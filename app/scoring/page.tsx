@@ -97,7 +97,11 @@ export default function ScoringPage() {
           description="Benchmark performance is scored on the hidden private split."
         />
         <Card className="mt-8">
-          <pre className="overflow-x-auto rounded-lg border border-border bg-background p-4 font-mono text-xs leading-relaxed text-primary sm:text-sm">
+          <pre
+            tabIndex={0}
+            aria-label="Benchmark formula"
+            className="overflow-x-auto rounded-lg border border-border bg-background p-4 font-mono text-xs leading-relaxed text-primary sm:text-sm"
+          >
             <code>{benchmark.formula}</code>
           </pre>
           <ul className="mt-4 space-y-2">

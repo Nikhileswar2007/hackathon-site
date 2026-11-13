@@ -89,15 +89,23 @@ export function Tabs({
         })}
       </div>
 
-      <div
-        role="tabpanel"
-        id={`${baseId}-${activeItem.id}-panel`}
-        aria-labelledby={`${baseId}-${activeItem.id}-tab`}
-        tabIndex={0}
-        className="mt-6 focus-visible:outline-offset-4"
-      >
-        {activeItem.content}
-      </div>
+      {items.map((item) => {
+        const selected = item.id === activeItem.id;
+
+        return (
+          <div
+            key={item.id}
+            role="tabpanel"
+            id={`${baseId}-${item.id}-panel`}
+            aria-labelledby={`${baseId}-${item.id}-tab`}
+            tabIndex={selected ? 0 : -1}
+            hidden={!selected}
+            className="mt-6 focus-visible:outline-offset-4"
+          >
+            {item.content}
+          </div>
+        );
+      })}
     </div>
   );
 }

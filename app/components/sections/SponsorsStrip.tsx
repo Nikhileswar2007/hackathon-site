@@ -1,3 +1,4 @@
+import { TBA } from "@/app/content/site-config";
 import { SectionHeading } from "../ui/SectionHeading";
 
 export function SponsorsStrip() {
@@ -11,7 +12,7 @@ export function SponsorsStrip() {
           id="sponsors-heading"
           eyebrow="Support"
           title="Sponsors"
-          description="Sponsors to be announced."
+          description={`Sponsors: ${TBA}.`}
         />
         <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {["Partner", "Partner", "Partner", "Partner"].map(
@@ -24,7 +25,7 @@ export function SponsorsStrip() {
                   {label}
                 </span>
                 <span className="text-sm font-medium text-foreground">
-                  To be announced
+                  {TBA}
                 </span>
               </li>
             ),

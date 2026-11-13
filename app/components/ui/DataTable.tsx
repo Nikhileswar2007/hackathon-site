@@ -30,6 +30,9 @@ export function DataTable({
 }) {
   return (
     <div
+      role="region"
+      aria-label={caption}
+      tabIndex={0}
       className={cn(
         "w-full overflow-x-auto rounded-xl border border-border bg-surface",
         className,
@@ -73,6 +76,11 @@ export function DataTable({
                   isRowHeader
                     ? "font-medium text-foreground"
                     : "text-foreground",
+                  alignmentClasses[
+                    isRowHeader
+                      ? "left"
+                      : (columns[cellIndex]?.align ?? "left")
+                  ],
                 );
 
                 return isRowHeader ? (

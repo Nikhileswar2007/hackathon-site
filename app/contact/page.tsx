@@ -36,7 +36,7 @@ export default function ContactPage() {
           id="channels-heading"
           eyebrow="Official channels"
           title="Where to reach the OC"
-          description={`Channel links are ${TBA}. Each channel will use the same official source for every team.`}
+          description={`Official channel links: ${TBA}.`}
         />
         <ul className="mt-8 grid gap-4 sm:grid-cols-2">
           {contactChannels.map((channel, index) => (
@@ -128,8 +128,8 @@ export default function ContactPage() {
       >
         <p>
           Anyone can report a conduct or integrity concern confidentially, and
-          retaliation is prohibited. The reporting channel is being finalised;
-          its link is {TBA}.
+          retaliation is prohibited. The reporting channel is being finalised.
+          Reporting link: {TBA}.
         </p>
       </Callout>
     </div>

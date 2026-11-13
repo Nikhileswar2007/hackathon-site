@@ -363,7 +363,9 @@ export function RegisterForm() {
                 }))
               }
               aria-invalid={Boolean(errors.track)}
-              aria-describedby="track-note track-error"
+              aria-describedby={
+                errors.track ? "track-note track-error" : "track-note"
+              }
               className={fieldClass(Boolean(errors.track))}
             >
               <option value="">Select a track</option>
@@ -672,11 +674,11 @@ export function RegisterForm() {
                       aria-invalid={Boolean(
                         errors[`${prefix}.collegeId`],
                       )}
-                      aria-describedby={`${member.id}-college-id-note ${
+                      aria-describedby={
                         errors[`${prefix}.collegeId`]
-                          ? `${member.id}-college-id-error`
-                          : ""
-                      }`}
+                          ? `${member.id}-college-id-note ${member.id}-college-id-error`
+                          : `${member.id}-college-id-note`
+                      }
                       className={cn(
                         "mt-2 block w-full cursor-pointer rounded-md border bg-background text-sm text-muted file:mr-3 file:cursor-pointer file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary-hover",
                         errors[`${prefix}.collegeId`]

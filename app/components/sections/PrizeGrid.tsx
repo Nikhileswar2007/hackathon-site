@@ -1,4 +1,5 @@
 import { prizeTracks } from "@/app/content/event-data";
+import { TBA } from "@/app/content/site-config";
 import { Badge } from "../ui/Badge";
 import { Card } from "../ui/Card";
 
@@ -12,7 +13,7 @@ export function PrizeGrid() {
               {track.name}
             </Badge>
             <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">
-              Amounts: To be announced
+              Amounts: {TBA}
             </span>
           </div>
           <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">

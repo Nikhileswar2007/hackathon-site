@@ -34,7 +34,7 @@ export default function FaqPage() {
           id="faq-list-heading"
           eyebrow="Browse by topic"
           title="Questions from teams"
-          description="Four topic groups covering the details teams ask about most."
+          description={`${faqGroups.length} topic groups covering the details teams ask about most.`}
         />
         <FaqList
           groups={faqGroups}

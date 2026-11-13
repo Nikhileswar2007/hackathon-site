@@ -52,8 +52,8 @@ export default function RegisterPage() {
         >
           <p>
             This form validates locally and nothing is sent or stored.
-            Registration dates, the fee and the official portal link are{" "}
-            {TBA}.
+            Registration dates, the fee and the official portal link are still
+            to be announced.
           </p>
         </Callout>
       ) : null}

@@ -55,7 +55,7 @@ export function Navbar() {
 
         <nav
           aria-label="Primary"
-          className="hidden items-center gap-0.5 lg:flex"
+          className="hidden items-center gap-0.5 xl:flex"
         >
           {siteConfig.navLinks.map((link) => {
             const active = isActivePath(pathname, link.href);
@@ -91,7 +91,7 @@ export function Navbar() {
           aria-controls="mobile-navigation"
           aria-label={open ? "Close navigation menu" : "Open navigation menu"}
           onClick={() => setOpen((current) => !current)}
-          className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-foreground transition-colors hover:bg-surface-raised lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-md border border-border bg-surface text-foreground transition-colors hover:bg-surface-raised xl:hidden"
         >
           {open ? (
             <CloseIcon className="size-5" />
@@ -101,44 +101,43 @@ export function Navbar() {
         </button>
       </div>
 
-      {open ? (
-        <div
-          id="mobile-navigation"
-          className="border-t border-border bg-background lg:hidden"
+      <div
+        id="mobile-navigation"
+        hidden={!open}
+        className="border-t border-border bg-background xl:hidden"
+      >
+        <nav
+          aria-label="Mobile primary"
+          className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
         >
-          <nav
-            aria-label="Mobile primary"
-            className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
+          {siteConfig.navLinks.map((link) => {
+            const active = isActivePath(pathname, link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-surface-raised text-primary"
+                    : "text-muted hover:bg-surface-raised hover:text-foreground",
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <Button
+            href={siteConfig.registerCta.href}
+            className="mt-3 w-full"
+            onClick={() => setOpen(false)}
           >
-            {siteConfig.navLinks.map((link) => {
-              const active = isActivePath(pathname, link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "rounded-md px-3 py-2.5 text-sm font-medium transition-colors",
-                    active
-                      ? "bg-surface-raised text-primary"
-                      : "text-muted hover:bg-surface-raised hover:text-foreground",
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-            <Button
-              href={siteConfig.registerCta.href}
-              className="mt-3 w-full"
-              onClick={() => setOpen(false)}
-            >
-              {siteConfig.registerCta.label}
-            </Button>
-          </nav>
-        </div>
-      ) : null}
+            {siteConfig.registerCta.label}
+          </Button>
+        </nav>
+      </div>
     </header>
   );
 }
