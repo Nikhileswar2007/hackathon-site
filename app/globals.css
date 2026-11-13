@@ -1,26 +1,291 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --background: #060a12;
+  --surface: #0c1320;
+  --surface-raised: #111a2b;
+  --surface-strong: #18233a;
+  --border: #263248;
+  --border-strong: #3b4a63;
+  --foreground: #eef2f8;
+  --muted: #a5b4c8;
+
+  --primary: #bae6fd;
+  --primary-hover: #e0f2fe;
+  --primary-strong: #7dd3fc;
+  --primary-foreground: #04121c;
+  --primary-soft: #0b2233;
+
+  --accent: #ddd6fe;
+  --accent-strong: #c4b5fd;
+  --accent-foreground: #140f28;
+  --accent-soft: #1d1733;
+
+  --success: #86efac;
+  --success-soft: #10291f;
+  --warning: #fde68a;
+  --warning-soft: #2a2311;
+  --danger: #fecdd3;
+  --danger-soft: #2c141a;
+
+  --focus: #7dd3fc;
+  --star: #dbeafe;
+  --glow-primary: rgba(56, 189, 248, 0.14);
+  --glow-accent: rgba(167, 139, 250, 0.12);
+  --overlay: rgba(6, 10, 18, 0.86);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-strong: var(--surface-strong);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --color-focus: var(--focus);
+  --color-star: var(--star);
+  --color-glow-primary: var(--glow-primary);
+  --color-glow-accent: var(--glow-accent);
+  --color-overlay: var(--overlay);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  --shadow-glow: 0 0 80px var(--glow-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family:
+      var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", sans-serif;
+  }
+
+  :where(
+    a,
+    button,
+    input,
+    select,
+    textarea,
+    summary,
+    [tabindex]
+  ):focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  #main-content:focus {
+    outline: none;
+  }
+
+  :target {
+    scroll-margin-top: 5.5rem;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--foreground);
+    box-shadow: 0 0 0 1000px var(--surface) inset;
+    caret-color: var(--foreground);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-150%);
+  border-radius: var(--radius-md);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.hero-space {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(
+      ellipse 90% 60% at 50% -20%,
+      var(--glow-primary),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 88% 8%,
+      var(--glow-accent),
+      transparent 70%
+    );
+}
+
+.hero-space::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      1px 1px at 8% 22%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1.5px 1.5px at 24% 68%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 37% 36%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      2px 2px at 52% 16%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 66% 58%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1.5px 1.5px at 81% 26%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 91% 72%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 14% 84%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1.5px 1.5px at 46% 89%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 74% 92%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 5% 52%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 89% 44%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1px 1px at 57% 74%,
+      var(--star) 50%,
+      transparent 51%
+    ),
+    radial-gradient(
+      1.5px 1.5px at 31% 12%,
+      var(--star) 50%,
+      transparent 51%
+    );
+  opacity: 0.5;
+  animation: star-twinkle 12s ease-in-out infinite;
+}
+
+.hero-space::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  top: -30rem;
+  right: -24rem;
+  width: 56rem;
+  height: 56rem;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  opacity: 0.55;
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
