@@ -112,7 +112,7 @@ export default function AboutPage() {
             <Button href="/tracks" variant="secondary">
               Compare tracks
             </Button>
-            <Button href="/register">Register</Button>
+            <Button href="/register" data-cursor="LAUNCH">Register</Button>
           </div>
         </section>
 

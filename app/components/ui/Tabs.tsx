@@ -73,6 +73,7 @@ export function Tabs({
               id={`${baseId}-${item.id}-tab`}
               aria-selected={selected}
               aria-controls={`${baseId}-${item.id}-panel`}
+              data-cursor="SWITCH"
               tabIndex={selected ? 0 : -1}
               onClick={() => setActiveId(item.id)}
               onKeyDown={(event) => handleKeyDown(event, index)}

@@ -185,7 +185,11 @@ export function Navbar() {
         <div className="flex items-center gap-3 sm:gap-4">
           <MissionClock className="hidden lg:flex" />
           <Magnetic className="hidden sm:inline-block">
-            <Button href={siteConfig.registerCta.href} size="sm">
+            <Button
+              href={siteConfig.registerCta.href}
+              size="sm"
+              data-cursor="LAUNCH"
+            >
               {siteConfig.registerCta.label}
             </Button>
           </Magnetic>
@@ -255,6 +259,7 @@ export function Navbar() {
                 href={siteConfig.registerCta.href}
                 size="lg"
                 className="w-full"
+                data-cursor="LAUNCH"
                 onClick={() => setMenuOpen(false)}
               >
                 {siteConfig.registerCta.label}

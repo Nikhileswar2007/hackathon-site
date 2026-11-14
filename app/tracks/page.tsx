@@ -61,7 +61,7 @@ export default function TracksPage() {
         title="Two tracks. Separate problem sets."
         description="The most senior member sets the track. Opting up is allowed; moving down is never allowed. Tracks never compete against each other."
       >
-        <Button href="/register">Register your team</Button>
+          <Button href="/register" data-cursor="LAUNCH">Register your team</Button>
       </PageHeader>
 
       <section

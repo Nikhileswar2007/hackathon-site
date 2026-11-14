@@ -66,6 +66,7 @@ export function TiltCard({
       onPointerMove={handleMove}
       onPointerLeave={handleLeave}
       data-tilting="false"
+      data-cursor="INSPECT"
       style={
         {
           "--tilt-x": "0deg",

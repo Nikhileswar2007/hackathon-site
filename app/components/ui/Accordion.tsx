@@ -51,6 +51,7 @@ export function Accordion({
                 id={buttonId}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
+                data-cursor={isOpen ? "COLLAPSE" : "EXPAND"}
                 onClick={() => toggle(item.id)}
                 className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-medium text-foreground transition-colors hover:bg-surface-raised focus-visible:outline-offset-[-2px]"
               >

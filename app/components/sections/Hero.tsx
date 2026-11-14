@@ -53,7 +53,11 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
-                <Button href={siteConfig.registerCta.href} size="lg">
+                <Button
+                  href={siteConfig.registerCta.href}
+                  size="lg"
+                  data-cursor="LAUNCH"
+                >
                   {siteConfig.registerCta.label}
                   <ArrowRightIcon className="size-4" />
                 </Button>
@@ -70,7 +74,10 @@ export function Hero() {
             </p>
           </div>
 
-          <div className="relative w-full max-w-md lg:justify-self-end">
+          <div
+            className="relative w-full max-w-md lg:justify-self-end"
+            data-cursor="DRAG"
+          >
             <div
               className="absolute -inset-6 -z-10 rounded-[2rem] bg-primary/5 blur-2xl"
               aria-hidden="true"

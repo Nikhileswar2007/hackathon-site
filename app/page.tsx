@@ -343,7 +343,7 @@ export default function HomePage() {
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-3">
                   <Magnetic>
-                    <Button href="/register" size="lg">
+                    <Button href="/register" size="lg" data-cursor="LAUNCH">
                       Register
                       <ArrowRightIcon className="size-4" />
                     </Button>

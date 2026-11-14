@@ -29,7 +29,7 @@ export default function PrizesPage() {
         title="Recognition for work that holds up"
         description={`Awards for both tracks, certificates for valid submissions and clear conditions for every winner. Prize amounts: ${TBA}.`}
       >
-        <Button href="/register">Register your team</Button>
+        <Button href="/register" data-cursor="LAUNCH">Register your team</Button>
       </PageHeader>
 
       <section
@@ -137,7 +137,7 @@ export default function PrizesPage() {
           {TBA}.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Button href="/register">Register your team</Button>
+          <Button href="/register" data-cursor="LAUNCH">Register your team</Button>
           <Button href="/scoring" variant="secondary">
             See how teams are ranked
           </Button>
