@@ -51,7 +51,11 @@ export default function ScoringPage() {
         </div>
       </PageHeader>
 
-      <section className="mt-12" aria-labelledby="criteria-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="criteria-heading"
+        data-hud="SCORING"
+      >
         <SectionHeading
           id="criteria-heading"
           eyebrow="Criteria"
@@ -63,7 +67,11 @@ export default function ScoringPage() {
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="bands-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="bands-heading"
+        data-hud="BANDS"
+      >
         <SectionHeading
           id="bands-heading"
           eyebrow="Bands"
@@ -170,7 +178,11 @@ export default function ScoringPage() {
         </ol>
       </section>
 
-      <section className="mt-16" aria-labelledby="penalties-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="penalties-heading"
+        data-hud="PENALTIES"
+      >
         <SectionHeading
           id="penalties-heading"
           eyebrow="Penalties"
@@ -220,7 +232,11 @@ export default function ScoringPage() {
         </ol>
       </section>
 
-      <section className="mt-16" aria-labelledby="disqualification-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="disqualification-heading"
+        data-hud="INTEGRITY"
+      >
         <SectionHeading
           id="disqualification-heading"
           eyebrow="Integrity"

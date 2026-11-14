@@ -33,7 +33,11 @@ export default function TimelinePage() {
         )}
       </Callout>
 
-      <section className="mt-12" aria-labelledby="full-timeline-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="full-timeline-heading"
+        data-hud="FLIGHT PLAN"
+      >
         <SectionHeading
           id="full-timeline-heading"
           eyebrow="Full schedule"

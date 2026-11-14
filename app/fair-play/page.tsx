@@ -30,7 +30,11 @@ export default function FairPlayPage() {
         </Button>
       </PageHeader>
 
-      <section className="mt-12" aria-labelledby="controls-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="controls-heading"
+        data-hud="CONTROLS"
+      >
         <SectionHeading
           id="controls-heading"
           eyebrow="Controls"
@@ -62,7 +66,11 @@ export default function FairPlayPage() {
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="threats-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="threats-heading"
+        data-hud="THREAT MODEL"
+      >
         <SectionHeading
           id="threats-heading"
           eyebrow="Threat and control"

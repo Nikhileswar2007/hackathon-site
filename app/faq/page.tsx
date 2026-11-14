@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FaqList } from "@/app/components/sections/FaqList";
+import { FaqExplorer } from "@/app/components/sections/FaqExplorer";
 import { Button } from "@/app/components/ui/Button";
 import { Callout } from "@/app/components/ui/Callout";
 import { PageHeader } from "@/app/components/ui/PageHeader";
@@ -32,15 +32,13 @@ export default function FaqPage() {
       <section className="mt-12" aria-labelledby="faq-list-heading">
         <SectionHeading
           id="faq-list-heading"
-          eyebrow="Browse by topic"
+          eyebrow="Search and filter"
           title="Questions from teams"
-          description={`${faqGroups.length} topic groups covering the details teams ask about most.`}
+          description={`Search every answer, or filter across ${faqGroups.length} topic groups.`}
         />
-        <FaqList
-          groups={faqGroups}
-          showGroupTitles
-          className="mt-8"
-        />
+        <div className="mt-8">
+          <FaqExplorer groups={faqGroups} />
+        </div>
       </section>
 
       <Callout title="Still need an answer?" tone="primary" className="mt-12">

@@ -116,6 +116,7 @@ export default function RegisterPage() {
         className="mt-16 scroll-mt-24"
         id="registration-form"
         aria-labelledby="registration-form-heading"
+        data-hud="REGISTRATION"
       >
         <SectionHeading
           id="registration-form-heading"

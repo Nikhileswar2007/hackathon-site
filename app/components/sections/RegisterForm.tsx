@@ -40,6 +40,36 @@ const advancedProgrammes = new Set([
   "Graduate within six months",
 ]);
 
+const steps = [
+  {
+    id: "team",
+    label: "Team details",
+    description:
+      "Name the team, choose a track and set the leader contact for OC updates.",
+  },
+  {
+    id: "crew",
+    label: "Crew and IDs",
+    description:
+      "Add 2 to 4 members with institutional emails and a college ID for each.",
+  },
+  {
+    id: "clearance",
+    label: "Consent and review",
+    description:
+      "Accept the rulebook, integrity declaration and seniority check before launch.",
+  },
+] as const;
+
+const stepFieldMatchers: Array<(key: string) => boolean> = [
+  (key) => key === "teamName" || key === "track" || key === "leaderEmail",
+  (key) => key === "form" || key.startsWith("members."),
+  (key) =>
+    key === "rulebookAccepted" ||
+    key === "declarationAccepted" ||
+    key === "seniorityConfirmed",
+];
+
 const fieldBase =
   "mt-2 w-full rounded-md border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted transition-colors";
 
@@ -154,6 +184,18 @@ function validate(state: RegistrationState): FieldErrors {
   return errors;
 }
 
+function errorsForStep(errors: FieldErrors, step: number): FieldErrors {
+  const matcher = stepFieldMatchers[step];
+
+  if (!matcher) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(errors).filter(([key]) => matcher(key)),
+  );
+}
+
 export function RegisterForm() {
   const [form, setForm] = useState<RegistrationState>({
     teamName: "",
@@ -164,9 +206,13 @@ export function RegisterForm() {
     declarationAccepted: false,
     seniorityConfirmed: false,
   });
-  const [attempted, setAttempted] = useState(false);
+  const [step, setStep] = useState(0);
+  const [attemptedSteps, setAttemptedSteps] = useState<Record<number, boolean>>(
+    {},
+  );
   const [submitted, setSubmitted] = useState(false);
   const nextMemberId = useRef(3);
+  const formRef = useRef<HTMLFormElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -175,8 +221,25 @@ export function RegisterForm() {
     }
   }, [submitted]);
 
-  const errors: FieldErrors = attempted ? validate(form) : {};
+  useEffect(() => {
+    if (step > 0) {
+      const behavior: ScrollBehavior = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
+        ? "auto"
+        : "smooth";
+
+      formRef.current?.scrollIntoView({ block: "start", behavior });
+    }
+  }, [step]);
+
+  const allErrors = validate(form);
+  const allErrorCount = Object.keys(allErrors).length;
+  const errors: FieldErrors = attemptedSteps[step]
+    ? errorsForStep(allErrors, step)
+    : {};
   const errorCount = Object.keys(errors).length;
+  const lastStep = steps.length - 1;
 
   const hasAdvancedProgramme = form.members.some((member) =>
     advancedProgrammes.has(member.programme),
@@ -220,13 +283,33 @@ export function RegisterForm() {
     }));
   }
 
+  function goNext() {
+    const currentErrors = errorsForStep(allErrors, step);
+
+    if (Object.keys(currentErrors).length > 0) {
+      setAttemptedSteps((current) => ({ ...current, [step]: true }));
+      return;
+    }
+
+    setStep((current) => Math.min(lastStep, current + 1));
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setAttempted(true);
 
-    const nextErrors = validate(form);
+    if (step < lastStep) {
+      goNext();
+      return;
+    }
 
-    if (Object.keys(nextErrors).length > 0) {
+    setAttemptedSteps({ 0: true, 1: true, 2: true });
+
+    if (allErrorCount > 0) {
+      const firstInvalidStep = stepFieldMatchers.findIndex((matcher) =>
+        Object.keys(allErrors).some((key) => matcher(key)),
+      );
+
+      setStep(firstInvalidStep === -1 ? 0 : firstInvalidStep);
       return;
     }
 
@@ -284,7 +367,13 @@ export function RegisterForm() {
         </dl>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button type="button" onClick={() => setSubmitted(false)}>
+          <Button
+            type="button"
+            onClick={() => {
+              setSubmitted(false);
+              setStep(lastStep);
+            }}
+          >
             Back to edit
           </Button>
           <Button href="/rules" variant="secondary">
@@ -296,8 +385,64 @@ export function RegisterForm() {
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="space-y-6">
+    <form
+      ref={formRef}
+      noValidate
+      onSubmit={handleSubmit}
+      className="scroll-mt-24 space-y-6"
+    >
+      <div
+        className="rounded-xl border border-border bg-surface/80 p-4 sm:p-5"
+        aria-label="Registration progress"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
+            Step {step + 1} of {steps.length}
+          </p>
+          <Badge tone={step === lastStep ? "success" : "primary"}>
+            {steps[step].label}
+          </Badge>
+        </div>
+        <ol className="mt-4 grid gap-2 sm:grid-cols-3">
+          {steps.map((entry, index) => {
+            const done = index < step;
+            const current = index === step;
+
+            return (
+              <li key={entry.id} className="min-w-0">
+                <span
+                  className={cn(
+                    "block h-1 rounded-full transition-colors",
+                    done
+                      ? "bg-primary/70"
+                      : current
+                        ? "bg-primary"
+                        : "bg-border",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "mt-2 block font-mono text-[0.625rem] uppercase tracking-[0.12em]",
+                    current
+                      ? "text-foreground"
+                      : done
+                        ? "text-primary"
+                        : "text-muted",
+                  )}
+                >
+                  {entry.label}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="mt-3 text-xs leading-relaxed text-muted">
+          {steps[step].description}
+        </p>
+      </div>
+
       <section
+        hidden={step !== 0}
         className="rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="team-details-heading"
       >
@@ -444,6 +589,7 @@ export function RegisterForm() {
       </section>
 
       <section
+        hidden={step !== 1}
         className="rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="members-heading"
       >
@@ -710,6 +856,7 @@ export function RegisterForm() {
       </section>
 
       <section
+        hidden={step !== 2}
         className="rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="consent-heading"
       >
@@ -841,12 +988,12 @@ export function RegisterForm() {
         <p className="text-sm leading-relaxed text-danger">{errors.form}</p>
       ) : null}
 
-      {attempted && errorCount > 0 ? (
+      {attemptedSteps[step] && errorCount > 0 ? (
         <div
           role="alert"
           className="rounded-lg border border-danger bg-danger-soft p-4 text-sm leading-relaxed text-danger"
         >
-          Please fix the highlighted fields before submitting.{" "}
+          Please fix the highlighted fields before continuing.{" "}
           {errorCount === 1
             ? "One field needs attention."
             : `${errorCount} fields need attention.`}
@@ -855,10 +1002,29 @@ export function RegisterForm() {
 
       <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs leading-relaxed text-muted">
-          Fee: {siteConfig.registrationFee ?? TBA}. Nothing is sent in this
-          preview.
+          Step {step + 1} of {steps.length} · Fee:{" "}
+          {siteConfig.registrationFee ?? TBA}. Nothing is sent in this preview.
         </p>
-        <Button type="submit">Submit registration</Button>
+        <div className="flex flex-wrap gap-3">
+          {step > 0 ? (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() =>
+                setStep((current) => Math.max(0, current - 1))
+              }
+            >
+              Back
+            </Button>
+          ) : null}
+          {step < lastStep ? (
+            <Button type="button" onClick={goNext}>
+              Continue
+            </Button>
+          ) : (
+            <Button type="submit">Submit registration</Button>
+          )}
+        </div>
       </div>
     </form>
   );

@@ -67,7 +67,11 @@ export default function RulesPage() {
         </p>
       </Callout>
 
-      <section className="mt-12" aria-labelledby="rule-sections-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="rule-sections-heading"
+        data-hud="RULEBOOK"
+      >
         <SectionHeading
           id="rule-sections-heading"
           eyebrow="Sections"

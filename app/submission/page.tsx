@@ -33,7 +33,11 @@ export default function SubmissionPage() {
         <p>{submission.window}</p>
       </Callout>
 
-      <section className="mt-12" aria-labelledby="pack-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="pack-heading"
+        data-hud="PACK BY TRACK"
+      >
         <SectionHeading
           id="pack-heading"
           eyebrow="Pack by track"
@@ -59,7 +63,11 @@ export default function SubmissionPage() {
         </div>
       </section>
 
-      <section className="mt-12" aria-labelledby="submission-rules-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="submission-rules-heading"
+        data-hud="INTEGRITY"
+      >
         <SectionHeading
           id="submission-rules-heading"
           eyebrow="Integrity"
@@ -76,7 +84,11 @@ export default function SubmissionPage() {
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="checklist-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="checklist-heading"
+        data-hud="FINAL CHECKS"
+      >
         <SectionHeading
           id="checklist-heading"
           eyebrow="Final checks"

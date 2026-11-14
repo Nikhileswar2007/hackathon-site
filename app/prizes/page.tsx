@@ -32,7 +32,11 @@ export default function PrizesPage() {
         <Button href="/register">Register your team</Button>
       </PageHeader>
 
-      <section className="mt-12" aria-labelledby="track-awards-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="track-awards-heading"
+        data-hud="REWARDS"
+      >
         <SectionHeading
           id="track-awards-heading"
           eyebrow="Track awards"
@@ -44,7 +48,11 @@ export default function PrizesPage() {
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="certificates-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="certificates-heading"
+        data-hud="CERTIFICATES"
+      >
         <SectionHeading
           id="certificates-heading"
           eyebrow="Certificates"

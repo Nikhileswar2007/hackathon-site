@@ -17,6 +17,7 @@ export function PageHeader({
 }) {
   return (
     <header
+      data-hud={eyebrow ? eyebrow.toUpperCase() : "MISSION"}
       className={cn(
         "relative space-y-4 border-b border-border pb-10",
         className,

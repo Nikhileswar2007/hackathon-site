@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { TrackCompare } from "@/app/components/sections/TrackCompare";
 import { Badge } from "@/app/components/ui/Badge";
 import { Button } from "@/app/components/ui/Button";
 import { Callout } from "@/app/components/ui/Callout";
 import { Card } from "@/app/components/ui/Card";
-import { DataTable } from "@/app/components/ui/DataTable";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { trackRules, tracks, trackThemesNote } from "@/app/content/event-data";
@@ -65,52 +64,27 @@ export default function TracksPage() {
         <Button href="/register">Register your team</Button>
       </PageHeader>
 
-      <section className="mt-12" aria-labelledby="comparison-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="comparison-heading"
+        data-hud="TRACK SELECT"
+      >
         <SectionHeading
           id="comparison-heading"
           eyebrow="Side by side"
           title="Beginner vs Advanced"
-          description="Same 48-hour window, different starting points and submission packs."
+          description="Same 48-hour window, different starting points and submission packs. Focus a column or hide the rows that match."
         />
         <div className="mt-8">
-          <DataTable
-            caption="Comparison of the Beginner and Advanced tracks"
-            columns={[
-              { label: "Detail" },
-              { label: "Beginner" },
-              { label: "Advanced" },
-            ]}
-            rows={[
-              ...comparisonRows.map((row) => [
-                row.label,
-                row.beginner,
-                row.advanced,
-              ]),
-              [
-                "Scoring",
-                <Link
-                  key="beginner-scoring"
-                  href="/scoring"
-                  className="text-primary underline underline-offset-4"
-                >
-                  Criteria and weights
-                </Link>,
-                <Link
-                  key="advanced-scoring"
-                  href="/scoring"
-                  className="text-primary underline underline-offset-4"
-                >
-                  Criteria and weights
-                </Link>,
-              ],
-            ]}
-            rowHeaders
-            minWidth="48rem"
-          />
+          <TrackCompare rows={comparisonRows} />
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="themes-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="themes-heading"
+        data-hud="PROBLEM SPACE"
+      >
         <SectionHeading
           id="themes-heading"
           eyebrow="Problem space"
@@ -159,7 +133,11 @@ export default function TracksPage() {
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="track-rules-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="track-rules-heading"
+        data-hud="BOUNDARIES"
+      >
         <SectionHeading
           id="track-rules-heading"
           eyebrow="Boundaries"

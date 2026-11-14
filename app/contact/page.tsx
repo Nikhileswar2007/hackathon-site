@@ -31,7 +31,11 @@ export default function ContactPage() {
         </Button>
       </PageHeader>
 
-      <section className="mt-12" aria-labelledby="channels-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="channels-heading"
+        data-hud="CHANNELS"
+      >
         <SectionHeading
           id="channels-heading"
           eyebrow="Official channels"
@@ -108,7 +112,7 @@ export default function ContactPage() {
           </ul>
         </section>
 
-        <section aria-labelledby="contact-form-heading">
+        <section aria-labelledby="contact-form-heading" data-hud="MESSAGE">
           <SectionHeading
             id="contact-form-heading"
             eyebrow="Message preview"
