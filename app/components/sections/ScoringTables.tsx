@@ -22,10 +22,12 @@ const stageTones = {
 
 function WeightBar({
   points,
+  label,
   barClassName,
   emphasised = false,
 }: {
   points: number;
+  label: string;
   barClassName: string;
   emphasised?: boolean;
 }) {
@@ -70,7 +72,7 @@ function WeightBar({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={points}
-      aria-label={`${points} out of 100`}
+      aria-label={`${label}: ${points} out of 100`}
       className="flex min-w-[7rem] items-center gap-2"
     >
       <div
@@ -152,6 +154,7 @@ export function ScoringTables() {
                 <WeightBar
                   key={`${criterion.name}-bar`}
                   points={criterion.points}
+                  label={criterion.name}
                   barClassName={barClassName}
                 />,
               ]),
@@ -166,6 +169,7 @@ export function ScoringTables() {
                 <WeightBar
                   key="total-bar"
                   points={100}
+                  label="Total"
                   barClassName={barClassName}
                   emphasised
                 />,

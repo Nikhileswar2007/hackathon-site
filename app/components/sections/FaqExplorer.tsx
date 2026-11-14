@@ -75,6 +75,8 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
+            aria-controls="faq-results"
+            autoComplete="off"
             placeholder="Try “fees”, “AI tools” or “appeal”"
             className="w-full rounded-md border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-colors placeholder:text-muted hover:border-border-strong focus-visible:border-primary"
           />
@@ -82,6 +84,7 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
             <button
               type="button"
               onClick={() => setQuery("")}
+              aria-label="Clear the FAQ search"
               className="shrink-0 rounded-md border border-border px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-colors hover:border-border-strong hover:text-foreground"
             >
               Clear
@@ -125,66 +128,68 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
         </div>
       </div>
 
-      <p
-        role="status"
-        aria-live="polite"
-        className="mt-4 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted"
-      >
-        {isFiltered
-          ? `${resultCount} of ${totalQuestions} questions`
-          : `${totalQuestions} questions across ${groups.length} topics`}
-      </p>
+      <div id="faq-results">
+        <p
+          role="status"
+          aria-live="polite"
+          className="mt-4 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted"
+        >
+          {isFiltered
+            ? `${resultCount} of ${totalQuestions} questions`
+            : `${totalQuestions} questions across ${groups.length} topics`}
+        </p>
 
-      {filteredGroups.length > 0 ? (
-        <div className="mt-5 space-y-8">
-          {filteredGroups.map((group) => {
-            const items: AccordionItem[] = group.items.map((item) => ({
-              id: item.id,
-              title: item.question,
-              content: <p>{item.answer}</p>,
-            }));
-            const headingId = `${group.id}-filtered-heading`;
+        {filteredGroups.length > 0 ? (
+          <div className="mt-5 space-y-8">
+            {filteredGroups.map((group) => {
+              const items: AccordionItem[] = group.items.map((item) => ({
+                id: item.id,
+                title: item.question,
+                content: <p>{item.answer}</p>,
+              }));
+              const headingId = `${group.id}-filtered-heading`;
 
-            return (
-              <section key={group.id} aria-labelledby={headingId}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h2
-                    id={headingId}
-                    className="text-lg font-semibold tracking-tight text-foreground"
-                  >
-                    {group.title}
-                  </h2>
-                  <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted">
-                    {group.items.length}{" "}
-                    {group.items.length === 1 ? "question" : "questions"}
-                  </span>
-                </div>
-                <Accordion items={items} className="mt-3" />
-              </section>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="mt-5 rounded-xl border border-border bg-surface p-8 text-center">
-          <p className="font-mono text-[0.625rem] uppercase tracking-[0.18em] text-primary">
-            No signal
-          </p>
-          <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
-            No questions match that filter.
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted">
-            Try a broader phrase, or reset the topic filter to scan every
-            answer.
-          </p>
-          <button
-            type="button"
-            onClick={resetFilters}
-            className="mt-5 rounded-full border border-primary/50 bg-primary-soft px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary/15"
-          >
-            Reset filters
-          </button>
-        </div>
-      )}
+              return (
+                <section key={group.id} aria-labelledby={headingId}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <h2
+                      id={headingId}
+                      className="text-lg font-semibold tracking-tight text-foreground"
+                    >
+                      {group.title}
+                    </h2>
+                    <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted">
+                      {group.items.length}{" "}
+                      {group.items.length === 1 ? "question" : "questions"}
+                    </span>
+                  </div>
+                  <Accordion items={items} className="mt-3" />
+                </section>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="mt-5 rounded-xl border border-border bg-surface p-8 text-center">
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.18em] text-primary">
+              No signal
+            </p>
+            <p className="mt-2 text-lg font-semibold tracking-tight text-foreground">
+              No questions match that filter.
+            </p>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted">
+              Try a broader phrase, or reset the topic filter to scan every
+              answer.
+            </p>
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="mt-5 rounded-full border border-primary/50 bg-primary-soft px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary/15"
+            >
+              Reset filters
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

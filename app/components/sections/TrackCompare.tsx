@@ -114,35 +114,47 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
             </tr>
           </thead>
           <tbody>
-            {shownRows.map((row) => (
-              <tr
-                key={row.label}
-                className="border-t border-border align-top transition-colors hover:bg-surface-raised/70"
-              >
-                <th
-                  scope="row"
-                  className="px-4 py-3 text-left font-mono text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted"
-                >
-                  {row.label}
-                </th>
+            {shownRows.length === 0 ? (
+              <tr className="border-t border-border">
                 <td
-                  className={cn(
-                    "px-4 py-3 leading-relaxed text-foreground transition-opacity",
-                    dimBeginner && "opacity-35",
-                  )}
+                  colSpan={3}
+                  className="px-4 py-6 text-center text-sm leading-relaxed text-muted"
                 >
-                  {row.beginner}
-                </td>
-                <td
-                  className={cn(
-                    "px-4 py-3 leading-relaxed text-foreground transition-opacity",
-                    dimAdvanced && "opacity-35",
-                  )}
-                >
-                  {row.advanced}
+                  No differences remain with this filter. Uncheck
+                  &ldquo;Differences only&rdquo; to see every detail.
                 </td>
               </tr>
-            ))}
+            ) : (
+              shownRows.map((row) => (
+                <tr
+                  key={row.label}
+                  className="border-t border-border align-top transition-colors hover:bg-surface-raised/70"
+                >
+                  <th
+                    scope="row"
+                    className="px-4 py-3 text-left font-mono text-[0.625rem] font-medium uppercase tracking-[0.12em] text-muted"
+                  >
+                    {row.label}
+                  </th>
+                  <td
+                    className={cn(
+                      "px-4 py-3 leading-relaxed text-foreground transition-opacity",
+                      dimBeginner && "opacity-35",
+                    )}
+                  >
+                    {row.beginner}
+                  </td>
+                  <td
+                    className={cn(
+                      "px-4 py-3 leading-relaxed text-foreground transition-opacity",
+                      dimAdvanced && "opacity-35",
+                    )}
+                  >
+                    {row.advanced}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

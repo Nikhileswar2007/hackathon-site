@@ -391,8 +391,12 @@ export function RegisterForm() {
       onSubmit={handleSubmit}
       className="scroll-mt-24 space-y-6"
     >
+      <p className="sr-only" role="status" aria-live="polite">
+        Step {step + 1} of {steps.length}: {steps[step].label}
+      </p>
       <div
         className="rounded-xl border border-border bg-surface/80 p-4 sm:p-5"
+        role="group"
         aria-label="Registration progress"
       >
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -409,8 +413,13 @@ export function RegisterForm() {
             const current = index === step;
 
             return (
-              <li key={entry.id} className="min-w-0">
+              <li
+                key={entry.id}
+                className="min-w-0"
+                aria-current={current ? "step" : undefined}
+              >
                 <span
+                  aria-hidden="true"
                   className={cn(
                     "block h-1 rounded-full transition-colors",
                     done
@@ -431,6 +440,13 @@ export function RegisterForm() {
                   )}
                 >
                   {entry.label}
+                  <span className="sr-only">
+                    {done
+                      ? " — complete"
+                      : current
+                        ? " — current step"
+                        : " — upcoming"}
+                  </span>
                 </span>
               </li>
             );
