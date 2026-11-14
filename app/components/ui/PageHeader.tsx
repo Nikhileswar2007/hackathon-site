@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { SplitHeading } from "../fx/SplitHeading";
 import { cn } from "./cn";
 
 export function PageHeader({
@@ -31,7 +32,11 @@ export function PageHeader({
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="display-title text-h1 text-foreground">{title}</h1>
+      <SplitHeading
+        as="h1"
+        text={title}
+        className="display-title text-h1 text-foreground"
+      />
       {description ? (
         <div className="max-w-3xl text-lead text-muted">{description}</div>
       ) : null}

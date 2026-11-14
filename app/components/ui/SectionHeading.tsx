@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { SplitHeading } from "../fx/SplitHeading";
 import { cn } from "./cn";
 
 export function SectionHeading({
@@ -37,12 +38,12 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <h2
+      <SplitHeading
+        as="h2"
         id={id}
+        text={title}
         className="display-title text-h2 text-foreground"
-      >
-        {title}
-      </h2>
+      />
       {description ? (
         <div
           className={cn(

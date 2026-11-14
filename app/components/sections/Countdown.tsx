@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/app/content/site-config";
+import { useEffectsMode } from "../effects/effects-provider";
 import { Badge } from "../ui/Badge";
 
 interface Remaining {
@@ -32,7 +33,13 @@ const units: Array<{ key: keyof Remaining; label: string }> = [
   { key: "seconds", label: "Seconds" },
 ];
 
+function formatUnit(key: keyof Remaining, value: number) {
+  return key === "days" ? String(value) : String(value).padStart(2, "0");
+}
+
 export function Countdown() {
+  const mode = useEffectsMode();
+  const animate = mode !== "off";
   const targetMs = siteConfig.eventStartISO
     ? Date.parse(siteConfig.eventStartISO)
     : null;
@@ -77,12 +84,13 @@ export function Countdown() {
 
   return (
     <div
-      className="w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-glow"
+      className="corner-frame w-full max-w-md rounded-2xl border border-border/80 bg-surface/55 p-5 shadow-glow backdrop-blur-xl sm:p-6"
       role="timer"
       aria-label="Countdown to Kakshya 2026 kickoff"
     >
       <div className="flex items-center justify-between gap-3">
-        <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-muted">
+        <p className="telemetry flex items-center gap-2 text-primary">
+          <span className="status-dot" aria-hidden="true" />
           Kickoff countdown
         </p>
         <Badge tone="primary">T0</Badge>
@@ -90,22 +98,33 @@ export function Countdown() {
 
       {!hasTarget || !dateLabel ? (
         <>
-          <div className="mt-6 rounded-xl border border-dashed border-border bg-background p-5">
-            <p className="text-2xl font-semibold tracking-tight text-foreground">
+          <div className="mt-5 grid grid-cols-4 gap-2" aria-hidden="true">
+            {units.map((unit) => (
+              <div
+                key={unit.key}
+                className="rounded-lg border border-border/80 bg-background/60 px-1 py-3 text-center"
+              >
+                <p className="font-mono text-xl font-semibold tabular-nums tracking-tight text-muted sm:text-2xl">
+                  --
+                </p>
+                <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-muted">
+                  {unit.label}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 rounded-lg border border-dashed border-border bg-background/40 px-4 py-3">
+            <p className="font-mono text-sm font-semibold uppercase tracking-[0.12em] text-foreground">
               Date to be announced
             </p>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
+            <p className="mt-1 text-xs leading-relaxed text-muted">
               Kickoff is planned for 10:00 IST. The live countdown starts once
               the dates are confirmed.
             </p>
           </div>
-          <div className="mt-4 flex items-center justify-between gap-3 font-mono text-[0.6875rem] uppercase tracking-[0.15em] text-muted">
-            <span>Clock starts at T0</span>
-            <span>48 hours</span>
-          </div>
         </>
       ) : started ? (
-        <div className="mt-6 rounded-xl border border-primary bg-primary-soft p-5">
+        <div className="mt-5 rounded-xl border border-primary bg-primary-soft/80 p-5">
           <p className="text-2xl font-semibold tracking-tight text-primary">
             Kakshya 2026 has begun.
           </p>
@@ -117,24 +136,31 @@ export function Countdown() {
       ) : remaining ? (
         <>
           <div
-            className="mt-6 grid grid-cols-4 gap-2"
+            className="mt-5 grid grid-cols-4 gap-2"
             aria-hidden="true"
           >
-            {units.map((unit) => (
-              <div
-                key={unit.key}
-                className="rounded-lg border border-border bg-background px-1 py-3 text-center"
-              >
-                <p className="font-mono text-xl font-semibold tabular-nums tracking-tight text-foreground sm:text-2xl">
-                  {unit.key === "days"
-                    ? remaining[unit.key]
-                    : String(remaining[unit.key]).padStart(2, "0")}
-                </p>
-                <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-muted">
-                  {unit.label}
-                </p>
-              </div>
-            ))}
+            {units.map((unit) => {
+              const value = formatUnit(unit.key, remaining[unit.key]);
+
+              return (
+                <div
+                  key={unit.key}
+                  className="overflow-hidden rounded-lg border border-border/80 bg-background/60 px-1 py-3 text-center"
+                >
+                  <p className="font-mono text-xl font-semibold tabular-nums tracking-tight text-foreground sm:text-2xl">
+                    <span
+                      key={value}
+                      className={animate ? "countdown-value" : undefined}
+                    >
+                      {value}
+                    </span>
+                  </p>
+                  <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-muted">
+                    {unit.label}
+                  </p>
+                </div>
+              );
+            })}
           </div>
           <p className="sr-only">
             Kickoff is scheduled for {dateLabel} IST.
@@ -144,11 +170,11 @@ export function Countdown() {
           </p>
         </>
       ) : (
-        <div className="mt-6 grid grid-cols-4 gap-2" aria-hidden="true">
+        <div className="mt-5 grid grid-cols-4 gap-2" aria-hidden="true">
           {units.map((unit) => (
             <div
               key={unit.key}
-              className="rounded-lg border border-border bg-background px-1 py-3 text-center"
+              className="rounded-lg border border-border/80 bg-background/60 px-1 py-3 text-center"
             >
               <p className="font-mono text-xl font-semibold text-muted sm:text-2xl">
                 --
@@ -160,6 +186,11 @@ export function Countdown() {
           ))}
         </div>
       )}
+
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-border/60 pt-3 font-mono text-[0.5625rem] uppercase tracking-[0.16em] text-muted">
+        <span>Window · 48 hours</span>
+        <span>{hasTarget ? "All times IST" : "Kickoff · 10:00 IST"}</span>
+      </div>
     </div>
   );
 }
