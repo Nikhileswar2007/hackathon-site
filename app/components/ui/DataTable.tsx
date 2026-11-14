@@ -33,8 +33,9 @@ export function DataTable({
       role="region"
       aria-label={caption}
       tabIndex={0}
+      data-lenis-prevent
       className={cn(
-        "w-full overflow-x-auto rounded-xl border border-border bg-surface",
+        "w-full overflow-auto overscroll-contain rounded-xl border border-border bg-surface/80",
         className,
       )}
     >
@@ -43,14 +44,14 @@ export function DataTable({
         style={{ minWidth }}
       >
         <caption className="sr-only">{caption}</caption>
-        <thead className="bg-surface-raised">
+        <thead className="sticky top-0 z-10 bg-surface-strong/95 backdrop-blur">
           <tr>
             {columns.map((column, index) => (
               <th
                 key={`${column.label}-${index}`}
                 scope="col"
                 className={cn(
-                  "px-4 py-3 font-mono text-xs font-medium uppercase tracking-[0.12em] text-muted",
+                  "border-b border-border px-4 py-3 font-mono text-[0.625rem] font-medium uppercase tracking-[0.16em] text-muted",
                   alignmentClasses[column.align ?? "left"],
                 )}
               >
@@ -67,7 +68,7 @@ export function DataTable({
           {rows.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="border-t border-border align-top"
+              className="border-t border-border align-top transition-colors hover:bg-surface-raised/70"
             >
               {row.map((cell, cellIndex) => {
                 const isRowHeader = rowHeaders && cellIndex === 0;

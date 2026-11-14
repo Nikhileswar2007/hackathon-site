@@ -20,14 +20,15 @@ type ButtonProps = SharedButtonProps & {
   >;
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[transform,background-color,color,border-color,box-shadow] duration-200 ease-out focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px";
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-primary-foreground hover:bg-primary-hover",
+    "bg-primary text-primary-foreground hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-[0_0_34px_var(--glow-primary)]",
   secondary:
-    "border border-border-strong bg-surface-raised text-foreground hover:border-primary hover:bg-surface-strong",
-  ghost: "text-foreground hover:bg-surface-raised",
+    "border border-border-strong bg-surface-raised/80 text-foreground hover:-translate-y-0.5 hover:border-primary hover:text-primary",
+  ghost:
+    "text-foreground hover:bg-surface-raised hover:text-primary",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

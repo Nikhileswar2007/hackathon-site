@@ -27,13 +27,19 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+        <p
+          className={cn(
+            "telemetry flex items-center gap-2 text-primary",
+            align === "center" && "justify-center",
+          )}
+        >
+          <span className="status-dot" aria-hidden="true" />
           {eyebrow}
         </p>
       ) : null}
       <h2
         id={id}
-        className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+        className="display-title text-h2 text-foreground"
       >
         {title}
       </h2>

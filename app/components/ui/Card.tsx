@@ -18,7 +18,7 @@ export function Card({
     <Component
       id={id}
       className={cn(
-        "rounded-xl border border-border bg-surface p-6",
+        "corner-frame rounded-xl border border-border bg-gradient-to-br from-surface-raised/80 to-surface p-6 transition-colors duration-300",
         className,
       )}
     >

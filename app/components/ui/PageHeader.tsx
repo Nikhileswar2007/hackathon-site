@@ -1,30 +1,39 @@
 import type { ReactNode } from "react";
+import { cn } from "./cn";
 
 export function PageHeader({
   eyebrow,
   title,
   description,
   children,
+  className,
 }: {
   eyebrow?: string;
   title: string;
   description?: ReactNode;
   children?: ReactNode;
+  className?: string;
 }) {
   return (
-    <header className="space-y-4 border-b border-border pb-10">
+    <header
+      className={cn(
+        "relative space-y-4 border-b border-border pb-10",
+        className,
+      )}
+    >
+      <span
+        className="absolute right-0 top-0 hidden h-px w-24 bg-gradient-to-r from-transparent to-border-strong sm:block"
+        aria-hidden="true"
+      />
       {eyebrow ? (
-        <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
+        <p className="telemetry flex items-center gap-2 text-primary">
+          <span className="status-dot" aria-hidden="true" />
           {eyebrow}
         </p>
       ) : null}
-      <h1 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-        {title}
-      </h1>
+      <h1 className="display-title text-h1 text-foreground">{title}</h1>
       {description ? (
-        <div className="max-w-3xl text-lg leading-relaxed text-muted">
-          {description}
-        </div>
+        <div className="max-w-3xl text-lead text-muted">{description}</div>
       ) : null}
       {children ? <div className="pt-2">{children}</div> : null}
     </header>

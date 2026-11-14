@@ -34,7 +34,7 @@ export function Accordion({
   return (
     <div
       className={cn(
-        "divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface",
+        "divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface/80",
         className,
       )}
     >
@@ -54,11 +54,19 @@ export function Accordion({
                 onClick={() => toggle(item.id)}
                 className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-medium text-foreground transition-colors hover:bg-surface-raised focus-visible:outline-offset-[-2px]"
               >
-                <span>{item.title}</span>
+                <span className="flex items-center gap-3">
+                  <span
+                    className="font-mono text-[0.625rem] text-primary/70"
+                    aria-hidden="true"
+                  >
+                    {isOpen ? "●" : "○"}
+                  </span>
+                  {item.title}
+                </span>
                 <ChevronDownIcon
                   className={cn(
-                    "size-4 shrink-0 text-muted transition-transform",
-                    isOpen && "rotate-180",
+                    "size-4 shrink-0 text-muted transition-transform duration-300",
+                    isOpen && "rotate-180 text-primary",
                   )}
                 />
               </button>
@@ -67,10 +75,20 @@ export function Accordion({
               id={panelId}
               role="region"
               aria-labelledby={buttonId}
-              hidden={!isOpen}
-              className="px-5 pb-5 text-sm leading-relaxed text-muted"
+              aria-hidden={!isOpen}
+              inert={!isOpen}
+              className={cn(
+                "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
+                isOpen
+                  ? "grid-rows-[1fr] opacity-100"
+                  : "grid-rows-[0fr] opacity-0",
+              )}
             >
-              {item.content}
+              <div className="overflow-hidden">
+                <div className="px-5 pb-5 pl-11 text-sm leading-relaxed text-muted">
+                  {item.content}
+                </div>
+              </div>
             </div>
           </div>
         );

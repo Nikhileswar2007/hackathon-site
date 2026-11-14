@@ -10,12 +10,12 @@ export type BadgeTone =
   | "danger";
 
 const toneClasses: Record<BadgeTone, string> = {
-  neutral: "border-border-strong bg-surface-raised text-muted",
-  primary: "border-primary bg-primary-soft text-primary",
-  accent: "border-accent bg-accent-soft text-accent",
-  success: "border-success bg-success-soft text-success",
-  warning: "border-warning bg-warning-soft text-warning",
-  danger: "border-danger bg-danger-soft text-danger",
+  neutral: "border-border-strong bg-surface-raised/80 text-muted",
+  primary: "border-primary/40 bg-primary-soft/80 text-primary",
+  accent: "border-accent/40 bg-accent-soft/80 text-accent",
+  success: "border-success/40 bg-success-soft/80 text-success",
+  warning: "border-warning/40 bg-warning-soft/80 text-warning",
+  danger: "border-danger/40 bg-danger-soft/80 text-danger",
 };
 
 export function Badge({
