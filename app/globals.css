@@ -857,14 +857,45 @@
     color 180ms ease;
 }
 
-.cursor-trail {
+.orbiter-canvas {
   position: fixed;
   inset: 0;
   z-index: var(--z-trail);
   width: 100%;
   height: 100%;
   pointer-events: none;
-  mix-blend-mode: screen;
+}
+
+.orbiter-pings {
+  position: absolute;
+  inset: 0;
+}
+
+.orbiter-ping {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 1px solid var(--primary);
+  border-radius: 999px;
+  opacity: 0;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--primary) 30%, transparent);
+  will-change: transform, opacity;
+}
+
+.orbiter-ping-2 {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.orbiter-cursor[data-pressed="true"] .orbiter-craft {
+  filter: drop-shadow(0 0 11px color-mix(in srgb, var(--primary) 68%, transparent));
+}
+
+.orbiter-cursor[data-pressed="true"] .orbiter-nozzle {
+  fill: var(--accent);
 }
 
 html.cursor-none,

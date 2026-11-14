@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { OrbiterCursor } from "@/app/components/effects/OrbiterCursor";
-import { CursorTrail } from "@/app/components/effects/CursorTrail";
 import { EffectsProvider } from "@/app/components/effects/effects-provider";
 import { Intro } from "@/app/components/effects/Intro";
 import { SmoothScroll } from "@/app/components/effects/SmoothScroll";
@@ -70,7 +69,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </main>
           <Footer />
           <OrbiterCursor />
-          <CursorTrail />
         </EffectsProvider>
       </body>
     </html>

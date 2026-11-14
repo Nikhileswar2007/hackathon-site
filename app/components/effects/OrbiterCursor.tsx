@@ -5,6 +5,7 @@ import { useEffects } from "./effects-provider";
 import { useMediaQuery } from "./use-media-query";
 import { getPointer } from "./pointer-store";
 import { onTick } from "./ticker";
+import { ExhaustCanvas, type ExhaustMotion } from "./ExhaustCanvas";
 
 export const CURSOR = {
   craftSize: 28,
@@ -22,6 +23,22 @@ export const CURSOR = {
   idleDelayMs: 2500,
   dimDelayMs: 8000,
   dimOpacity: 0.55,
+  hoverOrbitSpeed: 2.875,
+  ringHoverScale: 22 / 16,
+  ringPressedScale: 12 / 16,
+  ringLerp: 0.18,
+  pingPool: 3,
+  pingPerClick: 2,
+  pingLitePerClick: 1,
+  pingExpandTo: 3,
+  pingDurationMs: 450,
+  pingStaggerMs: 80,
+  particlePool: 80,
+  particleLifeMin: 300,
+  particleLifeMax: 500,
+  warpStreakCount: 5,
+  sparkBurstNormal: 8,
+  sparkBurstPrimary: 16,
 } as const;
 
 const NATIVE_SELECTOR =
@@ -50,6 +67,16 @@ export function OrbiterCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   const orbitRef = useRef<HTMLDivElement>(null);
   const hotspotRef = useRef<HTMLSpanElement>(null);
+  const pingRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const motionRef = useRef<ExhaustMotion>({
+    x: 0,
+    y: 0,
+    heading: CURSOR.restHeading,
+    speed: 0,
+    flare: false,
+    down: false,
+    native: false,
+  });
 
   useEffect(() => {
     const root = rootRef.current;
@@ -77,9 +104,21 @@ export function OrbiterCursor() {
     let nativeTarget = false;
     let lastInteraction = 0;
     let lastMotion = 0;
+    let pressed = false;
+    let ringScale = 1;
+    let lastDisplayX = craftX;
+    let lastDisplayY = craftY;
+    const motion = motionRef.current;
+    const pingStates = Array.from({ length: CURSOR.pingPool }, () => ({
+      active: false,
+      start: 0,
+      x: 0,
+      y: 0,
+    }));
 
     const setNative = (value: boolean) => {
       nativeTarget = value;
+      motion.native = value;
       rootEl.dataset.native = String(value);
 
       if (value) {
@@ -97,12 +136,56 @@ export function OrbiterCursor() {
       visible = value;
       rootEl.dataset.visible = String(value);
 
+      if (!value) {
+        pressed = false;
+        rootEl.dataset.pressed = "false";
+        motion.down = false;
+      }
+
       if (value && !nativeTarget) {
         document.documentElement.classList.add("cursor-none");
       } else {
         document.documentElement.classList.remove("cursor-none");
       }
     };
+
+    function triggerPings() {
+      lastInteraction = performance.now();
+      const count = mode === "lite" ? CURSOR.pingLitePerClick : CURSOR.pingPerClick;
+      let queued = 0;
+
+      for (let index = 0; index < pingStates.length && queued < count; index += 1) {
+        const ping = pingStates[index];
+
+        if (ping.active) {
+          continue;
+        }
+
+        ping.active = true;
+        ping.start = lastInteraction + queued * CURSOR.pingStaggerMs;
+        ping.x = lastDisplayX;
+        ping.y = lastDisplayY;
+        queued += 1;
+      }
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      if (event.button !== 0 || nativeTarget) {
+        return;
+      }
+
+      lastInteraction = performance.now();
+      pressed = true;
+      motion.down = true;
+      rootEl.dataset.pressed = "true";
+      triggerPings();
+    }
+
+    function handlePointerUp() {
+      pressed = false;
+      motion.down = false;
+      rootEl.dataset.pressed = "false";
+    }
 
     function handlePointerMove(event: PointerEvent) {
       lastInteraction = performance.now();
@@ -111,6 +194,9 @@ export function OrbiterCursor() {
     }
 
     function handleLeave() {
+      pressed = false;
+      motion.down = false;
+      rootEl.dataset.pressed = "false";
       setVisible(false);
       document.documentElement.classList.remove("cursor-none");
       rootEl.style.opacity = "1";
@@ -123,6 +209,11 @@ export function OrbiterCursor() {
     window.addEventListener("pointermove", handlePointerMove, {
       passive: true,
     });
+    window.addEventListener("pointerdown", handlePointerDown, {
+      passive: true,
+    });
+    window.addEventListener("pointerup", handlePointerUp, { passive: true });
+    window.addEventListener("pointercancel", handlePointerUp, { passive: true });
     window.addEventListener("blur", handleBlur);
     document.addEventListener("mouseleave", handleLeave);
 
@@ -185,6 +276,17 @@ export function OrbiterCursor() {
       const bob = idle ? Math.sin(time / 430) * 2 : 0;
       const displayX = craftX;
       const displayY = craftY + bob;
+      lastDisplayX = displayX;
+      lastDisplayY = displayY;
+      motion.x = displayX;
+      motion.y = displayY;
+      motion.heading = heading;
+      motion.speed = speed;
+      motion.down = pressed;
+      motion.flare = rootEl.dataset.state === "hover-primary";
+
+      const ringTarget = pressed ? CURSOR.ringPressedScale : 1;
+      ringScale += (ringTarget - ringScale) * CURSOR.ringLerp;
 
       rootEl.style.opacity = dimmed ? String(CURSOR.dimOpacity) : "1";
 
@@ -193,8 +295,42 @@ export function OrbiterCursor() {
       const craftTransform = `translate3d(${displayX}px, ${displayY}px, 0) rotate(${rotation}deg) skewY(${bankDegrees}deg) scale(${stretch}, ${squash})`;
 
       craft.style.transform = craftTransform;
-      ring.style.transform = `translate3d(${displayX}px, ${displayY}px, 0)`;
+      ring.style.transform = `translate3d(${displayX}px, ${displayY}px, 0) scale(${ringScale})`;
       hotspot.style.transform = `translate3d(${displayX}px, ${displayY}px, 0)`;
+
+      for (let index = 0; index < pingStates.length; index += 1) {
+        const ping = pingStates[index];
+        const pingElement = pingRefs.current[index];
+
+        if (!pingElement) {
+          continue;
+        }
+
+        if (!ping.active) {
+          pingElement.style.opacity = "0";
+          continue;
+        }
+
+        const age = now - ping.start;
+
+        if (age < 0) {
+          pingElement.style.opacity = "0";
+          continue;
+        }
+
+        const ratio = age / CURSOR.pingDurationMs;
+
+        if (ratio >= 1) {
+          ping.active = false;
+          pingElement.style.opacity = "0";
+          continue;
+        }
+
+        const eased = 1 - Math.pow(1 - ratio, 3);
+        const scale = 1 + (CURSOR.pingExpandTo - 1) * eased;
+        pingElement.style.opacity = String((1 - ratio) * 0.82);
+        pingElement.style.transform = `translate3d(${ping.x}px, ${ping.y}px, 0) scale(${scale})`;
+      }
 
       const orbitSpeed = idle ? CURSOR.idleOrbitSpeed : CURSOR.orbitSpeed;
       satelliteAngle += (orbitSpeed * delta) / 1000;
@@ -208,6 +344,9 @@ export function OrbiterCursor() {
     return () => {
       stopTicker();
       window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
       window.removeEventListener("blur", handleBlur);
       document.removeEventListener("mouseleave", handleLeave);
       document.documentElement.classList.remove("cursor-none");
@@ -220,8 +359,12 @@ export function OrbiterCursor() {
   }
 
   return (
-    <div
-      ref={rootRef}
+    <>
+      {mode === "full" ? (
+        <ExhaustCanvas motionRef={motionRef} />
+      ) : null}
+      <div
+        ref={rootRef}
       className="orbiter-cursor"
       data-visible="false"
       data-native="false"
@@ -229,9 +372,20 @@ export function OrbiterCursor() {
       data-state="idle"
       data-pressed="false"
       data-tone="orange"
-      data-mode={mode}
-      aria-hidden="true"
-    >
+        data-mode={mode}
+        aria-hidden="true"
+      >
+      <div className="orbiter-pings">
+        {Array.from({ length: CURSOR.pingPool }, (_, index) => (
+          <span
+            key={index}
+            ref={(node) => {
+              pingRefs.current[index] = node;
+            }}
+            className={`orbiter-ping orbiter-ping-${index + 1}`}
+          />
+        ))}
+      </div>
       <div ref={craftRef} className="orbiter-craft">
         <svg
           width={CURSOR.craftSize}
@@ -264,6 +418,7 @@ export function OrbiterCursor() {
       </div>
       <span ref={hotspotRef} className="orbiter-hotspot" />
       <span className="orbiter-label" />
-    </div>
+      </div>
+    </>
   );
 }
