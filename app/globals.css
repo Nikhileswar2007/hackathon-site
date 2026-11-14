@@ -707,6 +707,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--z-cursor);
+  display: none;
   pointer-events: none;
   opacity: 0;
   --orbiter-tone: var(--primary);
@@ -715,6 +716,7 @@
 }
 
 .orbiter-cursor[data-visible="true"] {
+  display: block;
   opacity: 1;
 }
 
@@ -733,14 +735,25 @@
 .orbiter-craft,
 .orbiter-hotspot,
 .orbiter-ring,
-.orbiter-label {
-  position: absolute;
+.orbiter-label,
+.orbiter-ping,
+.orbiter-brackets,
+.orbiter-corner,
+.orbiter-drag-arcs {
+  position: fixed;
   top: 0;
   left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  contain: layout paint style;
   will-change: transform;
 }
 
 .orbiter-craft {
+  width: 28px;
+  height: 28px;
+  contain: layout paint style;
   width: 28px;
   height: 28px;
   margin: -14px 0 0 -14px;
@@ -752,7 +765,7 @@
 
 .orbiter-craft svg {
   display: block;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .orbiter-body {
@@ -795,6 +808,7 @@
 }
 
 .orbiter-hotspot {
+  display: block;
   width: 3px;
   height: 3px;
   margin: -1.5px 0 0 -1.5px;
@@ -819,12 +833,20 @@
 }
 
 .orbiter-orbit {
+  display: block;
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  contain: layout paint style;
   will-change: transform;
 }
 
 .orbiter-satellite {
+  display: block;
   position: absolute;
   top: -1px;
   left: 50%;
@@ -837,6 +859,12 @@
 }
 
 .orbiter-label {
+  display: none;
+  width: max-content;
+  height: 18px;
+  top: 0;
+  left: 0;
+  contain: layout paint style;
   border: 1px solid color-mix(in srgb, var(--orbiter-tone) 38%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, var(--background) 72%, transparent);
@@ -859,26 +887,29 @@
 }
 
 .orbiter-cursor[data-label="true"] .orbiter-label {
+  display: inline-flex;
   opacity: 1;
 }
 
 .orbiter-brackets {
-  position: absolute;
-  inset: 0;
+  display: none;
   opacity: 0;
+  contain: layout paint style;
   transition: opacity 170ms ease;
 }
 
 .orbiter-brackets[data-frame="visible"] {
+  display: block;
   opacity: 1;
 }
 
 .orbiter-corner {
-  position: absolute;
+  display: block;
   top: 0;
   left: 0;
   width: 12px;
   height: 12px;
+  contain: layout paint style;
   border: 0 solid var(--orbiter-tone);
   opacity: 0.92;
   will-change: transform;
@@ -905,14 +936,13 @@
 }
 
 .orbiter-drag-arcs {
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: none;
+  opacity: 0;
   width: 44px;
   height: 44px;
   margin: -22px 0 0 -22px;
+  contain: layout paint style;
   color: var(--accent);
-  opacity: 0;
   pointer-events: none;
   transition: opacity 150ms ease;
   will-change: transform;
@@ -922,24 +952,33 @@
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 45%, transparent));
 }
 
-.orbiter-drag-arcs path {
+.orbiter-drag-arc {
   fill: none;
-  stroke: currentColor;
+  stroke: var(--accent);
   stroke-width: 1.35;
   stroke-linejoin: round;
   stroke-linecap: round;
 }
 
-.orbiter-cursor[data-state="hover-drag"][data-pressed="true"] .orbiter-craft {
-  opacity: 0;
+.orbiter-drag-head {
+  fill: var(--accent);
+  stroke: var(--accent);
+  stroke-width: 1.35;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .orbiter-cursor[data-state="hover-drag"][data-pressed="true"] .orbiter-drag-arcs {
+  display: block;
   opacity: 1;
+}
+
+.orbiter-cursor[data-state="hover-drag"][data-pressed="true"] .orbiter-craft {
+  opacity: 0;
 }
 
 .orbiter-cursor[data-idle="true"] .orbiter-nozzle {
@@ -957,6 +996,18 @@
   }
 }
 
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-trail);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: transparent;
+  contain: layout paint style;
+  mix-blend-mode: screen;
+}
+
 .orbiter-canvas {
   position: fixed;
   inset: 0;
@@ -964,20 +1015,27 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  background: transparent;
+  contain: layout paint style;
 }
 
 .orbiter-pings {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  contain: layout paint style;
 }
 
 .orbiter-ping {
-  position: absolute;
+  display: none;
   top: 0;
   left: 0;
   width: 32px;
   height: 32px;
   margin: -16px 0 0 -16px;
+  contain: layout paint style;
   border: 1px solid var(--primary);
   border-radius: 999px;
   opacity: 0;

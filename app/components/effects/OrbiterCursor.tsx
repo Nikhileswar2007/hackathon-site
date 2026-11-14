@@ -64,23 +64,86 @@ export const CURSOR = {
   lockAreaRatio: 0.35,
   lockBracketSize: 12,
   scrollTargetThrottleMs: 80,
+  dtMax: 50,
+  coordinateMax: 5000,
+  velocityMax: 5000,
+  speedMax: 5000,
+  elementBoundsMax: 5000,
+  particleRadiusMax: 6,
+  streakLengthMax: 120,
 } as const;
 
 const NATIVE_SELECTOR =
   'input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea, [contenteditable="true"], iframe, [data-cursor="native"]';
 
+let lastClampWarning = 0;
+
+function warnClamped(name: string, value: number, fallback: number) {
+  if (process.env.NODE_ENV === "production" || typeof performance === "undefined") {
+    return;
+  }
+
+  const now = performance.now();
+
+  if (now - lastClampWarning < 1000) {
+    return;
+  }
+
+  lastClampWarning = now;
+  console.warn(
+    `[Orbiter] Clamped ${name}: ${String(value)} -> ${fallback}`,
+  );
+}
+
+export function safeNumber(
+  value: number,
+  fallback: number,
+  min: number,
+  max: number,
+  name = "value",
+) {
+  if (!Number.isFinite(value)) {
+    warnClamped(name, value, fallback);
+    return fallback;
+  }
+
+  const clamped = Math.min(max, Math.max(min, value));
+
+  if (clamped !== value) {
+    warnClamped(name, value, clamped);
+  }
+
+  return clamped;
+}
+
 function shortestAngle(from: number, to: number) {
-  let difference = to - from;
+  const difference = to - from;
 
-  while (difference > Math.PI) {
-    difference -= Math.PI * 2;
+  if (!Number.isFinite(difference)) {
+    return 0;
   }
 
-  while (difference < -Math.PI) {
-    difference += Math.PI * 2;
+  let normalized = difference;
+
+  while (normalized > Math.PI) {
+    normalized -= Math.PI * 2;
   }
 
-  return difference;
+  while (normalized < -Math.PI) {
+    normalized += Math.PI * 2;
+  }
+
+  return normalized;
+}
+
+function transformNumber(value: number, fallback = 0) {
+  return safeNumber(
+    value,
+    fallback,
+    -CURSOR.coordinateMax,
+    CURSOR.coordinateMax,
+    "transform",
+  ).toFixed(3);
 }
 
 function cleanLabel(value: string | undefined) {
@@ -202,7 +265,13 @@ function frameElementFor(element: Element | null) {
 }
 
 function clampMagnet(value: number) {
-  return Math.max(-CURSOR.magnetMax, Math.min(CURSOR.magnetMax, value));
+  return safeNumber(
+    value,
+    0,
+    -CURSOR.magnetMax,
+    CURSOR.magnetMax,
+    "magneticPull",
+  );
 }
 
 export function OrbiterCursor() {
@@ -501,8 +570,22 @@ export function OrbiterCursor() {
       window.clearTimeout(refreshTimer);
       refreshTimer = window.setTimeout(() => {
         const pointerState = getPointer();
+        const safePointerX = safeNumber(
+          pointerState.x,
+          0,
+          0,
+          Math.max(1, window.innerWidth),
+          "pointerX",
+        );
+        const safePointerY = safeNumber(
+          pointerState.y,
+          0,
+          0,
+          Math.max(1, window.innerHeight),
+          "pointerY",
+        );
         updateTarget(
-          document.elementFromPoint(pointerState.x, pointerState.y),
+          document.elementFromPoint(safePointerX, safePointerY),
           true,
         );
       }, 60);
@@ -534,6 +617,12 @@ export function OrbiterCursor() {
       handleLeave();
     }
 
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        handleLeave();
+      }
+    }
+
     window.addEventListener("pointerover", handlePointerOver, {
       passive: true,
     });
@@ -550,11 +639,14 @@ export function OrbiterCursor() {
       capture: true,
     });
     window.addEventListener("blur", handleBlur);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     document.addEventListener("mouseleave", handleLeave);
 
     const stopTicker = onTick((time, delta) => {
       const pointerState = getPointer();
-      const now = performance.now();
+      const now = safeNumber(performance.now(), 0, 0, Number.MAX_SAFE_INTEGER, "now");
+      const frameDelta = safeNumber(delta, 16.67, 0, CURSOR.dtMax, "dt");
+      const frameTime = safeNumber(time, now, 0, Number.MAX_SAFE_INTEGER, "time");
 
       if (
         scrollPending &&
@@ -564,8 +656,10 @@ export function OrbiterCursor() {
         scrollPending = false;
 
         if (pointerState.active) {
+          const safePointerX = safeNumber(pointerState.x, 0, 0, Math.max(1, window.innerWidth), "pointerX");
+          const safePointerY = safeNumber(pointerState.y, 0, 0, Math.max(1, window.innerHeight), "pointerY");
           updateTarget(
-            document.elementFromPoint(pointerState.x, pointerState.y),
+            document.elementFromPoint(safePointerX, safePointerY),
             true,
           );
         }
@@ -577,8 +671,8 @@ export function OrbiterCursor() {
       }
 
       if (!visible) {
-        craftX = pointerState.x;
-        craftY = pointerState.y;
+        craftX = safeNumber(pointerState.x, window.innerWidth / 2, -CURSOR.coordinateMax, CURSOR.coordinateMax, "pointerX");
+        craftY = safeNumber(pointerState.y, window.innerHeight / 2, -CURSOR.coordinateMax, CURSOR.coordinateMax, "pointerY");
         previousX = craftX;
         previousY = craftY;
         heading = CURSOR.restHeading;
@@ -586,20 +680,34 @@ export function OrbiterCursor() {
         setVisible(true);
       }
 
-      const settle = 1 - Math.pow(1 - CURSOR.craftLerp, delta / 16.67);
-      const nextX = pointerState.x;
-      const nextY = pointerState.y;
-      const velocityX = nextX - previousX;
-      const velocityY = nextY - previousY;
-      const distance = Math.hypot(velocityX, velocityY);
-      const speed = distance * (1000 / Math.max(1, delta));
+      const settle = 1 - Math.pow(1 - CURSOR.craftLerp, frameDelta / 16.67);
+      const nextX = safeNumber(pointerState.x, craftX, -CURSOR.coordinateMax, CURSOR.coordinateMax, "pointerX");
+      const nextY = safeNumber(pointerState.y, craftY, -CURSOR.coordinateMax, CURSOR.coordinateMax, "pointerY");
+      const rawVelocityX = nextX - previousX;
+      const rawVelocityY = nextY - previousY;
+      const distance = safeNumber(Math.hypot(rawVelocityX, rawVelocityY), 0, 0, CURSOR.coordinateMax, "distance");
+      const velocityX = safeNumber(rawVelocityX, 0, -CURSOR.velocityMax, CURSOR.velocityMax, "velocityX");
+      const velocityY = safeNumber(rawVelocityY, 0, -CURSOR.velocityMax, CURSOR.velocityMax, "velocityY");
+      const speed = safeNumber(
+        distance * (1000 / Math.max(1, frameDelta)),
+        0,
+        0,
+        CURSOR.speedMax,
+        "speed",
+      );
 
       if (hoverKind === "hover-drag" && pressed) {
-        dragAngle += velocityX * 0.012;
+        dragAngle = safeNumber(
+          dragAngle + velocityX * 0.012,
+          dragAngle,
+          -Math.PI * 4,
+          Math.PI * 4,
+          "dragAngle",
+        );
       }
 
-      craftX += (nextX - craftX) * settle;
-      craftY += (nextY - craftY) * settle;
+      craftX = safeNumber(craftX + (nextX - craftX) * settle, nextX, -CURSOR.coordinateMax, CURSOR.coordinateMax, "craftX");
+      craftY = safeNumber(craftY + (nextY - craftY) * settle, nextY, -CURSOR.coordinateMax, CURSOR.coordinateMax, "craftY");
 
       if (distance > 0.7) {
         const velocityHeading = Math.atan2(velocityY, velocityX);
@@ -610,19 +718,42 @@ export function OrbiterCursor() {
         heading += shortestAngle(heading, CURSOR.restHeading) * 0.08;
       }
 
-      lateralVelocity =
+      lateralVelocity = safeNumber(
         lateralVelocity * 0.78 +
-        (velocityX * -Math.sin(heading) + velocityY * Math.cos(heading)) * 0.22;
-      const bankTarget = Math.max(
-        -CURSOR.bankMax,
-        Math.min(CURSOR.bankMax, lateralVelocity / 34),
+          (velocityX * -Math.sin(heading) + velocityY * Math.cos(heading)) * 0.22,
+        0,
+        -CURSOR.velocityMax,
+        CURSOR.velocityMax,
+        "lateralVelocity",
       );
-      bank += (bankTarget - bank) * 0.16;
+      const bankTarget = safeNumber(
+        Math.max(
+          -CURSOR.bankMax,
+          Math.min(CURSOR.bankMax, lateralVelocity / 34),
+        ),
+        0,
+        -CURSOR.bankMax,
+        CURSOR.bankMax,
+        "bankTarget",
+      );
+      bank = safeNumber(bank + (bankTarget - bank) * 0.16, bankTarget, -CURSOR.bankMax, CURSOR.bankMax, "bank");
 
-      const stretchTarget =
-        1 + Math.min(CURSOR.stretchMax, Math.max(0, speed - 160) / 3200);
-      stretch += (stretchTarget - stretch) * 0.18;
-      const squash = 1 / Math.sqrt(stretch);
+      const stretchTarget = safeNumber(
+        1 + Math.min(CURSOR.stretchMax, Math.max(0, speed - 160) / 3200),
+        1,
+        1,
+        1 + CURSOR.stretchMax,
+        "stretchTarget",
+      );
+      stretch = safeNumber(
+        stretch + (stretchTarget - stretch) * 0.18,
+        stretchTarget,
+        1,
+        1 + CURSOR.stretchMax,
+        "stretch",
+      );
+      const squash = safeNumber(1 / Math.sqrt(stretch), 1, 0.65, 1.1, "squash");
+      heading = safeNumber(heading, CURSOR.restHeading, -1000, 1000, "heading");
       const framePadding = pressed ? CURSOR.lockPressedPadding : CURSOR.lockPadding;
 
       if (lockedElement && !lockedElement.isConnected) {
@@ -632,12 +763,16 @@ export function OrbiterCursor() {
 
       if (lockedElement) {
         const rect = lockedElement.getBoundingClientRect();
-        frameTargetX = rect.left - framePadding;
-        frameTargetY = rect.top - framePadding;
-        frameTargetWidth = rect.width + framePadding * 2;
-        frameTargetHeight = rect.height + framePadding * 2;
-        lockCenterX = rect.left + rect.width / 2;
-        lockCenterY = rect.top + rect.height / 2;
+        const rectLeft = safeNumber(rect.left, 0, -CURSOR.elementBoundsMax, CURSOR.elementBoundsMax * 2, "rect.left");
+        const rectTop = safeNumber(rect.top, 0, -CURSOR.elementBoundsMax, CURSOR.elementBoundsMax * 2, "rect.top");
+        const rectWidth = safeNumber(rect.width, 0, 0, CURSOR.elementBoundsMax, "rect.width");
+        const rectHeight = safeNumber(rect.height, 0, 0, CURSOR.elementBoundsMax, "rect.height");
+        frameTargetX = rectLeft - framePadding;
+        frameTargetY = rectTop - framePadding;
+        frameTargetWidth = rectWidth + framePadding * 2;
+        frameTargetHeight = rectHeight + framePadding * 2;
+        lockCenterX = rectLeft + rectWidth / 2;
+        lockCenterY = rectTop + rectHeight / 2;
         lockVisible = frameTargetWidth > 0 && frameTargetHeight > 0;
       } else {
         frameTargetX = craftX - 8;
@@ -647,11 +782,11 @@ export function OrbiterCursor() {
         lockVisible = false;
       }
 
-      const frameSettle = 1 - Math.pow(1 - CURSOR.lockLerp, delta / 16.67);
-      frameX += (frameTargetX - frameX) * frameSettle;
-      frameY += (frameTargetY - frameY) * frameSettle;
-      frameWidth += (frameTargetWidth - frameWidth) * frameSettle;
-      frameHeight += (frameTargetHeight - frameHeight) * frameSettle;
+      const frameSettle = 1 - Math.pow(1 - CURSOR.lockLerp, frameDelta / 16.67);
+      frameX = safeNumber(frameX + (frameTargetX - frameX) * frameSettle, frameTargetX, -CURSOR.elementBoundsMax, CURSOR.elementBoundsMax * 2, "frameX");
+      frameY = safeNumber(frameY + (frameTargetY - frameY) * frameSettle, frameTargetY, -CURSOR.elementBoundsMax, CURSOR.elementBoundsMax * 2, "frameY");
+      frameWidth = safeNumber(frameWidth + (frameTargetWidth - frameWidth) * frameSettle, frameTargetWidth, 0, CURSOR.elementBoundsMax, "frameWidth");
+      frameHeight = safeNumber(frameHeight + (frameTargetHeight - frameHeight) * frameSettle, frameTargetHeight, 0, CURSOR.elementBoundsMax, "frameHeight");
       bracketsEl.dataset.frame = lockVisible ? "visible" : "retract";
 
       const cornerPositions = [
@@ -669,7 +804,7 @@ export function OrbiterCursor() {
         const [cornerX, cornerY] = cornerPositions[index];
 
         if (corner) {
-          corner.style.transform = `translate3d(${cornerX}px, ${cornerY}px, 0)`;
+          corner.style.transform = `translate3d(${transformNumber(cornerX)}px, ${transformNumber(cornerY)}px, 0)`;
         }
       }
 
@@ -679,8 +814,8 @@ export function OrbiterCursor() {
       const magnetTargetY = lockedElement
         ? clampMagnet((lockCenterY - craftY) * CURSOR.magnetScale)
         : 0;
-      magnetX += (magnetTargetX - magnetX) * CURSOR.magnetLerp;
-      magnetY += (magnetTargetY - magnetY) * CURSOR.magnetLerp;
+      magnetX = safeNumber(magnetX + (magnetTargetX - magnetX) * CURSOR.magnetLerp, magnetTargetX, -CURSOR.magnetMax, CURSOR.magnetMax, "magnetX");
+      magnetY = safeNumber(magnetY + (magnetTargetY - magnetY) * CURSOR.magnetLerp, magnetTargetY, -CURSOR.magnetMax, CURSOR.magnetMax, "magnetY");
 
       const interactionState = nativeTarget
         ? "native"
@@ -691,12 +826,18 @@ export function OrbiterCursor() {
           : hoverKind ?? (speed > 140 ? "moving" : "idle");
       commitState(interactionState);
 
-      const idleFor = now - (lastInteraction || now);
+      const idleFor = safeNumber(
+        now - (lastInteraction || now),
+        0,
+        0,
+        Number.MAX_SAFE_INTEGER,
+        "idleFor",
+      );
       const idle = idleFor > CURSOR.idleDelayMs;
       const dimmed = idleFor > CURSOR.dimDelayMs;
-      const bob = idle ? Math.sin(time / 430) * 2 : 0;
-      const displayX = craftX + magnetX;
-      const displayY = craftY + bob + magnetY;
+      const bob = idle ? Math.sin(frameTime / 430) * 2 : 0;
+      const displayX = safeNumber(craftX + magnetX, craftX, -CURSOR.coordinateMax, CURSOR.coordinateMax, "displayX");
+      const displayY = safeNumber(craftY + bob + magnetY, craftY, -CURSOR.coordinateMax, CURSOR.coordinateMax, "displayY");
       lastDisplayX = displayX;
       lastDisplayY = displayY;
       motion.x = displayX;
@@ -711,19 +852,25 @@ export function OrbiterCursor() {
         : hoverKind
           ? CURSOR.ringHoverScale
           : 1;
-      ringScale += (ringTarget - ringScale) * CURSOR.ringLerp;
+      ringScale = safeNumber(
+        ringScale + (ringTarget - ringScale) * CURSOR.ringLerp,
+        ringTarget,
+        CURSOR.ringPressedScale,
+        CURSOR.ringHoverScale,
+        "ringScale",
+      );
 
       rootEl.style.opacity = dimmed ? String(CURSOR.dimOpacity) : "1";
 
-      const rotation = (heading * 180) / Math.PI;
-      const bankDegrees = (bank * 180) / Math.PI;
-      const craftTransform = `translate3d(${displayX}px, ${displayY}px, 0) rotate(${rotation}deg) skewY(${bankDegrees}deg) scale(${stretch}, ${squash})`;
+      const rotation = safeNumber((heading * 180) / Math.PI, 180, -1000, 1000, "rotation");
+      const bankDegrees = safeNumber((bank * 180) / Math.PI, 0, -90, 90, "bankDegrees");
+      const craftTransform = `translate3d(${transformNumber(displayX)}px, ${transformNumber(displayY)}px, 0) rotate(${rotation.toFixed(3)}deg) skewY(${bankDegrees.toFixed(3)}deg) scale(${stretch.toFixed(4)}, ${squash.toFixed(4)})`;
 
       craft.style.transform = craftTransform;
-      ring.style.transform = `translate3d(${displayX}px, ${displayY}px, 0) scale(${ringScale})`;
-      hotspot.style.transform = `translate3d(${displayX}px, ${displayY}px, 0)`;
-      labelEl.style.transform = `translate3d(${displayX + 22}px, ${displayY + 15}px, 0)`;
-      dragArcsEl.style.transform = `translate3d(${displayX}px, ${displayY}px, 0) rotate(${(dragAngle * 180) / Math.PI}deg)`;
+      ring.style.transform = `translate3d(${transformNumber(displayX)}px, ${transformNumber(displayY)}px, 0) scale(${ringScale.toFixed(4)})`;
+      hotspot.style.transform = `translate3d(${transformNumber(displayX)}px, ${transformNumber(displayY)}px, 0)`;
+      labelEl.style.transform = `translate3d(${transformNumber(displayX + 22)}px, ${transformNumber(displayY + 15)}px, 0)`;
+      dragArcsEl.style.transform = `translate3d(${transformNumber(displayX)}px, ${transformNumber(displayY)}px, 0) rotate(${safeNumber((dragAngle * 180) / Math.PI, 0, -1000, 1000, "dragRotation").toFixed(3)}deg)`;
 
       for (let index = 0; index < pingStates.length; index += 1) {
         const ping = pingStates[index];
@@ -734,29 +881,39 @@ export function OrbiterCursor() {
         }
 
         if (!ping.active) {
+          pingElement.style.display = "none";
           pingElement.style.opacity = "0";
           continue;
         }
 
-        const age = now - ping.start;
+        const age = safeNumber(now - ping.start, CURSOR.pingDurationMs, 0, Number.MAX_SAFE_INTEGER, "pingAge");
 
-        if (age < 0) {
+        if (age <= 0) {
+          pingElement.style.display = "block";
           pingElement.style.opacity = "0";
           continue;
         }
 
-        const ratio = age / CURSOR.pingDurationMs;
+        const ratio = safeNumber(age / CURSOR.pingDurationMs, 1, 0, 1, "pingRatio");
 
         if (ratio >= 1) {
           ping.active = false;
+          pingElement.style.display = "none";
           pingElement.style.opacity = "0";
           continue;
         }
 
         const eased = 1 - Math.pow(1 - ratio, 3);
-        const scale = 1 + (CURSOR.pingExpandTo - 1) * eased;
-        pingElement.style.opacity = String((1 - ratio) * 0.82);
-        pingElement.style.transform = `translate3d(${ping.x}px, ${ping.y}px, 0) scale(${scale})`;
+        const scale = safeNumber(
+          1 + (CURSOR.pingExpandTo - 1) * eased,
+          1,
+          1,
+          CURSOR.pingExpandTo,
+          "pingScale",
+        );
+        pingElement.style.display = "block";
+        pingElement.style.opacity = String(safeNumber((1 - ratio) * 0.82, 0, 0, 1, "pingOpacity"));
+        pingElement.style.transform = `translate3d(${transformNumber(ping.x)}px, ${transformNumber(ping.y)}px, 0) scale(${scale.toFixed(4)})`;
       }
 
       const orbitSpeed = !idle && hoverKind && !pressed
@@ -764,8 +921,8 @@ export function OrbiterCursor() {
         : idle
           ? CURSOR.idleOrbitSpeed
           : CURSOR.orbitSpeed;
-      satelliteAngle += (orbitSpeed * delta) / 1000;
-      orbit.style.transform = `rotate(${(satelliteAngle * 180) / Math.PI}deg)`;
+      satelliteAngle = (satelliteAngle + (orbitSpeed * frameDelta) / 1000) % (Math.PI * 2);
+      orbit.style.transform = `rotate(${(safeNumber(satelliteAngle, 0, -Math.PI * 2, Math.PI * 2, "satelliteAngle") * 180 / Math.PI).toFixed(3)}deg)`;
       rootEl.dataset.idle = String(idle);
 
       previousX = nextX;
@@ -782,6 +939,7 @@ export function OrbiterCursor() {
       window.removeEventListener("scroll", handleScroll, true);
       window.clearTimeout(refreshTimer);
       window.removeEventListener("blur", handleBlur);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("mouseleave", handleLeave);
       document.documentElement.classList.remove("cursor-none");
       rootEl.style.opacity = "1";
@@ -832,11 +990,37 @@ export function OrbiterCursor() {
         ))}
       </div>
       <div ref={dragArcsRef} className="orbiter-drag-arcs" aria-hidden="true">
-        <svg viewBox="0 0 44 44" focusable="false">
-          <path d="M 35.5 15.2 A 14 14 0 0 0 12.2 8.9" />
-          <path d="M 12.2 8.9 L 16.8 9.4 L 14.7 13.5 Z" />
-          <path d="M 8.5 28.8 A 14 14 0 0 0 31.8 35.1" />
-          <path d="M 31.8 35.1 L 27.2 34.6 L 29.3 30.5 Z" />
+        <svg
+          viewBox="0 0 44 44"
+          width={44}
+          height={44}
+          overflow="hidden"
+          focusable="false"
+        >
+          <path
+            className="orbiter-drag-arc"
+            d="M 35.5 15.2 A 14 14 0 0 0 12.2 8.9"
+            fill="none"
+            stroke="var(--accent)"
+          />
+          <path
+            className="orbiter-drag-head"
+            d="M 12.2 8.9 L 16.8 9.4 L 14.7 13.5 Z"
+            fill="var(--accent)"
+            stroke="var(--accent)"
+          />
+          <path
+            className="orbiter-drag-arc"
+            d="M 8.5 28.8 A 14 14 0 0 0 31.8 35.1"
+            fill="none"
+            stroke="var(--accent)"
+          />
+          <path
+            className="orbiter-drag-head"
+            d="M 31.8 35.1 L 27.2 34.6 L 29.3 30.5 Z"
+            fill="var(--accent)"
+            stroke="var(--accent)"
+          />
         </svg>
       </div>
       <div ref={craftRef} className="orbiter-craft">
@@ -844,24 +1028,54 @@ export function OrbiterCursor() {
           width={CURSOR.craftSize}
           height={CURSOR.craftSize}
           viewBox="0 0 28 28"
+          overflow="hidden"
           focusable="false"
         >
           <path
             className="orbiter-flame orbiter-flame-full"
             d="M 5.2 14 L 0.8 11.4 L 2.6 14 L 0.8 16.6 Z"
+            fill="var(--primary)"
           />
-          <path className="orbiter-flame orbiter-flame-lite" d="M 5.2 14 L 1.8 12.1 L 3.2 14 L 1.8 15.9 Z" />
+          <path
+            className="orbiter-flame orbiter-flame-lite"
+            d="M 5.2 14 L 1.8 12.1 L 3.2 14 L 1.8 15.9 Z"
+            fill="var(--primary)"
+          />
           <path
             className="orbiter-body"
             d="M 25 14 L 9.2 5.8 L 12.6 14 L 9.2 22.2 Z"
+            fill="var(--foreground)"
+            fillOpacity="0.18"
+            stroke="var(--foreground)"
           />
-          <path className="orbiter-fin" d="M 10.6 8.4 L 5.8 3.8 L 12 10.8 Z" />
+          <path
+            className="orbiter-fin"
+            d="M 10.6 8.4 L 5.8 3.8 L 12 10.8 Z"
+            fill="var(--primary)"
+            fillOpacity="0.22"
+            stroke="var(--primary)"
+          />
           <path
             className="orbiter-fin"
             d="M 10.6 19.6 L 5.8 24.2 L 12 17.2 Z"
+            fill="var(--primary)"
+            fillOpacity="0.22"
+            stroke="var(--primary)"
           />
-          <circle className="orbiter-canopy" cx="15.7" cy="14" r="2.15" />
-          <circle className="orbiter-nozzle" cx="5.2" cy="14" r="1.7" />
+          <circle
+            className="orbiter-canopy"
+            cx="15.7"
+            cy="14"
+            r="2.15"
+            fill="var(--accent)"
+          />
+          <circle
+            className="orbiter-nozzle"
+            cx="5.2"
+            cy="14"
+            r="1.7"
+            fill="var(--primary)"
+          />
         </svg>
       </div>
       <div ref={ringRef} className="orbiter-ring">
