@@ -7,6 +7,7 @@ let mode: EffectsMode | null = null;
 let autoMode: EffectsMode | null = null;
 let userOverride = false;
 let motionBound = false;
+let webglSupport: boolean | null = null;
 const listeners = new Set<() => void>();
 
 function hasWebGL() {
@@ -41,11 +42,23 @@ function detectMode(): EffectsMode {
     window.matchMedia("(pointer: coarse)").matches &&
     Math.min(window.innerWidth, window.innerHeight) <= 820;
 
-  if (lowCpu || lowMemory || smallCoarse || !hasWebGL()) {
+  if (lowCpu || lowMemory || smallCoarse || !supportsWebGL()) {
     return "lite";
   }
 
   return "full";
+}
+
+export function supportsWebGL() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (webglSupport === null) {
+    webglSupport = hasWebGL();
+  }
+
+  return webglSupport;
 }
 
 function readStoredMode(): EffectsMode | null {

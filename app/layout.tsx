@@ -9,6 +9,7 @@ import { SmoothScroll } from "@/app/components/effects/SmoothScroll";
 import { Footer } from "@/app/components/layout/Footer";
 import { Navbar } from "@/app/components/layout/Navbar";
 import { ScrollHUD } from "@/app/components/layout/ScrollHUD";
+import { SpaceCanvas } from "@/app/components/space/SpaceCanvas";
 import { siteConfig } from "@/app/content/site-config";
 
 const displayFont = Space_Grotesk({
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <EffectsProvider>
           <SmoothScroll />
           <div className="space-backdrop" aria-hidden="true" />
+          <SpaceCanvas />
           <Intro />
           <a href="#main-content" className="skip-link">
             Skip to content
