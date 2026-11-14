@@ -701,91 +701,160 @@
   opacity: 1;
 }
 
-/* ---------- Custom cursor ---------- */
+/* ---------- Orbiter cursor ---------- */
 
-.custom-cursor {
+.orbiter-cursor {
   position: fixed;
   inset: 0;
   z-index: var(--z-cursor);
   pointer-events: none;
   opacity: 0;
+  --orbiter-tone: var(--primary);
   transition: opacity 180ms ease;
   contain: strict;
 }
 
-.custom-cursor[data-visible="true"] {
+.orbiter-cursor[data-visible="true"] {
   opacity: 1;
 }
 
-.custom-cursor[data-native="true"] {
+.orbiter-cursor[data-native="true"] {
   opacity: 0;
 }
 
-.cursor-dot,
-.cursor-ring {
+.orbiter-cursor[data-tone="cyan"] {
+  --orbiter-tone: var(--accent);
+}
+
+.orbiter-cursor[data-tone="white"] {
+  --orbiter-tone: var(--foreground);
+}
+
+.orbiter-craft,
+.orbiter-hotspot,
+.orbiter-ring,
+.orbiter-label {
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 999px;
   will-change: transform;
 }
 
-.cursor-dot {
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
-  background-color: var(--primary);
-  box-shadow: 0 0 12px var(--primary);
+.orbiter-craft {
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--primary) 48%, transparent));
+  transition:
+    opacity 140ms ease,
+    filter 220ms ease;
 }
 
-.cursor-ring {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  margin: -18px 0 0 -18px;
+.orbiter-craft svg {
+  display: block;
+  overflow: visible;
 }
 
-.cursor-ring-shape {
+.orbiter-body {
+  fill: color-mix(in srgb, var(--foreground) 18%, transparent);
+  stroke: var(--foreground);
+  stroke-width: 0.95;
+  stroke-linejoin: round;
+}
+
+.orbiter-fin {
+  fill: color-mix(in srgb, var(--primary) 22%, transparent);
+  stroke: var(--primary);
+  stroke-width: 0.8;
+  stroke-linejoin: round;
+}
+
+.orbiter-flame {
+  fill: var(--primary);
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.orbiter-cursor[data-mode="full"] .orbiter-flame-full {
+  opacity: 0.45;
+}
+
+.orbiter-cursor[data-mode="lite"] .orbiter-flame-lite,
+.orbiter-cursor[data-state="hover-primary"] .orbiter-flame {
+  opacity: 0.95;
+}
+
+.orbiter-canopy {
+  fill: var(--accent);
+  opacity: 0.95;
+}
+
+.orbiter-nozzle {
+  fill: var(--primary);
+  opacity: 0.9;
+}
+
+.orbiter-hotspot {
+  width: 3px;
+  height: 3px;
+  margin: -1.5px 0 0 -1.5px;
+  border-radius: 999px;
+  background: var(--foreground);
+  box-shadow:
+    0 0 6px var(--accent),
+    0 0 1.5px var(--foreground);
+}
+
+.orbiter-ring {
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 1px solid color-mix(in srgb, var(--orbiter-tone) 58%, transparent);
+  border-radius: 999px;
+  opacity: 0.72;
+  box-shadow: inset 0 0 8px color-mix(in srgb, var(--orbiter-tone) 10%, transparent);
+  transition:
+    border-color 180ms ease,
+    opacity 180ms ease;
+}
+
+.orbiter-orbit {
   position: absolute;
   inset: 0;
-  border: 1px solid color-mix(in srgb, var(--primary) 55%, transparent);
+  will-change: transform;
+}
+
+.orbiter-satellite {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  margin-left: -1.5px;
   border-radius: 999px;
-  transition:
-    transform 220ms var(--ease-out),
-    border-color 220ms ease,
-    background-color 220ms ease;
+  background: var(--accent);
+  box-shadow: 0 0 5px var(--accent);
 }
 
-.custom-cursor[data-hover="true"] .cursor-ring-shape {
-  transform: scale(1.6);
-  border-color: var(--primary);
-  background-color: color-mix(in srgb, var(--primary) 9%, transparent);
-}
-
-.custom-cursor[data-pressed="true"] .cursor-ring-shape {
-  transform: scale(0.66);
-  background-color: color-mix(in srgb, var(--primary) 18%, transparent);
-}
-
-.cursor-label {
+.orbiter-label {
+  border: 1px solid color-mix(in srgb, var(--orbiter-tone) 38%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--background) 72%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--orbiter-tone);
+  padding: 3px 7px 4px;
   font-family: var(--font-hud);
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  line-height: 1;
   text-transform: uppercase;
-  color: var(--primary);
+  white-space: nowrap;
   opacity: 0;
-  transform: scale(0.85);
   transition:
-    opacity 180ms ease,
-    transform 220ms var(--ease-out);
-}
-
-.custom-cursor[data-label="true"] .cursor-label {
-  opacity: 1;
-  transform: scale(1);
+    opacity 160ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
 }
 
 .cursor-trail {
