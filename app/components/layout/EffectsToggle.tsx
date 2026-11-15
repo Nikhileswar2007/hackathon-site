@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffects, type EffectsMode } from "../effects/effects-provider";
+import { useToast } from "../effects/ToastProvider";
 import { cn } from "../ui/cn";
 
 const options: Array<{ value: EffectsMode; label: string }> = [
@@ -10,6 +11,7 @@ const options: Array<{ value: EffectsMode; label: string }> = [
 ];
 
 export function EffectsToggle() {
+  const { toast } = useToast();
   const { mode, setMode, autoMode } = useEffects();
   const isAuto = autoMode === mode;
 
@@ -34,7 +36,17 @@ export function EffectsToggle() {
             key={option.value}
             type="button"
             aria-pressed={mode === option.value}
-            onClick={() => setMode(option.value)}
+            onClick={() => {
+              if (mode === option.value) {
+                return;
+              }
+
+              setMode(option.value);
+              toast({
+                title: `Effects set to ${option.label}`,
+                tone: "success",
+              });
+            }}
             className={cn(
               "rounded-full px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] transition-colors",
               mode === option.value

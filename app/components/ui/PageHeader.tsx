@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { LetterWave } from "../fx/LetterWave";
 import { SplitHeading } from "../fx/SplitHeading";
 import { TechRule } from "../fx/TechRule";
+import { ShareButton } from "./ShareButton";
 import { cn } from "./cn";
 
 export function PageHeader({
@@ -44,7 +45,12 @@ export function PageHeader({
       {description ? (
         <div className="max-w-3xl text-lead text-muted">{description}</div>
       ) : null}
-      {children ? <div className="pt-2">{children}</div> : null}
+      <div className="flex flex-wrap items-end justify-between gap-4 pt-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-3">
+          {children}
+        </div>
+        <ShareButton />
+      </div>
     </header>
   );
 }

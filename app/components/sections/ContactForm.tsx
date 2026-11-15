@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import { useToast } from "../effects/ToastProvider";
 import { contactTopics } from "@/app/content/event-data";
 import { Badge } from "../ui/Badge";
 import { Button3D } from "../ui/Button3D";
@@ -55,6 +56,7 @@ function validate(state: ContactState): ContactErrors {
 }
 
 export function ContactForm() {
+  const { toast } = useToast();
   const [form, setForm] = useState<ContactState>({
     name: "",
     email: "",
@@ -86,6 +88,11 @@ export function ContactForm() {
 
     // TODO: connect backend — POST the validated contact message to the contact API.
     setSubmitted(true);
+    toast({
+      title: "Message preview complete",
+      description: "This preview validates locally. Nothing is sent.",
+      tone: "success",
+    });
   }
 
   if (submitted) {

@@ -5,6 +5,7 @@ import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { TimelineView } from "@/app/components/sections/TimelineView";
+import { CalendarDownload } from "@/app/components/sections/CalendarDownload";
 import { timeline } from "@/app/content/event-data";
 import { siteConfig, TBA } from "@/app/content/site-config";
 
@@ -35,6 +36,10 @@ export default function TimelinePage() {
           )}
         </Callout>
       </Frame>
+
+      <div className="mt-6">
+        <CalendarDownload />
+      </div>
 
       <section
         className="mt-12"

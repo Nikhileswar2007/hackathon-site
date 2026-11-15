@@ -1,6 +1,7 @@
 interface LenisLike {
   stop: () => void;
   start: () => void;
+  scrollTo?: (target: number, options?: { immediate?: boolean }) => void;
 }
 
 let instance: LenisLike | null = null;
@@ -25,4 +26,14 @@ export function unlockPageScroll() {
     document.documentElement.classList.remove("lenis-stopped");
     document.body.style.overflow = "";
   }
+}
+
+
+export function scrollToTop() {
+  if (instance?.scrollTo) {
+    instance.scrollTo(0, { immediate: false });
+    return;
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }

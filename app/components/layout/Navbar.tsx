@@ -11,6 +11,7 @@ import { subscribeScroll } from "../effects/scroll-store";
 import { Magnetic } from "../fx/Magnetic";
 import { Button3D } from "../ui/Button3D";
 import { CloseIcon, MenuIcon, SearchIcon } from "../ui/icons";
+import { useCommandPalette } from "../effects/CommandPaletteProvider";
 import { Frame } from "../ui/Frame";
 import { cn } from "../ui/cn";
 import { MissionClock } from "./MissionClock";
@@ -57,6 +58,7 @@ function pageLabel(pathname: string) {
 export function Navbar() {
   const pathname = usePathname();
   const mode = useEffectsMode();
+  const palette = useCommandPalette();
   const finePointer = useMediaQuery("(hover: hover) and (pointer: fine)");
   const [menuOpen, setMenuOpen] = useState(false);
   const [expandedMobile, setExpandedMobile] = useState<string | null>(null);
@@ -83,8 +85,17 @@ export function Navbar() {
       setClosing(false);
     }
 
+    function onOpenNavigation() {
+      setMenuOpen(true);
+      setExpandedMobile(null);
+    }
+
     window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
+    window.addEventListener("kakshya:open-navigation", onOpenNavigation);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("kakshya:open-navigation", onOpenNavigation);
+    };
   }, []);
 
   useEffect(() => {
@@ -510,9 +521,9 @@ export function Navbar() {
               <button
                 type="button"
                 className="command-search"
-                disabled
-                aria-label="Command palette coming soon"
-                title="Command palette coming soon"
+                aria-label="Open command palette"
+                title="Open command palette"
+                onClick={palette.open}
                 data-cursor="OPEN"
               >
                 <SearchIcon className="size-4" />
@@ -599,7 +610,22 @@ export function Navbar() {
             aria-label="Mobile primary"
             className="mobile-command-scroll"
           >
-            <p className="telemetry mb-4">Mission index</p>
+            <div className="mobile-command-top">
+              <p className="telemetry">Mission index</p>
+              <button
+                type="button"
+                className="mobile-palette-button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  palette.open();
+                }}
+                data-cursor="OPEN"
+              >
+                <SearchIcon className="size-4" />
+                Search
+                <span className="mobile-palette-shortcut">Ctrl K</span>
+              </button>
+            </div>
             <ul className="mobile-command-list">
               {siteConfig.navLinks.map((link, index) => {
                 const active = isActivePath(pathname, link.href);

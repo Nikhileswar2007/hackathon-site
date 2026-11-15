@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { programmeOptions, tracks } from "@/app/content/event-data";
 import { siteConfig, TBA } from "@/app/content/site-config";
+import { useToast } from "../effects/ToastProvider";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Button3D } from "../ui/Button3D";
@@ -198,6 +199,7 @@ function errorsForStep(errors: FieldErrors, step: number): FieldErrors {
 }
 
 export function RegisterForm() {
+  const { toast } = useToast();
   const [form, setForm] = useState<RegistrationState>({
     teamName: "",
     track: "",
@@ -316,6 +318,11 @@ export function RegisterForm() {
 
     // TODO: connect backend — POST the validated registration payload to the registration API.
     setSubmitted(true);
+    toast({
+      title: "Registration preview complete",
+      description: "This preview validates locally. Nothing is sent or stored.",
+      tone: "success",
+    });
   }
 
   if (submitted) {
