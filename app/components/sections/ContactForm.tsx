@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import { isMockMode, sendContactMessage } from "@/app/services/api";
 import { useToast } from "../effects/ToastProvider";
 import { contactTopics } from "@/app/content/event-data";
 import { Badge } from "../ui/Badge";
@@ -65,6 +66,8 @@ export function ContactForm() {
   });
   const [attempted, setAttempted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverFieldErrors, setServerFieldErrors] = useState<ContactErrors>({});
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -73,8 +76,69 @@ export function ContactForm() {
     }
   }, [submitted]);
 
-  const errors: ContactErrors = attempted ? validate(form) : {};
+  const errors: ContactErrors = {
+    ...(attempted ? validate(form) : {}),
+    ...serverFieldErrors,
+  };
   const errorCount = Object.keys(errors).length;
+
+  async function submitMessage() {
+    setSubmitting(true);
+    setServerFieldErrors({});
+
+    try {
+      const result = await sendContactMessage({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        topic: form.topic,
+        message: form.message.trim(),
+      });
+
+      if (result.ok) {
+        setSubmitted(true);
+        toast(
+          isMockMode()
+            ? {
+                title: "Message preview complete",
+                description: "This preview validates locally. Nothing is sent.",
+                tone: "success",
+              }
+            : {
+                title: "Message received",
+                description:
+                  "The organising committee will get back to you on the official channels.",
+                tone: "success",
+              },
+        );
+        return;
+      }
+
+      if (result.fieldErrors) {
+        const mapped: ContactErrors = {};
+        for (const [key, value] of Object.entries(result.fieldErrors)) {
+          if (key in form) {
+            mapped[key as keyof ContactState] = value;
+          }
+        }
+        setServerFieldErrors(mapped);
+        setAttempted(true);
+      }
+
+      toast({
+        title: "Message not sent",
+        description: result.message,
+        tone: "warning",
+        action: {
+          label: "Retry",
+          onAction: () => {
+            void submitMessage();
+          },
+        },
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,17 +146,11 @@ export function ContactForm() {
 
     const nextErrors = validate(form);
 
-    if (Object.keys(nextErrors).length > 0) {
+    if (Object.keys(nextErrors).length > 0 || submitting) {
       return;
     }
 
-    // TODO: connect backend — POST the validated contact message to the contact API.
-    setSubmitted(true);
-    toast({
-      title: "Message preview complete",
-      description: "This preview validates locally. Nothing is sent.",
-      tone: "success",
-    });
+    void submitMessage();
   }
 
   if (submitted) {
@@ -102,17 +160,20 @@ export function ContactForm() {
         aria-live="polite"
         className="success-panel rounded-xl border border-success bg-success-soft p-6 shadow-[var(--elev-2)]"
       >
-        <Badge tone="success">Preview complete</Badge>
+        <Badge tone="success">
+          {isMockMode() ? "Preview complete" : "Message received"}
+        </Badge>
         <h3
           ref={successHeadingRef}
           tabIndex={-1}
           className="mt-4 text-xl font-semibold tracking-tight text-foreground"
         >
-          Message ready.
+          {isMockMode() ? "Message ready." : "Message received."}
         </h3>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-          Nothing was sent. This is a frontend preview; the contact backend
-          will be connected later.
+          {isMockMode()
+            ? "Nothing was sent. This is a frontend preview; the contact backend will be connected later."
+            : "Your message was received by the organising committee. They reply on the official channels."}
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Button3D type="button" onClick={() => setSubmitted(false)}>
@@ -278,9 +339,13 @@ export function ContactForm() {
 
       <div className="flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs leading-relaxed text-muted">
-          This form validates locally. Nothing is sent in this preview.
+          {isMockMode()
+            ? "This form validates locally. Nothing is sent in this preview."
+            : "Messages go straight to the organiser."}
         </p>
-        <Button3D type="submit">Send message</Button3D>
+        <Button3D type="submit" disabled={submitting} aria-busy={submitting}>
+          {submitting ? "Sending…" : "Send message"}
+        </Button3D>
       </div>
     </form>
   );

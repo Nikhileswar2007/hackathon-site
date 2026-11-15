@@ -38,6 +38,18 @@ export function ToastViewport({
               <p className="toast-description">{entry.description}</p>
             ) : null}
           </div>
+          {entry.action ? (
+            <button
+              type="button"
+              className="toast-action"
+              onClick={() => {
+                entry.action?.onAction();
+                onDismiss(entry.id);
+              }}
+            >
+              {entry.action.label}
+            </button>
+          ) : null}
           <button
             type="button"
             className="toast-close"

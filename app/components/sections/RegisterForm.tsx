@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { programmeOptions, tracks } from "@/app/content/event-data";
 import { siteConfig, TBA } from "@/app/content/site-config";
+import { isMockMode, registerTeam } from "@/app/services/api";
+import type { RegisterPayload } from "@/app/types/api";
 import { useToast } from "../effects/ToastProvider";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
@@ -214,6 +216,8 @@ export function RegisterForm() {
     {},
   );
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverFieldErrors, setServerFieldErrors] = useState<FieldErrors>({});
   const nextMemberId = useRef(3);
   const formRef = useRef<HTMLFormElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -237,10 +241,11 @@ export function RegisterForm() {
   }, [step]);
 
   const allErrors = validate(form);
-  const allErrorCount = Object.keys(allErrors).length;
+  const serverErrorCount = Object.keys(serverFieldErrors).length;
+  const allErrorCount = Object.keys(allErrors).length + serverErrorCount;
   const errors: FieldErrors = attemptedSteps[step]
-    ? errorsForStep(allErrors, step)
-    : {};
+    ? { ...errorsForStep(allErrors, step), ...errorsForStep(serverFieldErrors, step) }
+    : errorsForStep(serverFieldErrors, step);
   const errorCount = Object.keys(errors).length;
   const lastStep = steps.length - 1;
 
@@ -297,11 +302,106 @@ export function RegisterForm() {
     setStep((current) => Math.min(lastStep, current + 1));
   }
 
+  function mapServerFieldErrors(
+    fieldErrors: Record<string, string>,
+  ): FieldErrors {
+    const mapped: FieldErrors = {};
+
+    for (const [key, value] of Object.entries(fieldErrors)) {
+      const indexed = /^members\.(\d+)\.(.+)$/.exec(key);
+
+      if (indexed) {
+        const member = form.members[Number(indexed[1])];
+        const field = indexed[2];
+        mapped[member ? `members.${member.id}.${field}` : key] = value;
+        continue;
+      }
+
+      mapped[key] = value;
+    }
+
+    return mapped;
+  }
+
+  async function submitRegistration() {
+    const payload: RegisterPayload = {
+      teamName: form.teamName.trim(),
+      track: form.track,
+      leaderEmail: form.leaderEmail.trim(),
+      // The college ID file is not sent. File upload to be implemented by the
+      // backend (suggest signed upload URL or multipart) — see docs/api-contract.md.
+      members: form.members.map((member) => ({
+        fullName: member.fullName.trim(),
+        email: member.email.trim(),
+        college: member.college.trim(),
+        programme: member.programme,
+      })),
+      rulebookAccepted: form.rulebookAccepted,
+      declarationAccepted: form.declarationAccepted,
+      seniorityConfirmed: form.seniorityConfirmed,
+    };
+
+    setSubmitting(true);
+    setServerFieldErrors({});
+
+    try {
+      const result = await registerTeam(payload);
+
+      if (result.ok) {
+        setSubmitted(true);
+        toast(
+          isMockMode()
+            ? {
+                title: "Boarding pass issued",
+                description:
+                  "This preview validates locally. Nothing is sent or stored.",
+                tone: "success",
+              }
+            : {
+                title: "Boarding pass issued",
+                description:
+                  "Your registration was received. The OC verifies institutional emails and college IDs by D-3.",
+                tone: "success",
+              },
+        );
+        return;
+      }
+
+      if (result.fieldErrors) {
+        const mapped = mapServerFieldErrors(result.fieldErrors);
+        setServerFieldErrors(mapped);
+        setAttemptedSteps({ 0: true, 1: true, 2: true });
+        const firstInvalidStep = stepFieldMatchers.findIndex((matcher) =>
+          Object.keys(mapped).some((key) => matcher(key)),
+        );
+        setStep(firstInvalidStep === -1 ? 0 : firstInvalidStep);
+      }
+
+      toast({
+        title: "Registration not sent",
+        description: result.message,
+        tone: "warning",
+        action: {
+          label: "Retry",
+          onAction: () => {
+            void submitRegistration();
+          },
+        },
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (step < lastStep) {
       goNext();
+      return;
+    }
+
+    if (submitting) {
       return;
     }
 
@@ -316,13 +416,7 @@ export function RegisterForm() {
       return;
     }
 
-    // TODO: connect backend — POST the validated registration payload to the registration API.
-    setSubmitted(true);
-    toast({
-      title: "Boarding pass issued",
-      description: "This preview validates locally. Nothing is sent or stored.",
-      tone: "success",
-    });
+    void submitRegistration();
   }
 
   if (submitted) {
@@ -341,10 +435,16 @@ export function RegisterForm() {
           Cleared for launch prep.
         </h3>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-          Nothing was sent and nothing was stored.{" "}
-          {siteConfig.registrationOpen
-            ? "The backend connection is still to be added."
-            : "Registration is not open yet, so this was a preview only."}
+          {isMockMode() ? (
+            <>
+              Nothing was sent and nothing was stored.{" "}
+              {siteConfig.registrationOpen
+                ? "The backend connection is still to be added."
+                : "Registration is not open yet, so this was a preview only."}
+            </>
+          ) : (
+            "Your registration was received. The organising committee will verify institutional emails and college IDs by D-3."
+          )}
         </p>
 
         <dl className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -860,8 +960,7 @@ export function RegisterForm() {
                       id={`${member.id}-college-id-note`}
                       className="mt-2 text-xs leading-relaxed text-muted"
                     >
-                      UI only: the file stays in this browser and is not
-                      uploaded.
+                      UI only: the file is never sent anywhere. File upload to be implemented by the backend (suggest signed upload URL or multipart).
                     </p>
                     {errors[`${prefix}.collegeId`] ? (
                       <p
@@ -1026,8 +1125,11 @@ export function RegisterForm() {
 
       <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs leading-relaxed text-muted">
-          Step {step + 1} of {steps.length} · Fee:{" "}
-          {siteConfig.registrationFee ?? TBA}. Nothing is sent in this preview.
+          Step {step + 1} of {steps.length} A� Fee:{" "}
+          {siteConfig.registrationFee ?? TBA}.{" "}
+          {isMockMode()
+            ? "Nothing is sent in this preview."
+            : "Submissions go straight to the organiser."}
         </p>
         <div className="flex flex-wrap gap-3">
           {step > 0 ? (
@@ -1046,7 +1148,9 @@ export function RegisterForm() {
               Continue
             </Button3D>
           ) : (
-            <Button3D type="submit">Submit registration</Button3D>
+            <Button3D type="submit" disabled={submitting} aria-busy={submitting}>
+              {submitting ? "Submitting…" : "Submit registration"}
+            </Button3D>
           )}
         </div>
       </div>

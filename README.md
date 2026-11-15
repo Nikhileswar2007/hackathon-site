@@ -1,41 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kosmodrome 2026 — Frontend
 
-## Getting Started
+Marketing and registration site for **Kosmodrome 2026 — 48 Hours to Orbit**, the
+IIST National Space Hackathon: a national-level, online, 48-hour event with two
+tracks (Beginner and Advanced). Next.js 16 (App Router + Turbopack), React 19,
+Tailwind CSS v4, three.js / @react-three/fiber for the spaceport scene, Lenis
+for smooth scrolling, and a Motion-style effects system (Full / Lite / Off)
+with an automatic quality governor.
 
-First, run the development server:
+All content is currently static (`app/content/`) and there is no backend in this
+repo yet. The frontend expects two endpoints — `POST /api/register` and
+`POST /api/contact` — via a thin client layer in `app/services/api.ts`,
+controlled by `NEXT_PUBLIC_API_MODE` (`mock` by default).
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build (all routes are static)
+npm start       # serve the production build
+npm run lint    # eslint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy `.env.example` to `.env.local` and adjust the two values there
+(`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_API_MODE`). No secrets are needed for
+local development.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **[docs/api-contract.md](docs/api-contract.md)** — the API the frontend expects:
+  endpoints, request/response JSON, validation rules, error format and status
+  codes, and what the UI shows for each.
+- **[docs/FRONTEND_HANDOFF.md](docs/FRONTEND_HANDOFF.md)** — the full handoff:
+  stack, how to run, folder ownership, content constants, the list of
+  "To be announced" values, effects modes, environment variables, accessibility
+  and performance notes, known limitations, and open items.
 
-## Learn More
+## Branch workflow
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-## Team Workflow
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to set up, branch, and submit pull requests.
-
-practice test
+See [CONTRIBUTING.md](CONTRIBUTING.md). Short version: work on your own
+`dev-yourname` branch, open a PR against `main`, the maintainer reviews and
+merges.

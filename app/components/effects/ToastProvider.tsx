@@ -16,6 +16,11 @@ export interface ToastInput {
   title: string;
   description?: string;
   tone?: "primary" | "success" | "warning";
+  /** Optional action rendered as a small button, e.g. “Retry”. */
+  action?: {
+    label: string;
+    onAction: () => void;
+  };
 }
 
 const ToastViewport = dynamic(

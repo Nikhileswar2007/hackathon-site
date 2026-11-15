@@ -1554,6 +1554,28 @@
   border-color: var(--primary);
 }
 
+.toast-action {
+  min-height: 2.75rem;
+  margin-left: auto;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  font-family: var(--font-oxanium);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.toast-action:hover {
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.toast-action + .toast-close {
+  margin-left: 0;
+}
+
 .calendar-tba,
 .calendar-download {
   display: flex;
