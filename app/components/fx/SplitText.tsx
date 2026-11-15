@@ -78,6 +78,7 @@ export function SplitText({
       data-visible={isVisible}
       data-mode={mode}
       data-variant={effectiveVariant}
+      data-text={text}
     >
       <span aria-hidden="true">
         {words.map((word, wordIndex) => {

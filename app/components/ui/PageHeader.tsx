@@ -37,7 +37,7 @@ export function PageHeader({
       <SplitHeading
         as="h1"
         text={title}
-        className="display-title text-h1 text-foreground"
+        className="display-oxanium text-h1 text-foreground"
       />
       {description ? (
         <div className="max-w-3xl text-lead text-muted">{description}</div>

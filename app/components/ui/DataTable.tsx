@@ -51,7 +51,7 @@ export function DataTable({
                 key={`${column.label}-${index}`}
                 scope="col"
                 className={cn(
-                  "border-b border-border px-4 py-3 font-mono text-[0.625rem] font-medium uppercase tracking-[0.16em] text-muted",
+                  "border-b border-border px-4 py-3 font-ui text-[0.625rem] font-bold uppercase tracking-[0.14em] text-muted",
                   alignmentClasses[column.align ?? "left"],
                 )}
               >

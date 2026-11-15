@@ -55,7 +55,7 @@ export function Marquee({
       >
         {items.map((item) => (
           <li key={item} className="marquee-chip">
-            {item}
+            <span className="marquee-chip-inner">{item}</span>
           </li>
         ))}
       </ul>
@@ -75,7 +75,7 @@ export function Marquee({
       >
         {items.map((item) => (
           <li key={item} className="marquee-chip">
-            {item}
+            <span className="marquee-chip-inner">{item}</span>
           </li>
         ))}
         {items.map((item) => (
@@ -84,7 +84,7 @@ export function Marquee({
             className="marquee-chip"
             aria-hidden="true"
           >
-            {item}
+            <span className="marquee-chip-inner">{item}</span>
           </li>
         ))}
       </ul>

@@ -49,11 +49,10 @@ export function Button3D({
   type = "button",
   ...rest
 }: Button3DProps) {
-  const classes = cn(
-    baseClasses,
-    variantClasses[variant],
+  const classes = cn(baseClasses, variantClasses[variant], className);
+  const innerClasses = cn(
+    "btn3d-inner",
     variant === "icon" ? iconSizeClasses[size] : sizeClasses[size],
-    className,
   );
 
   if (href) {
@@ -64,14 +63,14 @@ export function Button3D({
 
     return (
       <Link href={href} className={classes} {...linkProps}>
-        <span className="btn3d-inner">{children}</span>
+        <span className={innerClasses}>{children}</span>
       </Link>
     );
   }
 
   return (
     <button type={type} className={classes} {...rest}>
-      <span className="btn3d-inner">{children}</span>
+      <span className={innerClasses}>{children}</span>
     </button>
   );
 }

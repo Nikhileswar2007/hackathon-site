@@ -78,7 +78,7 @@ export function Tabs({
               onClick={() => setActiveId(item.id)}
               onKeyDown={(event) => handleKeyDown(event, index)}
               className={cn(
-                "relative px-4 py-3 font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors focus-visible:outline-offset-[-2px]",
+                "relative px-4 py-3 font-ui text-[0.6875rem] font-bold uppercase tracking-[0.12em] transition-colors focus-visible:outline-offset-[-2px]",
                 selected
                   ? "text-foreground"
                   : "text-muted hover:text-foreground",

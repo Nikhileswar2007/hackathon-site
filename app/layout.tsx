@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, JetBrains_Mono, Orbitron, Oxanium } from "next/font/google";
 import "./globals.css";
 import { OrbiterCursor } from "@/app/components/effects/OrbiterCursor";
 import { CursorTrail } from "@/app/components/effects/CursorTrail";
@@ -12,22 +12,32 @@ import { ScrollHUD } from "@/app/components/layout/ScrollHUD";
 import { SpaceCanvas } from "@/app/components/space/SpaceCanvas";
 import { siteConfig } from "@/app/content/site-config";
 
-const displayFont = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const displayFont = Orbitron({
+  variable: "--font-orbitron-src",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["Arial Black", "Segoe UI", "sans-serif"],
+});
+
+const interfaceFont = Oxanium({
+  variable: "--font-oxanium-src",
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["Arial Narrow", "Segoe UI", "sans-serif"],
 });
 
 const bodyFont = Inter({
-  variable: "--font-inter",
+  variable: "--font-inter-src",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["system-ui", "sans-serif"],
 });
 
 const hudFont = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+  variable: "--font-jetbrains-mono-src",
   subsets: ["latin"],
   display: "swap",
+  fallback: ["SFMono-Regular", "Menlo", "monospace"],
 });
 
 export const metadata: Metadata = {
@@ -48,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${displayFont.variable} ${bodyFont.variable} ${hudFont.variable} h-full antialiased`}
+      className={`${displayFont.variable} ${interfaceFont.variable} ${bodyFont.variable} ${hudFont.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <EffectsProvider>

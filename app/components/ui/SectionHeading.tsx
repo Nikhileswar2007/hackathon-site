@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { LetterWave } from "../fx/LetterWave";
 import { SplitHeading } from "../fx/SplitHeading";
+import { TechRule } from "../fx/TechRule";
 import { cn } from "./cn";
 
 export function SectionHeading({
@@ -43,8 +44,11 @@ export function SectionHeading({
         as="h2"
         id={id}
         text={title}
-        className="display-title text-h2 text-foreground"
+        className="display-oxanium text-h2 text-foreground"
       />
+      <span className={cn("block", align === "center" && "mx-auto")}>
+        <TechRule align={align} />
+      </span>
       {description ? (
         <div
           className={cn(

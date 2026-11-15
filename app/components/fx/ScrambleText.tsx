@@ -114,6 +114,11 @@ export function ScrambleText({
       className={cn("scramble-text", className)}
       aria-label={text}
       data-mode={mode}
+      style={{
+        display: "inline-block",
+        minWidth: `${text.length}ch`,
+        whiteSpace: "pre-wrap",
+      }}
     >
       {text}
     </Tag>
