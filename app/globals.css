@@ -286,7 +286,11 @@
   }
 
   :target {
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 6.5rem;
+  }
+
+  [id] {
+    scroll-margin-top: 6.5rem;
   }
 
   ::selection {
@@ -544,6 +548,7 @@
   place-items: center;
   width: 2.25rem;
   height: 2.25rem;
+  flex: none;
   border: 1px dashed color-mix(in srgb, var(--accent) 55%, var(--border-strong));
   color: var(--accent);
   font-family: var(--font-oxanium);
@@ -553,12 +558,6 @@
   transition:
     border-color var(--duration-base) var(--ease-out),
     color var(--duration-base) var(--ease-out);
-}
-
-@media (min-width: 640px) {
-  .command-logo {
-    display: grid;
-  }
 }
 
 .command-wordmark:hover .command-logo,
@@ -571,6 +570,17 @@
   display: flex;
   flex-direction: column;
   line-height: 0.95;
+}
+
+@media (min-width: 1024px) {
+  .command-logo {
+    display: grid;
+  }
+
+  .command-wordmark {
+    width: 11.25rem;
+    flex: 0 0 11.25rem;
+  }
 }
 
 .wordmark {
@@ -595,9 +605,10 @@
   position: relative;
   align-items: center;
   justify-content: center;
-  gap: 0.15rem;
+  gap: clamp(0.08rem, 0.35vw, 0.38rem);
   align-self: center;
   min-width: 0;
+  white-space: nowrap;
 }
 
 .nav-lens {
@@ -617,12 +628,13 @@
   position: relative;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.24rem;
-  padding: 0.72rem 0.42rem;
+  min-width: 0;
+  padding: 0.78rem clamp(0.34rem, 0.65vw, 0.62rem);
   overflow: visible;
   color: var(--muted);
   text-decoration: none;
   text-transform: uppercase;
+  white-space: nowrap;
   transition:
     color var(--duration-base) var(--ease-out),
     transform var(--duration-base) var(--ease-out);
@@ -636,17 +648,14 @@
 }
 
 .nav-index {
-  font-family: var(--font-hud);
-  font-size: 0.45rem;
-  font-weight: 500;
-  color: color-mix(in srgb, var(--primary) 70%, transparent);
+  display: none;
 }
 
 .nav-link-label {
   font-family: var(--font-oxanium);
-  font-size: 0.625rem;
+  font-size: clamp(0.75rem, 0.28vw + 0.65rem, 0.875rem);
   font-weight: 700;
-  letter-spacing: 0.075em;
+  letter-spacing: 0.055em;
   line-height: 1;
 }
 
@@ -736,6 +745,60 @@
 .command-menu-button:hover {
   color: var(--primary);
   border-color: var(--primary);
+}
+
+.command-clock {
+  display: none;
+}
+
+@media (min-width: 1500px) {
+  .command-clock {
+    display: flex;
+  }
+}
+
+.command-search {
+  --chamfer: 0.45rem;
+  display: inline-flex;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding-inline: 0.62rem;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--muted);
+  clip-path: polygon(
+    var(--chamfer) 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    0 100%,
+    0 var(--chamfer)
+  );
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.command-search:disabled {
+  cursor: default;
+  opacity: 0.68;
+}
+
+.command-search-copy {
+  display: none;
+  color: inherit;
+  font-family: var(--font-hud);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 1280px) {
+  .command-search-copy {
+    display: inline;
+  }
 }
 
 .mission-progress {
@@ -1100,6 +1163,59 @@
   transition: none;
 }
 
+.more-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.more-tile {
+  --chamfer: 0.42rem;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.48rem;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: var(--foreground);
+  text-align: left;
+  clip-path: polygon(
+    var(--chamfer) 0,
+    100% 0,
+    100% calc(100% - var(--chamfer)),
+    calc(100% - var(--chamfer)) 100%,
+    0 100%,
+    0 var(--chamfer)
+  );
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+
+.more-tile[data-active="true"] {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary-soft) 56%, var(--surface));
+  color: var(--primary);
+}
+
+.more-tile-title {
+  font-family: var(--font-oxanium);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.more-tile-copy {
+  color: var(--muted);
+  font-size: 0.5rem;
+  line-height: 1.25;
+}
+
 .mobile-command-deck {
   position: fixed;
   z-index: 40;
@@ -1352,7 +1468,7 @@
 .display-title {
   font-family: var(--font-orbitron);
   letter-spacing: 0.018em;
-  line-height: 0.94;
+  line-height: 1.05;
   font-weight: 800;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
@@ -1375,7 +1491,7 @@
 
 .text-hero {
   font-size: var(--text-fluid-hero);
-  line-height: 0.92;
+  line-height: 1.04;
 }
 
 .text-h1 {
@@ -1694,7 +1810,7 @@
   background: repeating-linear-gradient(
     to bottom,
     transparent 0 0.16em,
-    rgba(2, 4, 9, 0.38) 0.16em 0.2em,
+    rgba(2, 4, 9, 0.18) 0.16em 0.2em,
     transparent 0.2em 0.31em
   );
   pointer-events: none;
@@ -1855,30 +1971,46 @@
 }
 
 .text-roll {
+  position: relative;
   display: inline-flex;
+  align-items: center;
+  width: max-content;
+  height: 1lh;
   overflow: hidden;
   font-family: var(--font-oxanium);
   font-weight: 600;
   letter-spacing: 0.075em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
 .text-roll-track {
-  display: inline-flex;
-  flex-direction: column;
+  display: block;
+  height: 100%;
   transition: transform var(--duration-hover) var(--ease-out);
 }
 
 .text-roll:hover .text-roll-track,
 .text-roll:focus-visible .text-roll-track,
+.text-roll:focus-within .text-roll-track,
+.text-roll:focus-within a .text-roll-track,
+.text-roll:focus-visible a .text-roll-track,
 a:hover > .text-roll .text-roll-track,
 a:focus-visible > .text-roll .text-roll-track {
-  transform: translate3d(0, -50%, 0);
+  transform: translate3d(0, -1lh, 0);
 }
 
 .text-roll-line {
   display: block;
+  height: 1lh;
+  line-height: 1;
   white-space: nowrap;
+}
+
+.text-roll-line[aria-hidden="true"] {
+  position: absolute;
+  top: 1lh;
+  left: 0;
 }
 
 .letter-wave-char {

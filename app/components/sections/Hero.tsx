@@ -47,7 +47,7 @@ export function Hero() {
 
             <ExtrudedTitle
               text={siteConfig.tagline}
-              className="display-title text-hero hero-title scanline-text mt-4 max-w-xl text-balance uppercase tracking-[-0.04em] text-foreground"
+              className="display-title text-hero scanline-text mt-4 max-w-xl text-balance uppercase tracking-[-0.02em] text-foreground"
             />
 
             <div className="mt-5 min-h-[6.4rem] max-w-xl text-lead text-muted sm:min-h-[5.4rem] lg:min-h-[3.4rem]">

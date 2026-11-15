@@ -10,7 +10,7 @@ import { useMediaQuery } from "../effects/use-media-query";
 import { subscribeScroll } from "../effects/scroll-store";
 import { Magnetic } from "../fx/Magnetic";
 import { Button3D } from "../ui/Button3D";
-import { CloseIcon, MenuIcon } from "../ui/icons";
+import { CloseIcon, MenuIcon, SearchIcon } from "../ui/icons";
 import { Frame } from "../ui/Frame";
 import { cn } from "../ui/cn";
 import { MissionClock } from "./MissionClock";
@@ -33,7 +33,13 @@ const previewIds = new Set([
   "/prizes",
   "/faq",
   "/contact",
+  "/more",
 ]);
+
+const desktopNavItems = [
+  ...siteConfig.primaryNavLinks,
+  { label: "More", href: "/more" },
+];
 
 function isPreviewId(href: string): href is NavPreviewId {
   return previewIds.has(href);
@@ -64,7 +70,7 @@ export function Navbar() {
   const menuRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const itemRefs = useRef<Array<HTMLElement | null>>([]);
   const openTimer = useRef(0);
   const closeTimer = useRef(0);
   const progressRef = useRef<HTMLSpanElement>(null);
@@ -325,10 +331,10 @@ export function Navbar() {
   }
 
   function handleNavKeyDown(
-    event: React.KeyboardEvent<HTMLAnchorElement>,
+    event: React.KeyboardEvent<HTMLElement>,
     index: number,
   ) {
-    const count = siteConfig.navLinks.length;
+    const count = desktopNavItems.length;
     let nextIndex = index;
 
     if (event.key === "ArrowRight") {
@@ -365,7 +371,7 @@ export function Navbar() {
     }
 
     event.preventDefault();
-    const index = siteConfig.navLinks.findIndex((link) => link.href === openId);
+    const index = desktopNavItems.findIndex((link) => link.href === openId);
     setOpenId(null);
     setClosing(false);
     window.requestAnimationFrame(() => {
@@ -427,7 +433,7 @@ export function Navbar() {
             <nav
               ref={navRef}
               aria-label="Primary"
-              className="command-nav hidden xl:flex"
+              className="command-nav hidden lg:flex"
               onBlurCapture={handleFocusOut}
             >
               <span
@@ -437,34 +443,60 @@ export function Navbar() {
                 }}
                 aria-hidden="true"
               />
-              {siteConfig.navLinks.map((link, index) => {
-                const active = isActivePath(pathname, link.href);
+              {desktopNavItems.map((link, index) => {
+                const active = link.href !== "/more" && isActivePath(pathname, link.href);
                 const activePreview = openId === link.href;
+                const commonProps = {
+                  ref: (node: HTMLElement | null) => {
+                    itemRefs.current[index] = node;
+                  },
+                  "aria-controls": activePreview ? "nav-preview" : undefined,
+                  "aria-expanded": activePreview,
+                  "data-cursor": "OPEN",
+                  className: "nav-item",
+                  "data-active": active,
+                  "data-popover-open": activePreview,
+                  onPointerEnter: () => finePointer && openPreview(link.href, index),
+                  onFocus: () => openPreview(link.href, index, true),
+                  onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => handleNavKeyDown(event, index),
+                };
+
+                if (link.href === "/more") {
+                  return (
+                    <button
+                      key="more"
+                      type="button"
+                      {...commonProps}
+                      onClick={() => {
+                        if (openId === "/more" && !closing) {
+                          setOpenId(null);
+                          setClosing(false);
+                          return;
+                        }
+                        measureLens(index);
+                        setClosing(false);
+                        setAnchor(measureAnchor(link.href, index));
+                        setOpenId("/more");
+                      }}
+                    >
+                      <NavDecode text={link.label} />
+                      <span className="nav-charge" data-active="false" aria-hidden="true" />
+                      <span className="nav-brackets" aria-hidden="true" />
+                    </button>
+                  );
+                }
+
                 return (
                   <Link
                     key={link.href}
-                    ref={(node) => {
-                      itemRefs.current[index] = node;
-                    }}
+                    {...commonProps}
                     href={link.href}
                     onClick={() => {
                       setOpenId(null);
                       setClosing(false);
                     }}
                     aria-current={active ? "page" : undefined}
-                    aria-expanded={activePreview}
-                    aria-controls={activePreview ? "nav-preview" : undefined}
-                    data-cursor="OPEN"
-                    className="nav-item"
-                    data-active={active}
-                    data-popover-open={activePreview}
-                    onPointerEnter={() => finePointer && openPreview(link.href, index)}
-                    onFocus={() => openPreview(link.href, index, true)}
-                    onKeyDown={(event) => handleNavKeyDown(event, index)}
                   >
-                    <span className="nav-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
                     <NavDecode text={link.label} />
                     <span className="nav-charge" data-active={active} aria-hidden="true" />
                     <span className="nav-brackets" aria-hidden="true" />
@@ -474,7 +506,18 @@ export function Navbar() {
             </nav>
 
             <div className="command-actions">
-              <MissionClock className="hidden lg:flex" />
+              <MissionClock className="command-clock" />
+              <button
+                type="button"
+                className="command-search"
+                disabled
+                aria-label="Command palette coming soon"
+                title="Command palette coming soon"
+                data-cursor="OPEN"
+              >
+                <SearchIcon className="size-4" />
+                <span className="command-search-copy">Ctrl K</span>
+              </button>
               <Magnetic className="hidden sm:inline-block">
                 <Button3D
                   href={siteConfig.registerCta.href}
@@ -491,7 +534,7 @@ export function Navbar() {
                 aria-controls="mobile-navigation"
                 aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
                 onClick={() => setMenuOpen((current) => !current)}
-                className="command-menu-button xl:hidden"
+                className="command-menu-button lg:hidden"
               >
                 {menuOpen ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
               </button>
@@ -513,7 +556,11 @@ export function Navbar() {
           ref={popoverRef}
           id="nav-preview"
           role="region"
-          aria-label={`${siteConfig.navLinks.find((link) => link.href === openId)?.label ?? "Navigation"} preview`}
+          aria-label={
+            openId === "/more"
+              ? "More pages preview"
+              : `${siteConfig.navLinks.find((link) => link.href === openId)?.label ?? "Navigation"} preview`
+          }
           className="nav-popover"
           data-state={closing ? "closing" : "open"}
           data-mode={mode}
@@ -545,7 +592,7 @@ export function Navbar() {
           id="mobile-navigation"
           ref={menuRef}
           data-lenis-prevent
-          className="mobile-command-deck xl:hidden"
+          className="mobile-command-deck lg:hidden"
         >
           <div className="mobile-command-grid" aria-hidden="true" />
           <nav

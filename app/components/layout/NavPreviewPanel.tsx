@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import {
   about,
@@ -17,6 +17,7 @@ import {
   timeline,
   tracks,
 } from "@/app/content/event-data";
+import { MissionClock } from "./MissionClock";
 import { siteConfig, TBA } from "@/app/content/site-config";
 import { useEffectsMode } from "../effects/effects-provider";
 import { TiltCard } from "../fx/TiltCard";
@@ -33,13 +34,16 @@ export type NavPreviewId =
   | "/fair-play"
   | "/prizes"
   | "/faq"
-  | "/contact";
+  | "/contact"
+  | "/more";
+
+type FeaturedPath = Exclude<NavPreviewId, "/more">;
 
 const indexByPath = new Map(
   siteConfig.navLinks.map((link, index) => [link.href, String(index + 1).padStart(2, "0")]),
 );
 
-const featuredByPath: Record<NavPreviewId, { title: string; description: string }> = {
+const featuredByPath: Record<FeaturedPath, { title: string; description: string }> = {
   "/about": {
     title: "The mission",
     description: "Kakshya 2026: national, online and built around one 48-hour clock.",
@@ -137,7 +141,7 @@ function FeaturedBlock({
   id,
   onNavigate,
 }: {
-  id: NavPreviewId;
+  id: FeaturedPath;
   onNavigate?: () => void;
 }) {
   const navLink = siteConfig.navLinks.find((link) => link.href === id);
@@ -278,7 +282,10 @@ function TimelinePreview({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex h-full flex-col">
-      <p className="nav-preview-kicker">Key moments</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="nav-preview-kicker">Key moments</p>
+        <MissionClock className="scale-[0.78] origin-right" />
+      </div>
       <div
         ref={stripRef}
         className="timeline-mini-strip"
@@ -425,19 +432,19 @@ function RulesPreview({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="grid gap-1.5 sm:grid-cols-2">
       {ruleSections.map((section) => (
-        previewLink({
-          href: `/rules#${section.id}`,
-          onNavigate,
-          className: "nav-preview-row nav-preview-rule",
-          children: (
-            <>
-              <ArrowRightIcon className="size-3.5 shrink-0" />
-              <span className="text-[0.6875rem] font-semibold uppercase leading-snug">
-                {section.title}
-              </span>
-            </>
-          ),
-        })
+        <Link
+          key={section.id}
+          href={`/rules#${section.id}`}
+          prefetch={false}
+          onClick={onNavigate}
+          data-cursor="OPEN"
+          className="nav-preview-row nav-preview-rule"
+        >
+          <ArrowRightIcon className="size-3.5 shrink-0" />
+          <span className="text-[0.6875rem] font-semibold uppercase leading-snug">
+            {section.title}
+          </span>
+        </Link>
       ))}
     </div>
   );
@@ -564,6 +571,110 @@ function ContactPreview() {
   );
 }
 
+type MoreTileId = "/about" | "/submission" | "/fair-play" | "/contact";
+
+const moreTileCopy: Record<MoreTileId, { index: string; description: string }> = {
+  "/about": {
+    index: "01",
+    description: "Mission, guarantees and the team path",
+  },
+  "/submission": {
+    index: "02",
+    description: "T+40 to T+48 and the final pack",
+  },
+  "/fair-play": {
+    index: "03",
+    description: "Sealed problems and auditable judging",
+  },
+  "/contact": {
+    index: "04",
+    description: "Official channels for requests and reports",
+  },
+};
+
+function renderPreviewContent(
+  id: FeaturedPath,
+  onNavigate?: () => void,
+) {
+  switch (id) {
+    case "/about":
+      return <AboutPreview />;
+    case "/tracks":
+      return <TracksPreview onNavigate={onNavigate} />;
+    case "/timeline":
+      return <TimelinePreview onNavigate={onNavigate} />;
+    case "/scoring":
+      return <ScoringPreview />;
+    case "/rules":
+      return <RulesPreview onNavigate={onNavigate} />;
+    case "/submission":
+      return <SubmissionPreview onNavigate={onNavigate} />;
+    case "/fair-play":
+      return <FairPlayPreview />;
+    case "/prizes":
+      return <PrizesPreview />;
+    case "/faq":
+      return <FaqPreview onNavigate={onNavigate} />;
+    case "/contact":
+      return <ContactPreview />;
+  }
+}
+
+function MorePanel({ onNavigate }: { onNavigate?: () => void }) {
+  const [selected, setSelected] = useState<MoreTileId>("/about");
+
+  return (
+    <div
+      className="nav-preview-shell"
+      data-preview="more"
+      data-cursor="INSPECT"
+    >
+      <div className="nav-preview-grid">
+        <div className="nav-preview-feature more-feature">
+          <span className="index-numeral">09</span>
+          <p className="hud-prefix mt-2">Mission index</p>
+          <h2 className="display-oxanium mt-2 text-[1.25rem] leading-[1.05] text-foreground">
+            More
+          </h2>
+          <div className="more-tiles mt-3">
+            {siteConfig.moreNavLinks.map((link) => {
+              const id = link.href as MoreTileId;
+              const copy = moreTileCopy[id];
+              return (
+                <button
+                  key={link.href}
+                  type="button"
+                  className="more-tile"
+                  data-active={selected === id}
+                  data-cursor="SWITCH"
+                  onClick={() => setSelected(id)}
+                  onFocus={() => setSelected(id)}
+                  onMouseEnter={() => setSelected(id)}
+                >
+                  <span className="index-numeral">{copy.index}</span>
+                  <span className="more-tile-title">{link.label}</span>
+                  <span className="more-tile-copy">{copy.description}</span>
+                </button>
+              );
+            })}
+          </div>
+          <Link
+            href={selected}
+            prefetch={false}
+            onClick={onNavigate}
+            data-cursor="OPEN"
+            className="nav-preview-open mt-3"
+          >
+            Open page
+            <ArrowRightIcon className="size-4" />
+          </Link>
+        </div>
+        <div className="nav-preview-body">{renderPreviewContent(selected, onNavigate)}</div>
+      </div>
+    </div>
+  );
+}
+
 export function NavPreviewPanel({
   id,
   onNavigate,
@@ -571,30 +682,9 @@ export function NavPreviewPanel({
   id: NavPreviewId;
   onNavigate?: () => void;
 }) {
-  const content = useMemo(() => {
-    switch (id) {
-      case "/about":
-        return <AboutPreview />;
-      case "/tracks":
-        return <TracksPreview onNavigate={onNavigate} />;
-      case "/timeline":
-        return <TimelinePreview onNavigate={onNavigate} />;
-      case "/scoring":
-        return <ScoringPreview />;
-      case "/rules":
-        return <RulesPreview onNavigate={onNavigate} />;
-      case "/submission":
-        return <SubmissionPreview onNavigate={onNavigate} />;
-      case "/fair-play":
-        return <FairPlayPreview />;
-      case "/prizes":
-        return <PrizesPreview />;
-      case "/faq":
-        return <FaqPreview onNavigate={onNavigate} />;
-      case "/contact":
-        return <ContactPreview />;
-    }
-  }, [id, onNavigate]);
+  if (id === "/more") {
+    return <MorePanel onNavigate={onNavigate} />;
+  }
 
   return (
     <div
@@ -604,7 +694,7 @@ export function NavPreviewPanel({
     >
       <div className="nav-preview-grid">
         <FeaturedBlock id={id} onNavigate={onNavigate} />
-        <div className="nav-preview-body">{content}</div>
+        <div className="nav-preview-body">{renderPreviewContent(id, onNavigate)}</div>
       </div>
     </div>
   );

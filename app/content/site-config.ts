@@ -45,6 +45,22 @@ export const siteConfig = {
 
   registerCta: { label: "Register", href: "/register" } satisfies NavLink,
 
+  primaryNavLinks: [
+    { label: "Tracks", href: "/tracks" },
+    { label: "Timeline", href: "/timeline" },
+    { label: "Scoring", href: "/scoring" },
+    { label: "Rules", href: "/rules" },
+    { label: "Prizes", href: "/prizes" },
+    { label: "FAQ", href: "/faq" },
+  ] satisfies NavLink[],
+
+  moreNavLinks: [
+    { label: "About", href: "/about" },
+    { label: "Submission", href: "/submission" },
+    { label: "Fair play", href: "/fair-play" },
+    { label: "Contact", href: "/contact" },
+  ] satisfies NavLink[],
+
   footerGroups: [
     {
       title: "Explore",
