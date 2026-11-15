@@ -7,6 +7,7 @@ import { SponsorsStrip } from "@/app/components/sections/SponsorsStrip";
 import { TrackCards } from "@/app/components/sections/TrackCards";
 import { Marquee } from "@/app/components/fx/Marquee";
 import { Magnetic } from "@/app/components/fx/Magnetic";
+import { GantryDivider } from "@/app/components/fx/GantryDivider";
 import { Reveal } from "@/app/components/fx/Reveal";
 import { SplitHeading } from "@/app/components/fx/SplitHeading";
 import { SpotlightGroup } from "@/app/components/fx/SpotlightGroup";
@@ -347,6 +348,8 @@ export default function HomePage() {
           </Reveal>
         </div>
       </section>
+
+      <GantryDivider className="text-border-strong" />
 
       <SponsorsStrip />
 

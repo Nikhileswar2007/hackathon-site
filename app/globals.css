@@ -4856,3 +4856,12 @@ html.cursor-none
   background-position: left center;
   background-repeat: no-repeat;
 }
+.rocket-silhouette {
+  position: absolute;
+  right: 1.15rem;
+  top: 2.35rem;
+  width: 2.35rem;
+  color: color-mix(in srgb, var(--border-strong) 80%, var(--accent) 20%);
+  opacity: 0.9;
+  pointer-events: none;
+}

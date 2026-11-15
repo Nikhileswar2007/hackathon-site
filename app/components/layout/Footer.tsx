@@ -5,6 +5,7 @@ import { SpotlightTile } from "../fx/SpotlightTile";
 import { TextRoll } from "../fx/TextRoll";
 import { BrandMark } from "../ui/BrandMark";
 import { Wordmark } from "../ui/Wordmark";
+import { GantryDivider } from "../fx/GantryDivider";
 import { EffectsToggle } from "./EffectsToggle";
 
 export function Footer() {
@@ -110,6 +111,7 @@ export function Footer() {
           </SpotlightTile>
         </SpotlightGroup>
 
+        <GantryDivider className="my-2 text-border-strong" />
         <div className="flex flex-col gap-3 border-t border-border py-6 text-xs leading-relaxed text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {brand.year} {brand.name}. A national space hackathon by{" "}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { siteConfig } from "@/app/content/site-config";
 import { useEffectsMode } from "../effects/effects-provider";
 import { Badge } from "../ui/Badge";
+import { TMinus } from "../ui/StatusLight";
 
 interface Remaining {
   days: number;
@@ -89,9 +90,9 @@ export function Countdown() {
       aria-label="T-minus countdown to Kosmodrome 2026 liftoff"
     >
       <div className="flex items-center justify-between gap-3">
-        <p className="telemetry flex items-center gap-2 text-primary">
+        <p className="flex items-center gap-2 text-primary">
           <span className="status-dot" aria-hidden="true" />
-          T-minus to liftoff
+          <TMinus />
         </p>
         <Badge tone="primary">T0</Badge>
       </div>

@@ -8,6 +8,7 @@ import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
 import { Card } from "@/app/components/ui/Card";
 import { DataTable } from "@/app/components/ui/DataTable";
+import { HazardStripe } from "@/app/components/ui/HazardStripe";
 import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
@@ -209,6 +210,7 @@ export default function ScoringPage() {
           title="Deductions from Stage 1"
           description="Penalties are cumulative and deducted from the Stage 1 score."
         />
+        <HazardStripe label="Caution" className="mt-4" />
         <div className="mt-8">
           <DataTable
             caption="Stage 1 penalties and deductions"

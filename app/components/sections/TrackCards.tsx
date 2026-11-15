@@ -5,6 +5,7 @@ import { TiltCard } from "../fx/TiltCard";
 import { Badge } from "../ui/Badge";
 import { Card } from "../ui/Card";
 import { CoordinateTag } from "../ui/CoordinateTag";
+import { RocketSilhouette } from "../fx/RocketSilhouette";
 import { ArrowRightIcon } from "../ui/icons";
 
 export function TrackCards({ tracks }: { tracks: Track[] }) {
@@ -25,6 +26,7 @@ export function TrackCards({ tracks }: { tracks: Track[] }) {
                 as="article"
                 className="blueprint-grid group flex h-full flex-col gap-5 hover:border-border-strong"
               >
+                <RocketSilhouette className="rocket-silhouette" />
                 <div className="flex items-center justify-between gap-3">
                   <Badge tone={beginner ? "primary" : "accent"}>
                     {beginner ? "PAD 01" : "PAD 02"}
