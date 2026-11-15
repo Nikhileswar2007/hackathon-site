@@ -81,7 +81,7 @@
     -apple-system, "Segoe UI", sans-serif;
   --font-hud: var(--font-jetbrains-mono-src), "JetBrains Mono", ui-monospace,
     SFMono-Regular, Menlo, monospace;
-  --font-watermark: var(--font-tektur-src), "Tektur", sans-serif;
+  --font-watermark: "Segoe UI", system-ui, -apple-system, "Noto Sans", sans-serif;
 
   --text-fluid-hero: clamp(2.35rem, 7.2vw, 5.35rem);
   --text-fluid-h1: clamp(1.85rem, 4.25vw, 3.35rem);
