@@ -14,7 +14,6 @@ import { SpotlightTile } from "@/app/components/fx/SpotlightTile";
 import { TiltCard } from "@/app/components/fx/TiltCard";
 import { Badge } from "@/app/components/ui/Badge";
 import { BeamBorder } from "@/app/components/ui/BeamBorder";
-import { Button } from "@/app/components/ui/Button";
 import { Button3D } from "@/app/components/ui/Button3D";
 import { Card } from "@/app/components/ui/Card";
 import { Frame } from "@/app/components/ui/Frame";
@@ -193,9 +192,9 @@ export default function HomePage() {
               title="From registration to orbit"
               description="Five key moments from the full event schedule."
             />
-            <Button href="/timeline" variant="secondary" size="sm">
+            <Button3D href="/timeline" variant="secondary" size="sm">
               View full timeline
-            </Button>
+            </Button3D>
           </div>
           <div className="mt-10">
             <MiniTimeline items={homeTimeline} />
@@ -218,9 +217,9 @@ export default function HomePage() {
             title="Prizes and certificates"
             description="Awards for both tracks, chosen from the finalists. Amounts are to be announced."
           />
-          <Button href="/prizes" variant="secondary" size="sm">
+          <Button3D href="/prizes" variant="secondary" size="sm">
             See all prizes
-          </Button>
+          </Button3D>
         </div>
 
         <div className="mt-8 grid gap-5 md:grid-cols-2">
@@ -311,9 +310,9 @@ export default function HomePage() {
               eyebrow="Questions"
               title="A few things teams ask"
             />
-            <Button href="/faq" variant="secondary" size="sm">
+            <Button3D href="/faq" variant="secondary" size="sm">
               Read all FAQs
-            </Button>
+            </Button3D>
           </div>
           <Reveal className="mt-8">
             <FaqList

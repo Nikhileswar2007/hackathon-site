@@ -131,10 +131,7 @@
     0 34px 78px rgba(0, 0, 0, 0.48);
   --edge-light: rgba(255, 255, 255, 0.11);
   --edge-dark: rgba(0, 0, 0, 0.62);
-  --glass-bg: color-mix(in srgb, var(--surface) 64%, transparent);
-  --glass-border: color-mix(in srgb, var(--border-strong) 72%, white 8%);
   --spotlight-color: rgba(255, 158, 69, 0.16);
-  --beam-angle: 118deg;
 
   /* Layers */
   --z-canvas: 0;
@@ -145,12 +142,6 @@
   --z-trail: 110;
   --z-cursor: 120;
   --z-skip: 130;
-}
-
-@property --beam-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 118deg;
 }
 
 @theme inline {
@@ -531,12 +522,6 @@
   background: var(--gradient-line);
 }
 
-.glass {
-  background-color: color-mix(in srgb, var(--surface) 72%, transparent);
-  backdrop-filter: blur(18px) saturate(130%);
-  -webkit-backdrop-filter: blur(18px) saturate(130%);
-}
-
 .mission-panel {
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -627,12 +612,12 @@
 .split-heading .split-word {
   display: inline-block;
   white-space: pre;
-  will-change: transform, opacity;
 }
 
 .split-heading[data-armed="true"]:not([data-visible="true"]) .split-word {
   opacity: 0;
   transform: translate3d(0, 0.7em, 0) rotate(0.4deg);
+  will-change: transform, opacity;
 }
 
 .split-heading[data-visible="true"] .split-word {
@@ -673,20 +658,6 @@
 .split-text[data-variant="letter"][data-visible="true"] .split-char {
   animation: char-rise 0.82s var(--ease-out) both;
   animation-delay: calc(var(--char-index, 0) * 22ms + 80ms);
-}
-
-.text-shimmer {
-  background: linear-gradient(
-    108deg,
-    var(--foreground) 8%,
-    var(--primary) 42%,
-    var(--foreground) 68%
-  );
-  background-size: 220% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: text-shimmer 7s linear infinite;
 }
 
 .link-underline {
@@ -784,6 +755,10 @@ a:focus-visible > .text-roll .text-roll-track {
   animation: marquee-scroll var(--marquee-duration, 44s) linear infinite;
 }
 
+.marquee[data-in-view="false"] .marquee-track {
+  animation-play-state: paused;
+}
+
 .marquee:hover .marquee-track,
 .marquee:focus-within .marquee-track {
   animation-play-state: paused;
@@ -856,11 +831,11 @@ a:focus-visible > .text-roll .text-roll-track {
 .magnetic {
   display: inline-block;
   transition: transform 420ms var(--ease-out);
-  will-change: transform;
 }
 
 .magnetic[data-active="true"] {
   transition-duration: 90ms;
+  will-change: transform;
 }
 
 .tilt-card {
@@ -892,7 +867,12 @@ a:focus-visible > .text-roll .text-roll-track {
   transition: opacity var(--duration-base) var(--ease-out);
 }
 
-.tilt-card:hover .tilt-glare,
+@media (hover: hover) and (pointer: fine) {
+  .tilt-card:hover .tilt-glare {
+    opacity: 1;
+  }
+}
+
 .tilt-card:focus-within .tilt-glare {
   opacity: 1;
 }
@@ -911,8 +891,13 @@ a:focus-visible > .text-roll .text-roll-track {
   transition: opacity var(--duration-base) var(--ease-out);
 }
 
-.tilt-card[data-spotlight="true"]:hover .tilt-spotlight,
-.tilt-card[data-spotlight="true"]:focus-within .tilt-spotlight {
+@media (hover: hover) and (pointer: fine) {
+  .tilt-card[data-spotlight="true"]:hover .tilt-spotlight {
+    opacity: 1;
+  }
+}
+
+.tilt-card:focus-within .tilt-spotlight {
   opacity: 1;
 }
 
@@ -989,14 +974,6 @@ a:focus-visible > .text-roll .text-roll-track {
     inset 0 0 26px rgba(0, 0, 0, 0.22);
 }
 
-.surface-glass {
-  border-color: var(--glass-border);
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(135%);
-  -webkit-backdrop-filter: blur(16px) saturate(135%);
-  box-shadow: var(--elev-2);
-}
-
 .surface[data-depth="1"] {
   box-shadow: var(--elev-1);
 }
@@ -1069,7 +1046,7 @@ a:focus-visible > .text-roll .text-roll-track {
   padding: 1px;
   pointer-events: none;
   background: conic-gradient(
-    from var(--beam-angle),
+    from 118deg,
     transparent 0deg 46deg,
     color-mix(in srgb, var(--primary) 78%, white 10%) 86deg,
     transparent 128deg 238deg,
@@ -1084,7 +1061,11 @@ a:focus-visible > .text-roll .text-roll-track {
 }
 
 .beam-border[data-mode="full"]::before {
-  animation: beam-rotate 8s linear infinite;
+  animation: beam-pulse 2.8s var(--ease-in-out) infinite;
+}
+
+.beam-border[data-in-view="false"]::before {
+  animation-play-state: paused;
 }
 
 .beam-border[data-mode="lite"]::before {
@@ -1301,7 +1282,16 @@ a:focus-visible > .text-roll .text-roll-track {
   z-index: 1;
 }
 
-.depth-stack:hover .depth-stack-layer,
+@media (hover: hover) and (pointer: fine) {
+  .depth-stack:hover .depth-stack-layer {
+    transform: translate3d(
+      calc(var(--stack-index) * 0.16rem),
+      calc(var(--stack-index) * 0.22rem + 2px),
+      0
+    );
+  }
+}
+
 .depth-stack:focus-within .depth-stack-layer {
   transform: translate3d(
     calc(var(--stack-index) * 0.16rem),
@@ -1336,17 +1326,10 @@ a:focus-visible > .text-roll .text-roll-track {
   stroke: var(--border-strong);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
 }
 
-.frame[data-mode="full"] .frame-svg path {
-  animation: frame-draw 1200ms var(--ease-out) forwards;
-}
-
-.frame[data-mode="lite"] .frame-svg path,
-.frame[data-mode="off"] .frame-svg path {
-  stroke-dashoffset: 0;
+.frame[data-mode="full"] .frame-svg {
+  animation: frame-fade 700ms var(--ease-out) both;
 }
 
 .scroll-scene {
@@ -1451,8 +1434,7 @@ a:focus-visible > .text-roll .text-roll-track {
   margin: -14px 0 0 -14px;
   filter: drop-shadow(0 0 7px color-mix(in srgb, var(--primary) 48%, transparent));
   transition:
-    opacity 140ms ease,
-    filter 220ms ease;
+    opacity 140ms ease;
 }
 
 .orbiter-craft svg {
@@ -1559,8 +1541,7 @@ a:focus-visible > .text-roll .text-roll-track {
   contain: layout paint style;
   border: 1px solid color-mix(in srgb, var(--orbiter-tone) 38%, transparent);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--background) 72%, transparent);
-  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--background) 90%, transparent);
   color: var(--orbiter-tone);
   padding: 3px 7px 4px;
   font-family: var(--font-hud);
@@ -2030,41 +2011,16 @@ html.cursor-none
   outline-offset: 2px;
 }
 
-.process-list {
-  position: relative;
-}
-
-.process-list::before {
-  content: "";
-  position: absolute;
-  top: 1.4rem;
-  bottom: 1.4rem;
-  left: 2.25rem;
-  width: 1px;
-  background: linear-gradient(
-    180deg,
-    var(--primary),
-    var(--accent) 60%,
-    transparent
-  );
-  opacity: 0.45;
-  pointer-events: none;
-}
-
-.process-step {
-  box-shadow:
-    var(--elev-1),
-    inset 0 1px 0 var(--edge-light);
-}
-
-.tie-breaker {
-  box-shadow:
-    var(--elev-1),
-    inset 0 1px 0 var(--edge-light);
-}
-
 .rulebook {
   box-shadow: var(--elev-2);
+}
+
+.rulebook-panel {
+  animation: panel-in 240ms var(--ease-out) both;
+}
+
+.rulebook-panel-instant {
+  animation: none;
 }
 
 .rulebook-row {
@@ -2247,15 +2203,36 @@ html.cursor-none
 
 /* ---------- Keyframes ---------- */
 
-@keyframes beam-rotate {
-  to {
-    --beam-angle: 478deg;
+@keyframes beam-pulse {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+
+  50% {
+    opacity: 0.72;
   }
 }
 
-@keyframes frame-draw {
+@keyframes frame-fade {
+  from {
+    opacity: 0;
+  }
+
   to {
-    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -0.35rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -2289,12 +2266,6 @@ html.cursor-none
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-@keyframes text-shimmer {
-  to {
-    background-position: -220% 0;
   }
 }
 
@@ -2340,13 +2311,11 @@ html.cursor-none
   from {
     opacity: 0;
     transform: translate3d(0, 0.4em, 0) rotateX(-28deg);
-    filter: blur(2px);
   }
 
   to {
     opacity: 1;
     transform: none;
-    filter: blur(0);
   }
 }
 
@@ -2423,11 +2392,6 @@ html.cursor-none
 @media (prefers-reduced-motion: reduce) {
   .extruded-layer {
     display: none;
-  }
-
-  .text-shimmer {
-    animation: none;
-    background-position: 0 0;
   }
 
   .letter-wave-char {

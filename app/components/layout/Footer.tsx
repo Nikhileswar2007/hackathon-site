@@ -7,7 +7,7 @@ import { EffectsToggle } from "./EffectsToggle";
 
 export function Footer() {
   return (
-    <footer className="site-footer border-t border-border bg-surface/70 backdrop-blur-xl">
+    <footer className="site-footer border-t border-border bg-surface">
       <div className="mx-auto w-full max-w-[88rem] px-4 sm:px-6 lg:px-8">
         <div
           className="relative flex items-end justify-between overflow-hidden border-b border-border/70 py-8 sm:py-10"

@@ -23,7 +23,6 @@ export function Frame({
       >
         <path
           d="M2 10V2H10M90 2H98V10M98 90V98H90M10 98H2V90"
-          pathLength={1}
         />
       </svg>
       {children}

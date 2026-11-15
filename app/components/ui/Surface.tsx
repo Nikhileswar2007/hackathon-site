@@ -6,7 +6,7 @@ import type {
 import { cn } from "./cn";
 
 type SurfaceElement = "div" | "article" | "section" | "li";
-type SurfaceTone = "flat" | "raised" | "inset" | "glass";
+type SurfaceTone = "flat" | "raised" | "inset";
 type SurfaceDepth = 1 | 2 | 3 | 4;
 
 type SurfaceProps = {
@@ -21,7 +21,6 @@ const toneClasses: Record<SurfaceTone, string> = {
   flat: "surface-flat",
   raised: "surface-raised",
   inset: "surface-inset",
-  glass: "surface-glass",
 };
 
 export function Surface({

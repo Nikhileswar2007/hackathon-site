@@ -107,7 +107,7 @@ export function ScrollHUD() {
         aria-hidden="true"
       >
         <div className="flex flex-col items-end gap-3">
-          <div className="rounded-md border border-border/80 bg-surface/55 px-3 py-2 text-right backdrop-blur-md">
+          <div className="rounded-md border border-border/80 bg-surface/90 px-3 py-2 text-right">
             <p className="telemetry text-[0.5rem] tracking-[0.2em]">
               Altitude
             </p>
@@ -149,7 +149,7 @@ export function ScrollHUD() {
             </div>
           </div>
 
-          <div className="rounded-md border border-border/80 bg-surface/55 px-3 py-2 text-right backdrop-blur-md">
+          <div className="rounded-md border border-border/80 bg-surface/90 px-3 py-2 text-right">
             <p className="telemetry text-[0.5rem] tracking-[0.2em]">Stage</p>
             <p className="mt-1 font-mono text-[0.625rem] tracking-[0.16em] text-primary">
               {hud.label}

@@ -75,20 +75,20 @@ export function SatelliteHud({ enabled }: { enabled: boolean }) {
     >
       {hoverLabel ? (
         <div
-          className="fixed z-20 -translate-x-1/2 -translate-y-[145%] rounded-md border border-primary/40 bg-background/90 px-3 py-2 text-left shadow-[0_0_28px_rgba(111,227,242,0.16)] backdrop-blur-md"
+          className="fixed z-20 -translate-x-1/2 -translate-y-[145%] rounded-md border border-primary/40 bg-background/90 px-3 py-2 text-left shadow-[0_0_28px_rgba(111,227,242,0.16)]"
           style={{ left: hoverLabel.x, top: hoverLabel.y }}
         >
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
             {hoverLabel.name}
           </p>
           <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted">
-            {hoverLabel.orbit} · click to track
+            {hoverLabel.orbit} Â· click to track
           </p>
         </div>
       ) : null}
 
       {hud.tracked ? (
-        <div className="fixed bottom-6 left-5 z-20 hidden w-60 rounded-lg border border-primary/40 bg-background/85 p-3 shadow-[0_0_32px_rgba(111,227,242,0.12)] backdrop-blur-md md:block">
+        <div className="fixed bottom-6 left-5 z-20 hidden w-60 rounded-lg border border-primary/40 bg-background/85 p-3 shadow-[0_0_32px_rgba(111,227,242,0.12)] md:block">
           <div className="flex items-center justify-between gap-3">
             <p className="font-mono text-[0.55rem] uppercase tracking-[0.18em] text-primary">
               Signal locked
@@ -99,7 +99,7 @@ export function SatelliteHud({ enabled }: { enabled: boolean }) {
             {hud.tracked.name}
           </p>
           <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted">
-            {hud.tracked.orbit} · click satellite to release
+            {hud.tracked.orbit} Â· click satellite to release
           </p>
         </div>
       ) : null}

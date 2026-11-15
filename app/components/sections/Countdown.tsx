@@ -84,7 +84,7 @@ export function Countdown() {
 
   return (
     <div
-      className="corner-frame w-full max-w-md rounded-2xl border border-border/80 bg-surface/55 p-5 shadow-glow backdrop-blur-xl sm:p-6"
+      className="corner-frame w-full max-w-md rounded-2xl border border-border/80 bg-surface/90 p-5 shadow-glow sm:p-6"
       role="timer"
       aria-label="Countdown to Kakshya 2026 kickoff"
     >

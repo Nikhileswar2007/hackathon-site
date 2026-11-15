@@ -377,9 +377,9 @@ export function RegisterForm() {
           >
             Back to edit
           </Button3D>
-          <Button href="/rules" variant="secondary">
+          <Button3D href="/rules" variant="secondary">
             Read the rules
-          </Button>
+          </Button3D>
         </div>
       </div>
     );

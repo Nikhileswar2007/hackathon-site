@@ -20,7 +20,7 @@ type ButtonProps = SharedButtonProps & {
   >;
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[transform,background-color,color,border-color,box-shadow] duration-200 ease-out focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px";
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[transform,background-color,color,border-color] duration-200 ease-out focus-visible:outline-offset-4 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px";
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:

@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import type { ReactNode } from "react";
+import { useEffectsMode } from "../effects/effects-provider";
 import { ChevronDownIcon } from "./icons";
 import { cn } from "./cn";
 
@@ -22,6 +23,7 @@ export function Accordion({
 }) {
   const [openIds, setOpenIds] = useState<string[]>(defaultOpenIds);
   const baseId = useId();
+  const mode = useEffectsMode();
 
   function toggle(id: string) {
     setOpenIds((current) =>
@@ -50,7 +52,7 @@ export function Accordion({
                 type="button"
                 id={buttonId}
                 aria-expanded={isOpen}
-                aria-controls={panelId}
+                aria-controls={isOpen ? panelId : undefined}
                 data-cursor={isOpen ? "COLLAPSE" : "EXPAND"}
                 onClick={() => toggle(item.id)}
                 className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left font-medium text-foreground transition-colors hover:bg-surface-raised focus-visible:outline-offset-[-2px]"
@@ -72,25 +74,21 @@ export function Accordion({
                 />
               </button>
             </h3>
-            <div
-              id={panelId}
-              role="region"
-              aria-labelledby={buttonId}
-              aria-hidden={!isOpen}
-              inert={!isOpen}
-              className={cn(
-                "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
-                isOpen
-                  ? "grid-rows-[1fr] opacity-100"
-                  : "grid-rows-[0fr] opacity-0",
-              )}
-            >
-              <div className="overflow-hidden">
+            {isOpen ? (
+              <div
+                id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
+                className={cn(
+                  "rulebook-panel",
+                  mode === "off" && "rulebook-panel-instant",
+                )}
+              >
                 <div className="px-5 pb-5 pl-11 text-sm leading-relaxed text-muted">
                   {item.content}
                 </div>
               </div>
-            </div>
+            ) : null}
           </div>
         );
       })}

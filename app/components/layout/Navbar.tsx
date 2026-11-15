@@ -218,7 +218,7 @@ export function Navbar() {
           id="mobile-navigation"
           ref={menuRef}
           data-lenis-prevent
-          className="fixed inset-0 top-16 z-40 overflow-y-auto overscroll-contain border-t border-border bg-background-deep/95 backdrop-blur-2xl xl:hidden"
+          className="fixed inset-0 top-16 z-40 overflow-y-auto overscroll-contain border-t border-border bg-background-deep/95 xl:hidden"
         >
           <div className="absolute inset-0 bg-mission-grid opacity-40" aria-hidden="true" />
           <nav

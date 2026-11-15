@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ExtrudedTitle } from "@/app/components/fx/ExtrudedTitle";
 import { SplitHeading } from "@/app/components/fx/SplitHeading";
+import { TiltCard } from "@/app/components/fx/TiltCard";
 import { ArrowRightIcon } from "@/app/components/ui/icons";
-import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -35,7 +37,10 @@ const quickLinks = [
 
 export default function NotFound() {
   return (
-    <section className="hero-space relative overflow-hidden border-b border-border">
+    <section
+      className="hero-space relative overflow-hidden border-b border-border"
+      data-hud="LOST SIGNAL"
+    >
       <div
         className="bg-mission-grid pointer-events-none absolute inset-0 opacity-20"
         aria-hidden="true"
@@ -57,12 +62,12 @@ export default function NotFound() {
           Error 404 · Signal lost
         </p>
 
-        <p
-          className="display-title mt-5 text-[clamp(5rem,16vw,10rem)] leading-[0.78] text-primary/15"
-          aria-hidden="true"
-        >
-          404
-        </p>
+        <div aria-hidden="true">
+          <ExtrudedTitle
+            text="404"
+            className="display-title pointer-events-none mt-5 select-none text-[clamp(5rem,16vw,10rem)] leading-[0.78] text-primary/15"
+          />
+        </div>
 
         <SplitHeading
           as="h1"
@@ -77,12 +82,12 @@ export default function NotFound() {
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/" size="lg">
+          <Button3D href="/" size="lg">
             Return to launch pad
-          </Button>
-          <Button href="/contact" variant="secondary" size="lg">
+          </Button3D>
+          <Button3D href="/contact" variant="secondary" size="lg">
             Contact the OC
-          </Button>
+          </Button3D>
         </div>
 
         <div className="mt-12">
@@ -91,19 +96,20 @@ export default function NotFound() {
           </p>
           <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {quickLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="group rounded-xl border border-border bg-surface/70 p-4 transition-colors hover:border-primary/50 hover:bg-surface-raised"
-              >
-                <span className="flex items-center justify-between gap-3 font-medium text-foreground">
-                  {link.label}
-                  <ArrowRightIcon className="size-4 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
-                </span>
-                <span className="mt-1 block text-xs leading-relaxed text-muted">
-                  {link.description}
-                </span>
-              </Link>
+              <TiltCard key={link.href} spotlight className="h-full rounded-xl">
+                <Link
+                  href={link.href}
+                  className="group flex h-full flex-col rounded-xl border border-border bg-surface/70 p-4 transition-colors hover:border-primary/50 hover:bg-surface-raised"
+                >
+                  <span className="flex items-center justify-between gap-3 font-medium text-foreground">
+                    {link.label}
+                    <ArrowRightIcon className="size-4 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
+                  </span>
+                  <span className="mt-1 block text-xs leading-relaxed text-muted">
+                    {link.description}
+                  </span>
+                </Link>
+              </TiltCard>
             ))}
           </div>
         </div>

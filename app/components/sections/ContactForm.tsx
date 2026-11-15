@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { contactTopics } from "@/app/content/event-data";
 import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Button3D } from "../ui/Button3D";
 import { cn } from "../ui/cn";
 
 interface ContactState {
@@ -93,7 +93,7 @@ export function ContactForm() {
       <div
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-success bg-success-soft p-6"
+        className="success-panel rounded-xl border border-success bg-success-soft p-6 shadow-[var(--elev-2)]"
       >
         <Badge tone="success">Preview complete</Badge>
         <h3
@@ -108,9 +108,9 @@ export function ContactForm() {
           will be connected later.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button type="button" onClick={() => setSubmitted(false)}>
+          <Button3D type="button" onClick={() => setSubmitted(false)}>
             Write another message
-          </Button>
+          </Button3D>
         </div>
       </div>
     );
@@ -273,7 +273,7 @@ export function ContactForm() {
         <p className="text-xs leading-relaxed text-muted">
           This form validates locally. Nothing is sent in this preview.
         </p>
-        <Button type="submit">Send message</Button>
+        <Button3D type="submit">Send message</Button3D>
       </div>
     </form>
   );
