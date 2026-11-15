@@ -46,7 +46,7 @@ export function Accordion({
         const panelId = `${baseId}-${item.id}-panel`;
 
         return (
-          <div key={item.id} className="rulebook-row" data-open={isOpen}>
+          <div key={item.id} id={item.id} className="rulebook-row" data-open={isOpen}>
             <h3 className="text-base">
               <button
                 type="button"

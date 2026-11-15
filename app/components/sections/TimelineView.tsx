@@ -100,7 +100,11 @@ export function TimelineView({ items }: { items: TimelineItem[] }) {
             const checkpoint = item.type === "checkpoint";
 
             return (
-              <li key={item.id} className="relative pl-8 sm:pl-10">
+              <li
+                key={item.id}
+                id={item.id}
+                className="relative pl-8 sm:pl-10"
+              >
                 <span
                   className={cn(
                     "timeline-node",

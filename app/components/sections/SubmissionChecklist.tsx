@@ -23,7 +23,10 @@ export function SubmissionChecklist() {
 
   return (
     <DepthStack className="rounded-xl" layers={2}>
-      <div className="checklist-panel rounded-xl border border-border bg-surface p-5 sm:p-6">
+      <div
+        id="checklist"
+        className="checklist-panel scroll-mt-24 rounded-xl border border-border bg-surface p-5 sm:p-6"
+      >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-lg font-semibold tracking-tight text-foreground">
             Pre-flight checklist
