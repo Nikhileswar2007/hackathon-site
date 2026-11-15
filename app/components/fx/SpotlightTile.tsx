@@ -5,7 +5,7 @@ import type {
 } from "react";
 import { cn } from "../ui/cn";
 
-type TileElement = "div" | "article" | "section" | "li";
+type TileElement = "div" | "article" | "section" | "li" | "nav";
 
 export function SpotlightTile({
   children,

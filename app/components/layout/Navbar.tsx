@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/app/content/site-config";
 import { lockPageScroll, unlockPageScroll } from "../effects/scroll-lock";
 import { Magnetic } from "../fx/Magnetic";
-import { Button } from "../ui/Button";
+import { Button3D } from "../ui/Button3D";
 import { CloseIcon, MenuIcon } from "../ui/icons";
 import { cn } from "../ui/cn";
 import { MissionClock } from "./MissionClock";
@@ -127,6 +127,8 @@ export function Navbar() {
           : "border-transparent bg-transparent",
         headerHidden && !menuOpen ? "-translate-y-full" : "translate-y-0",
       )}
+      data-scrolled={scrolled}
+      data-menu-open={menuOpen}
     >
       <div className="mx-auto flex h-16 w-full max-w-[88rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
@@ -171,7 +173,7 @@ export function Navbar() {
                     : "text-muted hover:text-foreground",
                 )}
               >
-                {link.label}
+                <span className="link-underline">{link.label}</span>
                 <span
                   className="nav-indicator"
                   data-active={active}
@@ -185,13 +187,13 @@ export function Navbar() {
         <div className="flex items-center gap-3 sm:gap-4">
           <MissionClock className="hidden lg:flex" />
           <Magnetic className="hidden sm:inline-block">
-            <Button
+            <Button3D
               href={siteConfig.registerCta.href}
               size="sm"
               data-cursor="LAUNCH"
             >
               {siteConfig.registerCta.label}
-            </Button>
+            </Button3D>
           </Magnetic>
           <button
             ref={menuButtonRef}
@@ -255,7 +257,7 @@ export function Navbar() {
             </ul>
 
             <div className="mt-8 flex flex-col gap-4">
-              <Button
+              <Button3D
                 href={siteConfig.registerCta.href}
                 size="lg"
                 className="w-full"
@@ -263,7 +265,7 @@ export function Navbar() {
                 onClick={() => setMenuOpen(false)}
               >
                 {siteConfig.registerCta.label}
-              </Button>
+              </Button3D>
               <div className="flex items-center justify-between gap-4 rounded-lg border border-border bg-surface/70 px-4 py-3">
                 <MissionClock />
                 <span className="telemetry text-[0.5625rem]">

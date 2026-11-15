@@ -15,7 +15,11 @@ export function TrackCards({ tracks }: { tracks: Track[] }) {
 
         return (
           <Reveal key={track.id} delay={index * 90} className="h-full">
-            <TiltCard id={track.id} className="h-full rounded-xl">
+            <TiltCard
+              id={track.id}
+              spotlight
+              className="h-full rounded-xl"
+            >
               <Card
                 as="article"
                 className="group flex h-full flex-col gap-5 hover:border-border-strong"

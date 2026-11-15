@@ -3,7 +3,8 @@ import { ExtrudedTitle } from "../fx/ExtrudedTitle";
 import { Magnetic } from "../fx/Magnetic";
 import { ScrambleText } from "../fx/ScrambleText";
 import { Badge } from "../ui/Badge";
-import { Button } from "../ui/Button";
+import { Button3D } from "../ui/Button3D";
+import { DepthStack } from "../ui/DepthStack";
 import { ArrowRightIcon } from "../ui/icons";
 import { Countdown } from "./Countdown";
 
@@ -54,19 +55,19 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
-                <Button
+                <Button3D
                   href={siteConfig.registerCta.href}
                   size="lg"
                   data-cursor="LAUNCH"
                 >
                   {siteConfig.registerCta.label}
                   <ArrowRightIcon className="size-4" />
-                </Button>
+                </Button3D>
               </Magnetic>
               <Magnetic>
-                <Button href="/rules" size="lg" variant="secondary">
+                <Button3D href="/rules" size="lg" variant="secondary">
                   Read the rules
-                </Button>
+                </Button3D>
               </Magnetic>
             </div>
 
@@ -83,7 +84,9 @@ export function Hero() {
               className="absolute -inset-6 -z-10 rounded-[2rem] bg-primary/5 blur-2xl"
               aria-hidden="true"
             />
-            <Countdown />
+            <DepthStack layers={2} className="rounded-2xl">
+              <Countdown />
+            </DepthStack>
           </div>
         </div>
 

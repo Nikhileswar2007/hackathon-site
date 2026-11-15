@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { siteConfig, TBA } from "@/app/content/site-config";
+import { SpotlightGroup } from "../fx/SpotlightGroup";
+import { SpotlightTile } from "../fx/SpotlightTile";
+import { TextRoll } from "../fx/TextRoll";
 import { EffectsToggle } from "./EffectsToggle";
 
 export function Footer() {
@@ -24,8 +27,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="grid gap-10 py-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
-          <div className="max-w-sm space-y-4">
+        <SpotlightGroup className="grid gap-10 py-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
+          <SpotlightTile className="max-w-sm space-y-4 rounded-lg">
             <div className="flex items-center gap-3">
               <span
                 className="grid size-9 shrink-0 place-items-center rounded-md border border-dashed border-border-strong text-[0.5rem] tracking-[0.12em] text-muted"
@@ -61,10 +64,15 @@ export function Footer() {
                 <span className="text-foreground">{TBA}</span>
               )}
             </p>
-          </div>
+          </SpotlightTile>
 
           {siteConfig.footerGroups.map((group, groupIndex) => (
-            <nav key={group.title} aria-label={`Footer: ${group.title}`}>
+            <SpotlightTile
+              as="nav"
+              key={group.title}
+              aria-label={`Footer: ${group.title}`}
+              className="rounded-lg"
+            >
               <h2 className="flex items-center gap-2 font-mono text-[0.625rem] font-medium uppercase tracking-[0.22em] text-muted">
                 <span className="text-primary/70">
                   {String(groupIndex + 1).padStart(2, "0")}
@@ -79,15 +87,15 @@ export function Footer() {
                       className="rounded-sm text-sm text-foreground transition-colors hover:text-primary"
                       data-cursor="OPEN"
                     >
-                      {link.label}
+                      <TextRoll>{link.label}</TextRoll>
                     </Link>
                   </li>
                 ))}
               </ul>
-            </nav>
+            </SpotlightTile>
           ))}
 
-          <div className="space-y-6">
+          <SpotlightTile className="space-y-6 rounded-lg">
             <EffectsToggle />
             <div className="rounded-lg border border-dashed border-border p-3">
               <p className="telemetry text-[0.5rem] tracking-[0.2em]">
@@ -98,8 +106,8 @@ export function Footer() {
                 <span className="text-foreground">{TBA}</span>
               </p>
             </div>
-          </div>
-        </div>
+          </SpotlightTile>
+        </SpotlightGroup>
 
         <div className="flex flex-col gap-3 border-t border-border py-6 text-xs leading-relaxed text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>

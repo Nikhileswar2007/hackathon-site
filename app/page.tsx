@@ -9,10 +9,15 @@ import { Marquee } from "@/app/components/fx/Marquee";
 import { Magnetic } from "@/app/components/fx/Magnetic";
 import { Reveal } from "@/app/components/fx/Reveal";
 import { SplitHeading } from "@/app/components/fx/SplitHeading";
+import { SpotlightGroup } from "@/app/components/fx/SpotlightGroup";
+import { SpotlightTile } from "@/app/components/fx/SpotlightTile";
 import { TiltCard } from "@/app/components/fx/TiltCard";
 import { Badge } from "@/app/components/ui/Badge";
+import { BeamBorder } from "@/app/components/ui/BeamBorder";
 import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Card } from "@/app/components/ui/Card";
+import { Frame } from "@/app/components/ui/Frame";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { StatCard } from "@/app/components/ui/StatCard";
 import { cn } from "@/app/components/ui/cn";
@@ -99,7 +104,7 @@ export default function HomePage() {
           title="The shape of the challenge"
           description="Two tracks, 48 hours and a final field of eight teams per track."
         />
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <SpotlightGroup className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <Reveal
               key={stat.label}
@@ -109,7 +114,7 @@ export default function HomePage() {
               <StatCard {...stat} />
             </Reveal>
           ))}
-        </div>
+        </SpotlightGroup>
       </section>
 
       <section
@@ -132,22 +137,24 @@ export default function HomePage() {
                 delay={index * 80}
                 className="h-full"
               >
-                <Card className="h-full hover:border-border-strong">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-xs font-medium text-primary">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span className="font-mono text-[0.5625rem] uppercase tracking-[0.18em] text-muted">
-                      Guarantee
-                    </span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
-                    {guarantee.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">
-                    {guarantee.description}
-                  </p>
-                </Card>
+                <TiltCard spotlight className="h-full rounded-xl">
+                  <Card className="h-full hover:border-border-strong">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-mono text-xs font-medium text-primary">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-[0.5625rem] uppercase tracking-[0.18em] text-muted">
+                        Guarantee
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-lg font-semibold tracking-tight text-foreground">
+                      {guarantee.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                      {guarantee.description}
+                    </p>
+                  </Card>
+                </TiltCard>
               </Reveal>
             ))}
           </ul>
@@ -223,7 +230,7 @@ export default function HomePage() {
               delay={index * 90}
               className="h-full"
             >
-              <TiltCard className="h-full rounded-xl">
+              <TiltCard spotlight className="h-full rounded-xl">
                 <Card className="h-full hover:border-border-strong">
                   <div className="flex items-center justify-between gap-3">
                     <Badge
@@ -275,9 +282,9 @@ export default function HomePage() {
           ))}
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <SpotlightGroup className="mt-5 grid gap-3 sm:grid-cols-3">
           {prizeCertificates.map((certificate) => (
-            <div
+            <SpotlightTile
               key={certificate.name}
               className="corner-frame rounded-xl border border-border bg-surface/60 p-4"
             >
@@ -287,9 +294,9 @@ export default function HomePage() {
               <p className="mt-1 text-xs leading-relaxed text-muted">
                 {certificate.description}
               </p>
-            </div>
+            </SpotlightTile>
           ))}
-        </div>
+        </SpotlightGroup>
       </section>
 
       <section
@@ -325,47 +332,59 @@ export default function HomePage() {
       >
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <div className="hero-space relative overflow-hidden rounded-2xl border border-border px-6 py-14 text-center sm:px-12 sm:py-20">
-              <div
-                className="bg-mission-grid pointer-events-none absolute inset-0 opacity-30"
-                aria-hidden="true"
-              />
-              <div className="relative">
-                <p className="telemetry text-primary">Final call</p>
-                <SplitHeading
-                  as="h2"
-                  text="Ready for 48 hours to orbit?"
-                  className="display-title text-h1 mx-auto mt-3 max-w-3xl text-balance text-foreground"
-                />
-                <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted">
-                  Registration opens at D-14. Event dates and fees: {TBA}. The
-                  rulebook is a draft.
-                </p>
-                <div className="mt-8 flex flex-wrap justify-center gap-3">
-                  <Magnetic>
-                    <Button href="/register" size="lg" data-cursor="LAUNCH">
-                      Register
-                      <ArrowRightIcon className="size-4" />
-                    </Button>
-                  </Magnetic>
-                  <Magnetic>
-                    <Button href="/rules" size="lg" variant="secondary">
-                      Read the rules
-                    </Button>
-                  </Magnetic>
+            <BeamBorder className="rounded-2xl">
+              <Frame className="rounded-2xl">
+                <div className="hero-space relative overflow-hidden rounded-2xl border border-border px-6 py-14 text-center sm:px-12 sm:py-20">
+                  <div
+                    className="bg-mission-grid pointer-events-none absolute inset-0 opacity-30"
+                    aria-hidden="true"
+                  />
+                  <div className="relative">
+                    <p className="telemetry text-primary">Final call</p>
+                    <SplitHeading
+                      as="h2"
+                      text="Ready for 48 hours to orbit?"
+                      className="display-title text-h1 mx-auto mt-3 max-w-3xl text-balance text-foreground"
+                    />
+                    <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted">
+                      Registration opens at D-14. Event dates and fees: {TBA}.
+                      The rulebook is a draft.
+                    </p>
+                    <div className="mt-8 flex flex-wrap justify-center gap-3">
+                      <Magnetic>
+                        <Button3D
+                          href="/register"
+                          size="lg"
+                          data-cursor="LAUNCH"
+                        >
+                          Register
+                          <ArrowRightIcon className="size-4" />
+                        </Button3D>
+                      </Magnetic>
+                      <Magnetic>
+                        <Button3D
+                          href="/rules"
+                          size="lg"
+                          variant="secondary"
+                        >
+                          Read the rules
+                        </Button3D>
+                      </Magnetic>
+                    </div>
+                    <p className="mt-6 text-sm text-muted">
+                      Already exploring?{" "}
+                      <Link
+                        href="/tracks"
+                        className="text-primary underline underline-offset-4"
+                      >
+                        Compare the tracks
+                      </Link>
+                      .
+                    </p>
+                  </div>
                 </div>
-                <p className="mt-6 text-sm text-muted">
-                  Already exploring?{" "}
-                  <Link
-                    href="/tracks"
-                    className="text-primary underline underline-offset-4"
-                  >
-                    Compare the tracks
-                  </Link>
-                  .
-                </p>
-              </div>
-            </div>
+              </Frame>
+            </BeamBorder>
           </Reveal>
         </div>
       </section>
