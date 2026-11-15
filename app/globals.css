@@ -228,7 +228,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     scrollbar-color: var(--border-strong) transparent;
     scrollbar-width: thin;
   }
@@ -776,6 +775,12 @@
   transition:
     border-color var(--duration-base) var(--ease-out),
     color var(--duration-base) var(--ease-out);
+}
+
+@media (min-width: 1024px) {
+  .command-menu-button {
+    display: none;
+  }
 }
 
 .command-menu-button:hover {
@@ -2381,7 +2386,11 @@
   z-index: -1;
   pointer-events: none;
   opacity: 0;
-  white-space: inherit;
+  white-space: nowrap;
+  font: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
   color: var(--accent);
   transform: translate3d(0, 0, 0);
 }
@@ -2422,6 +2431,10 @@
   content: attr(data-text);
   position: absolute;
   inset: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  white-space: nowrap;
   background: linear-gradient(
     100deg,
     transparent 0 24%,
@@ -2435,7 +2448,16 @@
   color: transparent;
   pointer-events: none;
   mix-blend-mode: screen;
-  animation: holo-drift 5.5s var(--ease-in-out) infinite alternate;
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .holo-sheen[data-mode="full"]:hover::before,
+  .holo-sheen[data-mode="full"]:focus-visible::before,
+  .command-wordmark:hover .holo-sheen[data-mode="full"]::before,
+  .command-wordmark:focus-visible .holo-sheen[data-mode="full"]::before {
+    animation: holo-sheen-sweep 0.75s var(--ease-in-out) 1;
+  }
 }
 
 .scanline-text {
@@ -4254,12 +4276,19 @@ html.cursor-none
   }
 }
 
-@keyframes holo-drift {
-  from {
+@keyframes holo-sheen-sweep {
+  0% {
+    opacity: 0;
     transform: translate3d(-12%, 0, 0);
   }
 
-  to {
+  15%,
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
     transform: translate3d(12%, 0, 0);
   }
 }
@@ -4548,6 +4577,8 @@ html.cursor-none
 .extruded-title {
   position: relative;
   isolation: isolate;
+  width: max-content;
+  max-width: 100%;
 }
 
 .extruded-layer {
@@ -4555,11 +4586,16 @@ html.cursor-none
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  font: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  white-space: nowrap;
   color: color-mix(in srgb, var(--primary) 42%, var(--background-deep));
   opacity: calc(0.32 - var(--layer) * 0.055);
   transform: translate3d(
-    calc(var(--layer) * 0.032em),
-    calc(var(--layer) * 0.045em),
+    min(calc(var(--layer) * 2px), 6px),
+    calc(var(--layer) * 1px),
     0
   );
 }

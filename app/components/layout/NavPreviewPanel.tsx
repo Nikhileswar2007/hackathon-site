@@ -118,14 +118,17 @@ function previewLink({
   children,
   className,
   onNavigate,
+  linkKey,
 }: {
   href: string;
   children: ReactNode;
   className?: string;
   onNavigate?: () => void;
+  linkKey?: string;
 }) {
   return (
     <Link
+      key={linkKey}
       href={href}
       prefetch={false}
       onClick={onNavigate}
@@ -532,6 +535,7 @@ function FaqPreview({ onNavigate }: { onNavigate?: () => void }) {
     <div className="space-y-1">
       {homeFaqs.map((item) => (
         previewLink({
+          linkKey: item.id,
           href: `/faq#${item.id}`,
           onNavigate,
           className: "nav-preview-question",

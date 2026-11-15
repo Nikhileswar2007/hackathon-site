@@ -23,7 +23,6 @@ export function Hero() {
         aria-hidden="true"
       />
       <div className="relative mx-auto flex w-full max-w-7xl flex-col px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-14 lg:min-h-[calc(100svh-4.5rem)] lg:justify-center lg:px-8 lg:pb-14 lg:pt-14">
-        <TelemetryTicker className="pointer-events-none absolute left-0 right-0 top-0 z-10" />
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-10">
           <div className="max-w-2xl pt-8 sm:pt-10">
             <div className="flex flex-wrap items-center gap-2">
@@ -53,7 +52,7 @@ export function Hero() {
 
             <ExtrudedTitle
               text="KOSMODROME"
-              className="display-title text-hero scanline-text mt-3 max-w-xl text-balance uppercase leading-[1.02] tracking-[-0.02em] text-foreground"
+              className="display-title text-hero scanline-text mt-3 uppercase leading-[1.02] tracking-[-0.02em] text-foreground"
             />
 
             <p className="display-oxanium mt-2 text-[clamp(1.15rem,3.4vw,1.9rem)] uppercase leading-none text-accent">
@@ -109,7 +108,11 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-border/60 pt-5 lg:mt-14">
+        <TelemetryTicker
+          className="-mx-4 mt-8 sm:-mx-6 lg:-mx-8 lg:mt-10"
+        />
+
+        <div className="mt-5 flex flex-wrap items-end justify-between gap-6 border-t border-border/60 pt-5">
           <span className="scroll-cue" aria-hidden="true">
             <span className="scroll-cue-track" />
             Begin ascent
