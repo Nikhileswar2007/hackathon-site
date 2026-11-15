@@ -1,6 +1,7 @@
 import { siteConfig, TBA } from "@/app/content/site-config";
+import { ExtrudedTitle } from "../fx/ExtrudedTitle";
 import { Magnetic } from "../fx/Magnetic";
-import { SplitHeading } from "../fx/SplitHeading";
+import { ScrambleText } from "../fx/ScrambleText";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { ArrowRightIcon } from "../ui/icons";
@@ -32,13 +33,13 @@ export function Hero() {
 
             <p className="telemetry mt-6 flex items-center gap-2 text-primary">
               <span className="status-dot" aria-hidden="true" />
-              {siteConfig.name} · Mission brief 01
+              {siteConfig.name} ·{" "}
+              <ScrambleText text="Mission brief 01" />
             </p>
 
-            <SplitHeading
-              as="h1"
+            <ExtrudedTitle
               text={siteConfig.tagline}
-              className="display-title text-hero mt-4 max-w-xl text-balance uppercase tracking-[-0.04em] text-foreground"
+              className="display-title text-hero hero-title mt-4 max-w-xl text-balance uppercase tracking-[-0.04em] text-foreground"
             />
 
             <p className="mt-5 max-w-xl text-lead text-muted">

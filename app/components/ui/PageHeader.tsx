@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { LetterWave } from "../fx/LetterWave";
 import { SplitHeading } from "../fx/SplitHeading";
 import { cn } from "./cn";
 
@@ -30,7 +31,7 @@ export function PageHeader({
       {eyebrow ? (
         <p className="telemetry flex items-center gap-2 text-primary">
           <span className="status-dot" aria-hidden="true" />
-          {eyebrow}
+          <LetterWave text={eyebrow} />
         </p>
       ) : null}
       <SplitHeading

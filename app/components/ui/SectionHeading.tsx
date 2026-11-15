@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { LetterWave } from "../fx/LetterWave";
 import { SplitHeading } from "../fx/SplitHeading";
 import { cn } from "./cn";
 
@@ -35,7 +36,7 @@ export function SectionHeading({
           )}
         >
           <span className="status-dot" aria-hidden="true" />
-          {eyebrow}
+          <LetterWave text={eyebrow} />
         </p>
       ) : null}
       <SplitHeading

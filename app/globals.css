@@ -609,6 +609,131 @@
   animation-delay: calc(var(--word-index, 0) * 55ms + 60ms);
 }
 
+.split-text .split-word {
+  display: inline-block;
+  white-space: pre;
+}
+
+.split-text[data-armed="true"]:not([data-visible="true"]) .split-word {
+  opacity: 0;
+  transform: translate3d(0, 0.7em, 0) rotate(0.4deg);
+}
+
+.split-text[data-variant="word"][data-visible="true"] .split-word {
+  animation: word-rise 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--word-index, 0) * 55ms + 60ms);
+}
+
+.split-word-letters {
+  white-space: nowrap;
+}
+
+.split-char {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+}
+
+.split-text[data-armed="true"]:not([data-visible="true"]) .split-char {
+  opacity: 0;
+  transform: translate3d(0, 0.6em, 0) rotateX(-62deg);
+}
+
+.split-text[data-variant="letter"][data-visible="true"] .split-char {
+  animation: char-rise 0.82s var(--ease-out) both;
+  animation-delay: calc(var(--char-index, 0) * 22ms + 80ms);
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    108deg,
+    var(--foreground) 8%,
+    var(--primary) 42%,
+    var(--foreground) 68%
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: text-shimmer 7s linear infinite;
+}
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -0.2em;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--duration-hover) var(--ease-out);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.text-roll {
+  display: inline-flex;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.text-roll-track {
+  display: inline-flex;
+  flex-direction: column;
+  transition: transform var(--duration-hover) var(--ease-out);
+}
+
+.text-roll:hover .text-roll-track,
+.text-roll:focus-visible .text-roll-track {
+  transform: translate3d(0, -50%, 0);
+}
+
+.text-roll-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.letter-wave-char {
+  display: inline-block;
+  transition:
+    transform var(--duration-hover) var(--ease-spring),
+    color var(--duration-base) var(--ease-out);
+  transition-delay: calc(var(--letter-index, 0) * 18ms);
+}
+
+.letter-wave:hover .letter-wave-char,
+.letter-wave:focus-visible .letter-wave-char {
+  color: var(--primary);
+  transform: translate3d(0, -0.13em, 0);
+}
+
+.split-text[data-mode="lite"] .split-char {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+.split-text[data-mode="lite"][data-visible="true"] .split-word {
+  animation-duration: 0.65s;
+}
+
+.split-text[data-mode="off"] .split-word,
+.split-text[data-mode="off"] .split-char {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
 .marquee {
   overflow: hidden;
   mask-image: linear-gradient(
@@ -1872,6 +1997,23 @@ html.cursor-none
   }
 }
 
+@keyframes char-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.6em, -0.4em) rotateX(-62deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes text-shimmer {
+  to {
+    background-position: -220% 0;
+  }
+}
+
 @keyframes marquee-scroll {
   from {
     transform: translate3d(0, 0, 0);
@@ -1960,5 +2102,45 @@ html.cursor-none
   .reveal[data-armed="true"]:not([data-visible="true"]) {
     opacity: 1;
     transform: none;
+  }
+
+  .split-text .split-word,
+  .split-text .split-char {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+.extruded-title {
+  position: relative;
+  isolation: isolate;
+}
+
+.extruded-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  color: color-mix(in srgb, var(--primary) 42%, var(--background-deep));
+  opacity: calc(0.32 - var(--layer) * 0.055);
+  transform: translate3d(
+    calc(var(--layer) * 0.032em),
+    calc(var(--layer) * 0.045em),
+    0
+  );
+}
+
+.extruded-front {
+  position: relative;
+  z-index: 1;
+}
+
+.text-shimmer {
+    animation: none;
+    background-position: 0 0;
+  }
+
+  .letter-wave-char {
+    transition: none;
   }
 }
