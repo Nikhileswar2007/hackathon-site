@@ -9,6 +9,7 @@ import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { fairPlayCards, fairPlayThreats } from "@/app/content/event-data";
+import { StatusLight } from "@/app/components/ui/StatusLight";
 
 export const metadata: Metadata = {
   title: "Fair play",
@@ -50,9 +51,12 @@ export default function FairPlayPage() {
           {fairPlayCards.map((card) => (
             <TiltCard key={card.id} spotlight className="h-full rounded-xl">
               <Card className="h-full">
-                <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                  {card.title}
-                </h3>
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                    {card.title}
+                  </h3>
+                  <StatusLight tone="go">GO</StatusLight>
+                </div>
                 <ul className="mt-4 space-y-2.5">
                   {card.points.map((point) => (
                     <li

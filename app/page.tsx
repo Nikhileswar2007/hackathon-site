@@ -124,8 +124,8 @@ export default function HomePage() {
       >
         <SectionHeading
           id="stats-heading"
-          eyebrow="At a glance"
-          title="The shape of the challenge"
+          eyebrow="Status board"
+          title="Pre-launch status board"
           description="Two tracks, 48 hours and a final field of eight teams per track."
         />
         <SpotlightGroup className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -149,8 +149,8 @@ export default function HomePage() {
         <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
           <SectionHeading
             id="guarantees-heading"
-            eyebrow="Fair by design"
-            title="Built on three guarantees"
+            eyebrow="Range safety"
+            title="Three range checks"
             description="The event is designed to keep problems sealed, work traceable and scores open to audit."
           />
           <ul className="mt-8 grid gap-4 md:grid-cols-3">
@@ -192,7 +192,7 @@ export default function HomePage() {
       >
         <SectionHeading
           id="tracks-heading"
-          eyebrow="Choose a lane"
+          eyebrow="Launch pads"
           title="Two tracks, separate problem sets"
           description="Beginner teams get a guided build. Advanced teams get open-ended mission problems. Tracks never compete against each other."
         />
@@ -213,7 +213,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading
               id="timeline-preview-heading"
-              eyebrow="The arc"
+              eyebrow="Launch sequence"
               title="From registration to orbit"
               description="Five key moments from the full event schedule."
             />
@@ -238,7 +238,7 @@ export default function HomePage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
             id="prizes-heading"
-            eyebrow="Recognition"
+            eyebrow="Mission honours"
             title="Prizes and certificates"
             description="Awards for both tracks, chosen from the finalists. Amounts are to be announced."
           />
@@ -332,7 +332,7 @@ export default function HomePage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading
               id="faq-preview-heading"
-              eyebrow="Questions"
+              eyebrow="Ground support"
               title="A few things teams ask"
             />
             <Button3D href="/faq" variant="secondary" size="sm">
@@ -367,7 +367,7 @@ export default function HomePage() {
                     <p className="telemetry text-primary">Final call</p>
                     <SplitHeading
                       as="h2"
-                      text="Ready for 48 hours to orbit?"
+                      text="Ready for liftoff?"
                       className="display-title text-h1 mx-auto mt-3 max-w-3xl text-balance text-foreground"
                     />
                     <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted">

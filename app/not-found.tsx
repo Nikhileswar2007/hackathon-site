@@ -59,7 +59,7 @@ export default function NotFound() {
       <div className="relative mx-auto flex min-h-[calc(100svh-14rem)] w-full max-w-6xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
         <p className="telemetry flex items-center gap-2 text-primary">
           <span className="status-dot" aria-hidden="true" />
-          Error 404 · Signal lost
+          Error 404 · WRONG PAD
         </p>
 
         <div aria-hidden="true">
@@ -70,7 +70,7 @@ export default function NotFound() {
         </div>
 
         <h1 className="display-oxanium mt-3 max-w-3xl text-h1 text-foreground">
-          This page drifted out of <HoloText text="orbit." />
+          Wrong <HoloText text="pad." />
         </h1>
 
         <p className="mt-4 max-w-xl text-lead text-muted">
@@ -81,7 +81,7 @@ export default function NotFound() {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button3D href="/" size="lg">
-            Return to launch pad
+            Return to gate
           </Button3D>
           <Button3D href="/contact" variant="secondary" size="lg">
             Contact the OC

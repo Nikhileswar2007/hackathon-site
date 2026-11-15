@@ -61,7 +61,7 @@ export function BackToTop() {
         visible && "is-visible",
         launching && "is-launching",
       )}
-      aria-label="Back to launch pad"
+      aria-label="Return to pad"
       data-cursor="LAUNCH"
       onClick={launch}
       tabIndex={visible ? 0 : -1}
@@ -85,7 +85,7 @@ export function BackToTop() {
         />
       </svg>
       <OrbitMark className="back-to-top-icon" />
-      <span className="sr-only">Back to launch pad</span>
+      <span className="sr-only">Return to pad</span>
     </button>
   );
 }

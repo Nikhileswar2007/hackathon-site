@@ -30,9 +30,9 @@ export default function GlobalError({
       </head>
       <body>
         <main>
-          <p className="status">Error 500 · System fault</p>
-          <h1>This console went dark.</h1>
-          <p>The page failed to load. Try again, or return to the launch pad.</p>
+          <p className="status">Error 500 · Launch aborted</p>
+          <h1>Launch aborted.</h1>
+          <p>The page failed to load. Try again, or return to the gate.</p>
           <button type="button" onClick={retry}>
             Try again
           </button>

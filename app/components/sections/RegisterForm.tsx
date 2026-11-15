@@ -319,7 +319,7 @@ export function RegisterForm() {
     // TODO: connect backend — POST the validated registration payload to the registration API.
     setSubmitted(true);
     toast({
-      title: "Registration preview complete",
+      title: "Boarding pass issued",
       description: "This preview validates locally. Nothing is sent or stored.",
       tone: "success",
     });
@@ -332,13 +332,13 @@ export function RegisterForm() {
         aria-live="polite"
         className="success-panel rounded-xl border border-success bg-success-soft p-6 shadow-[var(--elev-2)]"
       >
-        <Badge tone="success">Preview complete</Badge>
+        <Badge tone="success">Boarding pass issued</Badge>
         <h3
           ref={successHeadingRef}
           tabIndex={-1}
           className="mt-4 text-xl font-semibold tracking-tight text-foreground"
         >
-          Registration preview ready.
+          Cleared for launch prep.
         </h3>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
           Nothing was sent and nothing was stored.{" "}
@@ -646,11 +646,11 @@ export function RegisterForm() {
             return (
               <div
                 key={member.id}
-                className="rounded-xl border border-border bg-background shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+                className="boarding-pass rounded-xl border border-border bg-background shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
                   <h4 className="text-sm font-semibold text-foreground">
-                    Member {index + 1}
+                    Crew pass 0{index + 1}
                   </h4>
                   <Button
                     type="button"

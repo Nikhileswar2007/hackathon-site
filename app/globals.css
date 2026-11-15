@@ -4804,3 +4804,55 @@ html.cursor-none
   height: 60%;
   opacity: 0.9;
 }
+.poll-row:has(input:checked) {
+  border-color: color-mix(in srgb, var(--go) 50%, var(--border));
+  background: color-mix(in srgb, var(--success-soft) 45%, var(--background));
+}
+
+.all-systems-go {
+  position: relative;
+  overflow: hidden;
+}
+
+.all-systems-go::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(139, 233, 176, 0.42) 45%,
+    rgba(255, 255, 255, 0.72) 50%,
+    rgba(139, 233, 176, 0.42) 55%,
+    transparent 100%
+  );
+  transform: translate3d(-100%, 0, 0);
+  animation: go-sweep 900ms var(--ease-out) 1 350ms both;
+  pointer-events: none;
+}
+
+@keyframes go-sweep {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .all-systems-go::after {
+    animation: none;
+    transform: none;
+    opacity: 0;
+  }
+}
+.boarding-pass {
+  position: relative;
+  border-left: 2px dashed color-mix(in srgb, var(--primary) 55%, var(--border));
+  background-image: radial-gradient(circle at left center, var(--background-deep) 0 5px, transparent 6px);
+  background-size: 100% 100%;
+  background-position: left center;
+  background-repeat: no-repeat;
+}

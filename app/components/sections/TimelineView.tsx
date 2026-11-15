@@ -10,6 +10,29 @@ import { SpotlightTile } from "../fx/SpotlightTile";
 import { Badge, type BadgeTone } from "../ui/Badge";
 import { cn } from "../ui/cn";
 
+const flavourTags: Record<string, string> = {
+  "registration-opens": "Crew manifest",
+  "hash-commitments": "Range draw",
+  "registration-closes": "Manifest closed",
+  "team-lock": "Manifest locked",
+  briefing: "Launch briefing",
+  "sealed-draw": "Range draw",
+  kickoff: "Liftoff",
+  "clarification-window": "Range call",
+  "checkpoint-1": "Flight checkpoint",
+  "checkpoint-2": "Flight checkpoint",
+  "checkpoint-3": "Flight checkpoint",
+  "submission-window-opens": "Insertion window",
+  "hard-close": "Orbit insertion",
+  "stage-0": "Range safety check",
+  "stage-1": "Telemetry review",
+  "finalists-announced": "Mission review board",
+  "stage-2": "Mission review board",
+  "provisional-results": "Mission review board",
+  "appeals-close": "Winner audit",
+  "final-results": "Mission success",
+};
+
 const typeStyles: Record<
   TimelineType,
   { label: string; tone: BadgeTone; dot: string }
@@ -98,6 +121,7 @@ export function TimelineView({ items }: { items: TimelineItem[] }) {
           {items.map((item, index) => {
             const style = typeStyles[item.type];
             const checkpoint = item.type === "checkpoint";
+            const flavour = flavourTags[item.id];
 
             return (
               <li
@@ -120,7 +144,7 @@ export function TimelineView({ items }: { items: TimelineItem[] }) {
                     className={cn(
                       "timeline-card relative rounded-xl border p-4 transition-colors sm:p-5",
                       checkpoint
-                        ? "border-warning/80 bg-warning-soft"
+                        ? "hold-point border-warning/80 bg-warning-soft"
                         : "border-border bg-surface/80 hover:border-border-strong",
                     )}
                     data-timeline-type={item.type}
@@ -135,6 +159,9 @@ export function TimelineView({ items }: { items: TimelineItem[] }) {
                         </span>
                       ) : null}
                       <Badge tone={style.tone}>{style.label}</Badge>
+                      {flavour ? (
+                        <span className="index-numeral text-accent">{flavour}</span>
+                      ) : null}
                       <span
                         className="ml-auto hidden font-mono text-[0.5625rem] uppercase tracking-[0.18em] text-muted sm:inline"
                         aria-hidden="true"

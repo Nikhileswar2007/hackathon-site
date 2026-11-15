@@ -33,7 +33,7 @@ export function PrizeGrid() {
                       className="award-index mt-0.5 font-mono text-[0.625rem] text-primary/70"
                       aria-hidden="true"
                     >
-                      {String(index + 1).padStart(2, "0")}
+                      {index < 3 ? `PAD 0${index + 1}` : String(index + 1).padStart(2, "0")}
                     </span>
                     <div>
                       <p className="text-sm font-medium text-foreground">

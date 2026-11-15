@@ -23,10 +23,10 @@ export default function Error({
       <div className="relative mx-auto flex min-h-[calc(100svh-14rem)] w-full max-w-6xl flex-col justify-center px-4 py-20 sm:px-6 lg:px-8">
         <p className="telemetry flex items-center gap-2 text-danger">
           <span className="status-dot status-dot-danger" aria-hidden="true" />
-          Error 500 · System fault
+          Error 500 · LAUNCH ABORTED
         </p>
         <h1 className="display-oxanium mt-5 max-w-3xl text-h1 text-foreground">
-          This console went dark.
+          Launch aborted.
         </h1>
         <p className="mt-4 max-w-xl text-lead text-muted">
           The page failed to load. The mission control systems will retry the
@@ -36,8 +36,8 @@ export default function Error({
           <Button3D type="button" onClick={retry} data-cursor="LAUNCH">
             Try again
           </Button3D>
-          <Button3D href="/" variant="secondary">
-            Return to launch pad
+          <Button3D href="/" variant="secondary" data-cursor="HOME">
+            Return to gate
           </Button3D>
         </div>
       </div>

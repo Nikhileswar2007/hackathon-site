@@ -36,7 +36,7 @@ interface CommandItem {
 }
 
 const pages: Array<{ label: string; href: string; description: string }> = [
-  { label: "Home", href: "/", description: "Kosmodrome 2026 and the mission brief" },
+  { label: "Home", href: "/", description: "Kosmodrome 2026 and the spaceport brief" },
   { label: "About", href: "/about", description: "The event, guarantees and who can join" },
   { label: "Tracks", href: "/tracks", description: "Beginner and Advanced problem sets" },
   { label: "Timeline", href: "/timeline", description: "Twenty moments from D-14 to T+144" },
@@ -56,7 +56,7 @@ const actions: Array<{ id: string; label: string; detail: string; action: Action
   { id: "action-lite", label: "Switch effects: Lite", detail: "Reduced motion and detail", action: "mode-lite" },
   { id: "action-off", label: "Switch effects: Off", detail: "Static fallback", action: "mode-off" },
   { id: "action-copy", label: "Copy page link", detail: "Copy the current URL to the clipboard", action: "copy-link" },
-  { id: "action-top", label: "Back to launch pad", detail: "Return to the top of the page", action: "top" },
+  { id: "action-top", label: "Return to pad", detail: "Return to the top of the page", action: "top" },
 ];
 
 const allItems: CommandItem[] = [
@@ -215,7 +215,7 @@ function nextTypeAction(
 
   if (action === "top") {
     scrollToTop();
-    toast({ title: "Back to launch pad", tone: "success" });
+    toast({ title: "Return to pad", tone: "success" });
   }
 }
 

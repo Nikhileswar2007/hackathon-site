@@ -4,6 +4,7 @@ import { Reveal } from "../fx/Reveal";
 import { TiltCard } from "../fx/TiltCard";
 import { Badge } from "../ui/Badge";
 import { Card } from "../ui/Card";
+import { CoordinateTag } from "../ui/CoordinateTag";
 import { ArrowRightIcon } from "../ui/icons";
 
 export function TrackCards({ tracks }: { tracks: Track[] }) {
@@ -22,15 +23,15 @@ export function TrackCards({ tracks }: { tracks: Track[] }) {
             >
               <Card
                 as="article"
-                className="group flex h-full flex-col gap-5 hover:border-border-strong"
+                className="blueprint-grid group flex h-full flex-col gap-5 hover:border-border-strong"
               >
                 <div className="flex items-center justify-between gap-3">
                   <Badge tone={beginner ? "primary" : "accent"}>
-                    {track.name}
+                    {beginner ? "PAD 01" : "PAD 02"}
                   </Badge>
-                  <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">
-                    TRK-{String(index + 1).padStart(2, "0")}
-                  </span>
+                  <CoordinateTag>
+                    {beginner ? "LOW EARTH ORBIT" : "DEEP SPACE"}
+                  </CoordinateTag>
                 </div>
 
                 <div>

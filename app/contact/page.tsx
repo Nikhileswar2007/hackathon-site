@@ -3,7 +3,7 @@ import { ContactForm } from "@/app/components/sections/ContactForm";
 import { SpotlightGroup } from "@/app/components/fx/SpotlightGroup";
 import { SpotlightTile } from "@/app/components/fx/SpotlightTile";
 import { TiltCard } from "@/app/components/fx/TiltCard";
-import { Badge } from "@/app/components/ui/Badge";
+import { StatusLight } from "@/app/components/ui/StatusLight";
 import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
 import { Card } from "@/app/components/ui/Card";
@@ -55,12 +55,12 @@ export default function ContactPage() {
               <TiltCard spotlight className="h-full rounded-xl">
                 <Card className="flex h-full flex-col">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-xs font-medium text-primary">
+                    <span className="index-numeral">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <Badge tone={channel.url ? "success" : "warning"}>
-                      {channel.url ? "Available" : "TBA"}
-                    </Badge>
+                    <StatusLight tone={channel.url ? "go" : "hold"}>
+                      {channel.url ? "COMMS GO" : "COMMS HOLD"}
+                    </StatusLight>
                   </div>
                   <h3 className="mt-3 text-lg font-semibold tracking-tight text-foreground">
                     {channel.label}

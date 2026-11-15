@@ -17,6 +17,21 @@ const typeStyles: Record<
   judging: { label: "Judging", tone: "success" },
 };
 
+const flavourTags: Record<string, string> = {
+  "registration-opens": "Crew manifest",
+  "team-lock": "Manifest locked",
+  briefing: "Launch briefing",
+  "sealed-draw": "Range draw",
+  kickoff: "Liftoff",
+  checkpoint: "Flight checkpoints",
+  checkpoints: "Flight checkpoints",
+  "hard-close": "Orbit insertion",
+  "stage-0": "Range safety check",
+  "stage-1": "Telemetry review",
+  "stage-2": "Mission review board",
+  "final-results": "Mission success",
+};
+
 export function MiniTimeline({ items }: { items: TimelineItem[] }) {
   const mode = useEffectsMode();
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -95,6 +110,7 @@ export function MiniTimeline({ items }: { items: TimelineItem[] }) {
       >
         {items.map((item, index) => {
           const style = typeStyles[item.type];
+          const flavour = flavourTags[item.id];
 
           return (
             <li
@@ -121,9 +137,12 @@ export function MiniTimeline({ items }: { items: TimelineItem[] }) {
                     {item.note}
                   </p>
                 ) : null}
-                <Badge tone={style.tone} className="mt-3 w-fit">
-                  {style.label}
-                </Badge>
+                <div className="mt-2 flex items-center gap-2">
+                  <Badge tone={style.tone}>{style.label}</Badge>
+                  {flavour ? (
+                    <span className="index-numeral text-accent">{flavour}</span>
+                  ) : null}
+                </div>
               </Reveal>
             </li>
           );
