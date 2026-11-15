@@ -5,8 +5,15 @@ import { useEffects } from "./effects-provider";
 
 const LEGACY_SESSION_KEY = "kakshya:intro-seen";
 const SESSION_KEY = "kosmodrome:intro-seen";
-const CLOSE_AT = 620;
-const REMOVE_AT = 940;
+const CLOSE_AT = 900;
+const REMOVE_AT = 1150;
+
+const LINES = [
+  "RANGE: GO",
+  "GROUND: GO",
+  "FLIGHT: GO",
+  "KOSMODROME READY",
+] as const;
 
 export function Intro() {
   const { mode, ready } = useEffects();
@@ -45,7 +52,7 @@ export function Intro() {
     function dismiss() {
       setState("closing");
       timers.current.push(
-        window.setTimeout(() => setState("hidden"), 320),
+        window.setTimeout(() => setState("hidden"), 280),
       );
     }
 
@@ -72,15 +79,18 @@ export function Intro() {
       data-closing={state === "closing"}
       aria-hidden="true"
     >
-      <div className="flex flex-col items-center gap-4 px-6 text-center">
-        <span className="intro-orbit" />
-        <p className="telemetry telemetry-accent">
-          Initialising mission control
-        </p>
-        <p className="font-mono text-[0.625rem] uppercase tracking-[0.3em] text-muted">
-          T-03 · 02 · 01
-        </p>
-      </div>
+      <ol className="intro-poll">
+        {LINES.map((line, index) => (
+          <li
+            key={line}
+            className="intro-poll-line"
+            style={{ animationDelay: `${120 + index * 170}ms` }}
+          >
+            <span className="status-light" data-tone="go" />
+            {line}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

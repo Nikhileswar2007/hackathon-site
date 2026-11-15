@@ -33,7 +33,7 @@ export default function PrizesPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Prizes"
+        eyebrow="Mission success honours"
         title="Recognition for work that holds up"
         description={`Awards for both tracks, certificates for valid submissions and clear conditions for every winner. Prize amounts: ${TBA}.`}
       >
@@ -45,7 +45,7 @@ export default function PrizesPage() {
       <section
         className="mt-12"
         aria-labelledby="track-awards-heading"
-        data-hud="REWARDS"
+        data-hud="MISSION HONOURS"
       >
         <SectionHeading
           id="track-awards-heading"

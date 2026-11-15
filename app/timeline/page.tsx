@@ -22,7 +22,7 @@ export default function TimelinePage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
       <PageHeader
-        eyebrow="Schedule"
+        eyebrow="Launch sequence"
         title="From registration to the final result"
         description="Twenty moments across registration, the 48-hour build, judging and the closing ceremony. Checkpoints are highlighted."
       >
@@ -47,7 +47,7 @@ export default function TimelinePage() {
       <section
         className="mt-12"
         aria-labelledby="full-timeline-heading"
-        data-hud="FLIGHT PLAN"
+        data-hud="LAUNCH SEQUENCE"
       >
         <SectionHeading
           id="full-timeline-heading"

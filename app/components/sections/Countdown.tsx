@@ -86,12 +86,12 @@ export function Countdown() {
     <div
       className="corner-frame w-full max-w-md rounded-2xl border border-border/80 bg-surface/90 p-5 shadow-glow sm:p-6"
       role="timer"
-      aria-label="Countdown to Kosmodrome 2026 kickoff"
+      aria-label="T-minus countdown to Kosmodrome 2026 liftoff"
     >
       <div className="flex items-center justify-between gap-3">
         <p className="telemetry flex items-center gap-2 text-primary">
           <span className="status-dot" aria-hidden="true" />
-          Kickoff countdown
+          T-minus to liftoff
         </p>
         <Badge tone="primary">T0</Badge>
       </div>

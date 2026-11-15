@@ -24,7 +24,7 @@ export default function FaqPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="FAQ"
+        eyebrow="Ground support"
         title="Answers before you build"
         description="Eligibility, teams, tools, integrity, judging and appeals. Open a question to read the short answer."
       >

@@ -26,7 +26,7 @@ export default function FairPlayPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Fair play"
+        eyebrow="Range safety"
         title="Sealed problems, traceable work, auditable scores"
         description="The framework behind the three guarantees. Every control is designed to be verifiable, not just promised."
       >

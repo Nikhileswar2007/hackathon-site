@@ -13,7 +13,12 @@ interface HudState {
 const METER_HEIGHT = 260;
 const MAX_ALTITUDE = 400;
 
-const ticks = [400, 300, 200, 100, 0];
+const ticks = [
+  { at: 400, label: "ORBIT" },
+  { at: 270, label: "MAX-Q" },
+  { at: 135, label: "LIFTOFF" },
+  { at: 0, label: "PAD" },
+] as const;
 
 export function ScrollHUD() {
   const pathname = usePathname();
@@ -121,9 +126,9 @@ export function ScrollHUD() {
               <span className="absolute right-0 top-0 h-full w-px bg-border" />
               {ticks.map((tick) => (
                 <span
-                  key={tick}
+                  key={tick.at}
                   className="absolute right-0 h-px w-2 bg-border-strong"
-                  style={{ top: `${(1 - tick / MAX_ALTITUDE) * 100}%` }}
+                  style={{ top: `${(1 - tick.at / MAX_ALTITUDE) * 100}%` }}
                 />
               ))}
               <span
@@ -144,7 +149,7 @@ export function ScrollHUD() {
               style={{ height: METER_HEIGHT }}
             >
               {ticks.map((tick) => (
-                <span key={tick}>{String(tick).padStart(3, "0")}</span>
+                <span key={tick.at}>{tick.label}</span>
               ))}
             </div>
           </div>

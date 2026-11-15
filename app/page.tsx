@@ -95,7 +95,7 @@ export default function HomePage() {
       <section
         className="relative overflow-hidden border-b border-border/70 bg-background-deep/40 py-4"
         aria-label="Indicative mission themes"
-        data-hud="MISSION THEMES"
+        data-hud="SPACEPORT GATE"
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 sm:px-6 lg:flex-row lg:items-center lg:gap-5 lg:px-8">
           <div className="flex shrink-0 items-center gap-3">
@@ -120,7 +120,7 @@ export default function HomePage() {
       <section
         className={pageContainer}
         aria-labelledby="stats-heading"
-        data-hud="TELEMETRY"
+        data-hud="STATUS BOARD"
       >
         <SectionHeading
           id="stats-heading"
@@ -144,7 +144,7 @@ export default function HomePage() {
       <section
         className="border-y border-border bg-surface/60"
         aria-labelledby="guarantees-heading"
-        data-hud="FAIR PLAY"
+        data-hud="RANGE CHECKS"
       >
         <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
           <SectionHeading
@@ -188,7 +188,7 @@ export default function HomePage() {
       <section
         className={pageContainer}
         aria-labelledby="tracks-heading"
-        data-hud="TRACK SELECT"
+        data-hud="LAUNCH PADS"
       >
         <SectionHeading
           id="tracks-heading"
@@ -207,7 +207,7 @@ export default function HomePage() {
       <section
         className="border-y border-border bg-surface/50"
         aria-labelledby="timeline-preview-heading"
-        data-hud="FLIGHT PLAN"
+        data-hud="LAUNCH SEQUENCE"
       >
         <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -233,7 +233,7 @@ export default function HomePage() {
       <section
         className={pageContainer}
         aria-labelledby="prizes-heading"
-        data-hud="REWARDS"
+        data-hud="MISSION HONOURS"
       >
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <SectionHeading
@@ -326,7 +326,7 @@ export default function HomePage() {
       <section
         className="border-y border-border bg-surface"
         aria-labelledby="faq-preview-heading"
-        data-hud="COMMS"
+        data-hud="GROUND SUPPORT"
       >
         <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -352,7 +352,7 @@ export default function HomePage() {
 
       <section
         className="relative pb-16 pt-14 sm:pb-24 sm:pt-20"
-        data-hud="GATEWAY"
+        data-hud="FINAL CALL"
       >
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <Reveal>

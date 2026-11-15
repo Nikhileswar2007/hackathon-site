@@ -29,7 +29,7 @@ export default function ContactPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Contact"
+        eyebrow="Control centre"
         title="Reach the organising committee"
         description="Official channels for registration questions, accessibility requests, technical support and conduct or integrity reports."
       >

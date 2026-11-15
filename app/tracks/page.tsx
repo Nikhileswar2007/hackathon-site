@@ -63,7 +63,7 @@ export default function TracksPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Tracks"
+        eyebrow="Launch pads"
         title="Two tracks. Separate problem sets."
         description="The most senior member sets the track. Opting up is allowed; moving down is never allowed. Tracks never compete against each other."
       >
@@ -75,7 +75,7 @@ export default function TracksPage() {
       <section
         className="mt-12"
         aria-labelledby="comparison-heading"
-        data-hud="TRACK SELECT"
+        data-hud="LAUNCH PADS"
       >
         <SectionHeading
           id="comparison-heading"

@@ -10,6 +10,7 @@ import { Card } from "@/app/components/ui/Card";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { about, guarantees } from "@/app/content/event-data";
+import { brand } from "@/app/content/site-config";
 
 export const metadata: Metadata = {
   title: "About",
@@ -27,7 +28,7 @@ export default function AboutPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="About"
+        eyebrow="Briefing room"
         title="A national space hackathon, built for 48 hours"
         description="Kosmodrome 2026 is the IIST National Space Hackathon: national level, online, and built around a single 48-hour build window."
       />
@@ -73,6 +74,21 @@ export default function AboutPage() {
               </Card>
             </TiltCard>
           </Reveal>
+        </section>
+
+        <section
+          className="rounded-2xl border border-primary/25 bg-primary-soft/40 p-6 sm:p-8"
+          aria-labelledby="why-kosmodrome-heading"
+        >
+          <p
+            id="why-kosmodrome-heading"
+            className="telemetry text-primary"
+          >
+            Why Kosmodrome?
+          </p>
+          <p className="display-oxanium mt-3 max-w-3xl text-xl leading-snug text-foreground sm:text-2xl">
+            {brand.conceptLine}
+          </p>
         </section>
 
         <section aria-labelledby="about-guarantees-heading">

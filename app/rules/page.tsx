@@ -40,7 +40,7 @@ export default function RulesPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
       <PageHeader
-        eyebrow="Rulebook summary"
+        eyebrow="Range rules"
         title="The rules, in short"
         description="A compact summary of the draft rulebook. Open a section for the short bullet version."
       >
@@ -76,7 +76,7 @@ export default function RulesPage() {
       <section
         className="mt-12"
         aria-labelledby="rule-sections-heading"
-        data-hud="RULEBOOK"
+        data-hud="RANGE RULES"
       >
         <SectionHeading
           id="rule-sections-heading"

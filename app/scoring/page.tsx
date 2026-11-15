@@ -44,7 +44,7 @@ export default function ScoringPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Scoring"
+        eyebrow="Flight evaluation"
         title="How the 100 points are built"
         description="Every judged criterion uses the same four bands. Stage 1 decides the top 8, and Stage 2 decides the final order inside that group."
       >
@@ -61,7 +61,7 @@ export default function ScoringPage() {
       <section
         className="mt-12"
         aria-labelledby="criteria-heading"
-        data-hud="SCORING"
+        data-hud="FLIGHT EVALUATION"
       >
         <SectionHeading
           id="criteria-heading"

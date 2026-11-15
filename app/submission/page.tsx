@@ -24,7 +24,7 @@ export default function SubmissionPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Submission"
+        eyebrow="Payload integration"
         title="Ship the right pack, before the hard close"
         description="The submission window and the exact pack for each track. The evaluated version is the repository snapshot at hard close."
       >

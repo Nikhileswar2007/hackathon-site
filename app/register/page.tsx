@@ -33,7 +33,7 @@ export default function RegisterPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Register"
+        eyebrow="Crew manifest"
         title={isOpen ? "Register your team" : "Registration preview"}
         description="Check eligibility, prepare every member's details and see how the registration flow will work. Teams have two to four members."
       >
@@ -126,7 +126,7 @@ export default function RegisterPage() {
         className="mt-16 scroll-mt-24"
         id="registration-form"
         aria-labelledby="registration-form-heading"
-        data-hud="REGISTRATION"
+        data-hud="CREW MANIFEST"
       >
         <SectionHeading
           id="registration-form-heading"
