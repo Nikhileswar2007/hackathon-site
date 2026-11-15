@@ -14,6 +14,7 @@ import { ScrollHUD } from "@/app/components/layout/ScrollHUD";
 import { BackToTop } from "@/app/components/layout/BackToTop";
 import { MobileActionBar } from "@/app/components/layout/MobileActionBar";
 import { RouteAnnouncer } from "@/app/components/layout/RouteAnnouncer";
+import { PerfPanelLoader } from "@/app/components/effects/PerfPanelLoader";
 import { SpaceCanvas } from "@/app/components/space/SpaceCanvas";
 import { siteConfig } from "@/app/content/site-config";
 
@@ -95,6 +96,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 Skip to content
               </a>
               <RouteAnnouncer />
+              <PerfPanelLoader />
               <Navbar />
               <ScrollHUD />
               <main
