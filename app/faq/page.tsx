@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqExplorer } from "@/app/components/sections/FaqExplorer";
-import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { faqGroups } from "@/app/content/event-data";
@@ -24,9 +25,9 @@ export default function FaqPage() {
         title="Answers before you build"
         description="Eligibility, teams, tools, integrity, judging and appeals. Open a question to read the short answer."
       >
-        <Button href="/contact" variant="secondary">
+        <Button3D href="/contact" variant="secondary">
           Contact the OC
-        </Button>
+        </Button3D>
       </PageHeader>
 
       <section className="mt-12" aria-labelledby="faq-list-heading">
@@ -41,19 +42,21 @@ export default function FaqPage() {
         </div>
       </section>
 
-      <Callout title="Still need an answer?" tone="primary" className="mt-12">
-        <p>
-          Use the official{" "}
-          <Link
-            href="/contact"
-            className="text-primary underline underline-offset-4"
-          >
-            contact channels
-          </Link>{" "}
-          for registration questions, accessibility requests, technical support
-          and integrity reports.
-        </p>
-      </Callout>
+      <Frame className="mt-12 rounded-xl">
+        <Callout title="Still need an answer?" tone="primary">
+          <p>
+            Use the official{" "}
+            <Link
+              href="/contact"
+              className="text-primary underline underline-offset-4"
+            >
+              contact channels
+            </Link>{" "}
+            for registration questions, accessibility requests, technical support
+            and integrity reports.
+          </p>
+        </Callout>
+      </Frame>
     </div>
   );
 }

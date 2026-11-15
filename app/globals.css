@@ -1064,7 +1064,7 @@ a:focus-visible > .text-roll .text-roll-track {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   border-radius: inherit;
   padding: 1px;
   pointer-events: none;
@@ -2074,6 +2074,175 @@ html.cursor-none
 .rulebook-row[data-open="true"] {
   background-color: color-mix(in srgb, var(--primary) 6%, transparent);
   box-shadow: inset 0 1px 0 var(--edge-light);
+}
+
+/* ---------- Phase 5: submission, prizes, register, faq, contact ---------- */
+
+.checklist-panel {
+  box-shadow:
+    var(--elev-2),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.checklist-row:has(input:checked) {
+  box-shadow:
+    inset 3px 0 0 var(--primary),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.award-row {
+  background: color-mix(in srgb, var(--surface-raised) 88%, var(--surface));
+}
+
+.award-row[data-tier="1"] {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--primary) 12%, var(--surface-raised)),
+    var(--surface-raised) 62%
+  );
+  box-shadow:
+    inset 3px 0 0 var(--primary),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.award-row[data-tier="2"] {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 10%, var(--surface-raised)),
+    var(--surface-raised) 62%
+  );
+  box-shadow:
+    inset 3px 0 0 var(--accent),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.award-row[data-tier="3"] {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--warning) 8%, var(--surface-raised)),
+    var(--surface-raised) 62%
+  );
+  box-shadow:
+    inset 3px 0 0 var(--warning),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.award-index {
+  letter-spacing: 0.08em;
+}
+
+.certificate-card {
+  position: relative;
+}
+
+.certificate-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 44%;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--primary) 7%, transparent),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.certificate-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.condition-row {
+  box-shadow:
+    var(--elev-1),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.faq-console {
+  position: relative;
+}
+
+.faq-chip[aria-pressed="true"] {
+  box-shadow:
+    inset 0 1px 0 var(--edge-light),
+    0 8px 22px -18px var(--primary);
+}
+
+.faq-empty {
+  position: relative;
+  overflow: hidden;
+}
+
+.faq-empty::after {
+  content: "";
+  position: absolute;
+  inset: -30% 20% auto;
+  height: 70%;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--primary) 12%, transparent),
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+.faq-empty > * {
+  position: relative;
+  z-index: 1;
+}
+
+.faq-accordion {
+  box-shadow:
+    var(--elev-2),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.form-panel {
+  box-shadow:
+    var(--elev-2),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.registration-progress {
+  box-shadow:
+    var(--elev-1),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.registration-step {
+  box-shadow:
+    var(--elev-1),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.success-panel {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    var(--elev-2),
+    inset 0 1px 0 var(--edge-light);
+}
+
+.success-panel::before {
+  content: "";
+  position: absolute;
+  inset: -40% 30% auto;
+  height: 80%;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--success) 16%, transparent),
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+.success-panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ---------- Keyframes ---------- */

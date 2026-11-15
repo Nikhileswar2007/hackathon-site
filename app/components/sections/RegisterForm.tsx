@@ -7,6 +7,7 @@ import { programmeOptions, tracks } from "@/app/content/event-data";
 import { siteConfig, TBA } from "@/app/content/site-config";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
+import { Button3D } from "../ui/Button3D";
 import { cn } from "../ui/cn";
 
 interface MemberForm {
@@ -322,7 +323,7 @@ export function RegisterForm() {
       <div
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-success bg-success-soft p-6"
+        className="success-panel rounded-xl border border-success bg-success-soft p-6 shadow-[var(--elev-2)]"
       >
         <Badge tone="success">Preview complete</Badge>
         <h3
@@ -367,7 +368,7 @@ export function RegisterForm() {
         </dl>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button
+          <Button3D
             type="button"
             onClick={() => {
               setSubmitted(false);
@@ -375,7 +376,7 @@ export function RegisterForm() {
             }}
           >
             Back to edit
-          </Button>
+          </Button3D>
           <Button href="/rules" variant="secondary">
             Read the rules
           </Button>
@@ -395,7 +396,7 @@ export function RegisterForm() {
         Step {step + 1} of {steps.length}: {steps[step].label}
       </p>
       <div
-        className="rounded-xl border border-border bg-surface/80 p-4 sm:p-5"
+        className="registration-progress rounded-xl border border-border bg-surface/80 p-4 shadow-[var(--elev-1)] sm:p-5"
         role="group"
         aria-label="Registration progress"
       >
@@ -421,7 +422,7 @@ export function RegisterForm() {
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "block h-1 rounded-full transition-colors",
+                    "block h-1.5 rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.25)] transition-colors",
                     done
                       ? "bg-primary/70"
                       : current
@@ -459,7 +460,7 @@ export function RegisterForm() {
 
       <section
         hidden={step !== 0}
-        className="rounded-xl border border-border bg-surface p-5 sm:p-6"
+        className="form-panel rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="team-details-heading"
       >
         <h3
@@ -606,7 +607,7 @@ export function RegisterForm() {
 
       <section
         hidden={step !== 1}
-        className="rounded-xl border border-border bg-surface p-5 sm:p-6"
+        className="form-panel rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="members-heading"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -638,7 +639,7 @@ export function RegisterForm() {
             return (
               <div
                 key={member.id}
-                className="rounded-xl border border-border bg-background"
+                className="rounded-xl border border-border bg-background shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
                   <h4 className="text-sm font-semibold text-foreground">
@@ -873,7 +874,7 @@ export function RegisterForm() {
 
       <section
         hidden={step !== 2}
-        className="rounded-xl border border-border bg-surface p-5 sm:p-6"
+        className="form-panel rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="consent-heading"
       >
         <h3
@@ -1034,11 +1035,11 @@ export function RegisterForm() {
             </Button>
           ) : null}
           {step < lastStep ? (
-            <Button type="button" onClick={goNext}>
+            <Button3D type="button" onClick={goNext}>
               Continue
-            </Button>
+            </Button3D>
           ) : (
-            <Button type="submit">Submit registration</Button>
+            <Button3D type="submit">Submit registration</Button3D>
           )}
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useDeferredValue, useMemo, useState } from "react";
 import type { FaqGroup } from "@/app/content/event-data";
 import { Accordion, type AccordionItem } from "../ui/Accordion";
+import { Frame } from "../ui/Frame";
 import { cn } from "../ui/cn";
 
 const allTopicsId = "all";
@@ -62,13 +63,18 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
 
   return (
     <div>
-      <div className="rounded-xl border border-border bg-surface/80 p-4 sm:p-5">
-        <label
-          htmlFor="faq-search"
-          className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted"
-        >
-          Search the FAQ
-        </label>
+      <Frame className="faq-console rounded-xl border border-border bg-surface/80 p-4 shadow-[var(--elev-2)] sm:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <label
+            htmlFor="faq-search"
+            className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted"
+          >
+            Search the FAQ
+          </label>
+          <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-primary/70">
+            Query console
+          </span>
+        </div>
         <div className="mt-2 flex flex-col gap-2 sm:flex-row">
           <input
             id="faq-search"
@@ -78,14 +84,15 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
             aria-controls="faq-results"
             autoComplete="off"
             placeholder="Try “fees”, “AI tools” or “appeal”"
-            className="w-full rounded-md border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-colors placeholder:text-muted hover:border-border-strong focus-visible:border-primary"
+            className="w-full rounded-md border border-border bg-background px-3 py-2.5 text-sm text-foreground shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] transition-colors placeholder:text-muted hover:border-border-strong focus-visible:border-primary"
           />
           {query ? (
             <button
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear the FAQ search"
-              className="shrink-0 rounded-md border border-border px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-colors hover:border-border-strong hover:text-foreground"
+              data-cursor="SWITCH"
+              className="shrink-0 rounded-md border border-border px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-[color,border-color,transform] hover:border-border-strong hover:text-foreground active:translate-y-px"
             >
               Clear
             </button>
@@ -106,11 +113,12 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
                 type="button"
                 aria-pressed={selected}
                 onClick={() => setActiveTopic(topic.id)}
+                data-cursor="SWITCH"
                 className={cn(
-                  "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
+                  "faq-chip shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-[color,background-color,border-color,transform] active:translate-y-px",
                   selected
-                    ? "border-primary/50 bg-primary-soft text-primary"
-                    : "border-border text-muted hover:border-border-strong hover:text-foreground",
+                    ? "border-primary/50 bg-primary-soft text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                    : "border-border bg-surface text-muted hover:border-border-strong hover:text-foreground",
                 )}
               >
                 {topic.title}
@@ -126,7 +134,7 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
             );
           })}
         </div>
-      </div>
+      </Frame>
 
       <div id="faq-results">
         <p
@@ -141,7 +149,7 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
 
         {filteredGroups.length > 0 ? (
           <div className="mt-5 space-y-8">
-            {filteredGroups.map((group) => {
+            {filteredGroups.map((group, groupIndex) => {
               const items: AccordionItem[] = group.items.map((item) => ({
                 id: item.id,
                 title: item.question,
@@ -154,8 +162,14 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <h2
                       id={headingId}
-                      className="text-lg font-semibold tracking-tight text-foreground"
+                      className="flex items-baseline gap-2.5 text-lg font-semibold tracking-tight text-foreground"
                     >
+                      <span
+                        className="font-mono text-[0.625rem] font-normal text-primary/70"
+                        aria-hidden="true"
+                      >
+                        {String(groupIndex + 1).padStart(2, "0")}
+                      </span>
                       {group.title}
                     </h2>
                     <span className="font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted">
@@ -163,13 +177,13 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
                       {group.items.length === 1 ? "question" : "questions"}
                     </span>
                   </div>
-                  <Accordion items={items} className="mt-3" />
+                  <Accordion items={items} className="faq-accordion mt-3" />
                 </section>
               );
             })}
           </div>
         ) : (
-          <div className="mt-5 rounded-xl border border-border bg-surface p-8 text-center">
+          <Frame className="faq-empty mt-5 rounded-xl border border-border bg-surface p-8 text-center shadow-[var(--elev-2)]">
             <p className="font-mono text-[0.625rem] uppercase tracking-[0.18em] text-primary">
               No signal
             </p>
@@ -183,11 +197,12 @@ export function FaqExplorer({ groups }: { groups: FaqGroup[] }) {
             <button
               type="button"
               onClick={resetFilters}
-              className="mt-5 rounded-full border border-primary/50 bg-primary-soft px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary transition-colors hover:bg-primary/15"
+              data-cursor="SWITCH"
+              className="mt-5 rounded-full border border-primary/50 bg-primary-soft px-4 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-primary transition-[background-color,transform] hover:bg-primary/15 active:translate-y-px"
             >
               Reset filters
             </button>
-          </div>
+          </Frame>
         )}
       </div>
     </div>
