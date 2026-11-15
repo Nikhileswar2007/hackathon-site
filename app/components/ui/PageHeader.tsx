@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { LetterWave } from "../fx/LetterWave";
 import { SplitHeading } from "../fx/SplitHeading";
+import { TechRule } from "../fx/TechRule";
 import { cn } from "./cn";
 
 export function PageHeader({
@@ -39,6 +40,7 @@ export function PageHeader({
         text={title}
         className="display-oxanium text-h1 text-foreground"
       />
+      <TechRule />
       {description ? (
         <div className="max-w-3xl text-lead text-muted">{description}</div>
       ) : null}

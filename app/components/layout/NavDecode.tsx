@@ -89,8 +89,10 @@ export function NavDecode({
 
   return (
     <span
-      className={cn("text-roll nav-link-label", className)}
+      className={cn("text-roll nav-link-label glitch-hover", className)}
       aria-hidden="true"
+      data-mode={mode}
+      data-text={text}
       onMouseEnter={startDecode}
       onPointerEnter={startDecode}
       onFocus={startDecode}

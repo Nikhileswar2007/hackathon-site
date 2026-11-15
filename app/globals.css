@@ -258,6 +258,8 @@
   button,
   th {
     font-family: var(--font-oxanium);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
     text-wrap: balance;
   }
 
@@ -1071,9 +1073,8 @@
   border-left: 1px solid color-mix(in srgb, var(--background) 70%, transparent);
 }
 
-.nav-popover[data-mode="lite"] .nav-popover-content,
-.nav-popover[data-mode="off"] .nav-popover-content {
-  animation-duration: 140ms;
+.nav-popover[data-mode="lite"] .nav-popover-content {
+  animation: popover-glide 140ms var(--ease-out) both;
 }
 
 .nav-popover[data-mode="off"] .nav-popover-content {
@@ -1856,7 +1857,10 @@
 .text-roll {
   display: inline-flex;
   overflow: hidden;
-  line-height: 1.2;
+  font-family: var(--font-oxanium);
+  font-weight: 600;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
 }
 
 .text-roll-track {
@@ -1885,6 +1889,15 @@ a:focus-visible > .text-roll .text-roll-track {
     color var(--duration-base) var(--ease-out),
     font-variation-settings var(--duration-hover) var(--ease-spring);
   transition-delay: calc(var(--letter-index, 0) * 18ms);
+}
+
+.letter-wave[data-mode="off"] .letter-wave-char {
+  transition: none;
+}
+
+.letter-wave[data-mode="off"]:hover .letter-wave-char,
+.letter-wave[data-mode="off"]:focus-visible .letter-wave-char {
+  transform: none;
 }
 
 .letter-wave:hover .letter-wave-char,
@@ -3570,6 +3583,18 @@ html.cursor-none
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0) rotateX(0);
+  }
+}
+
+@keyframes popover-glide {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -0.25rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 

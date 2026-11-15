@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ExtrudedTitle } from "@/app/components/fx/ExtrudedTitle";
-import { SplitHeading } from "@/app/components/fx/SplitHeading";
+import { HoloText } from "@/app/components/fx/HoloText";
 import { TiltCard } from "@/app/components/fx/TiltCard";
 import { ArrowRightIcon } from "@/app/components/ui/icons";
 import { Button3D } from "@/app/components/ui/Button3D";
@@ -69,11 +69,9 @@ export default function NotFound() {
           />
         </div>
 
-        <SplitHeading
-          as="h1"
-          text="This page drifted out of orbit."
-          className="display-title mt-3 max-w-3xl text-h1 text-foreground"
-        />
+        <h1 className="display-oxanium mt-3 max-w-3xl text-h1 text-foreground">
+          This page drifted out of <HoloText text="orbit." />
+        </h1>
 
         <p className="mt-4 max-w-xl text-lead text-muted">
           The page you are looking for does not exist. It may have moved, or
@@ -101,7 +99,7 @@ export default function NotFound() {
                   href={link.href}
                   className="group flex h-full flex-col rounded-xl border border-border bg-surface/70 p-4 transition-colors hover:border-primary/50 hover:bg-surface-raised"
                 >
-                  <span className="flex items-center justify-between gap-3 font-medium text-foreground">
+                  <span className="flex items-center justify-between gap-3 font-ui text-sm font-bold uppercase tracking-[0.12em] text-foreground">
                     {link.label}
                     <ArrowRightIcon className="size-4 text-muted transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
                   </span>

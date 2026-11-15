@@ -104,7 +104,7 @@ export function Countdown() {
                 key={unit.key}
                 className="rounded-lg border border-border/80 bg-background/60 px-1 py-3 text-center"
               >
-                <p className="font-mono text-xl font-semibold tabular-nums tracking-tight text-muted sm:text-2xl">
+                <p className="numeric-display text-xl font-extrabold tracking-tight text-muted sm:text-2xl">
                   --
                 </p>
                 <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-muted">
@@ -147,7 +147,7 @@ export function Countdown() {
                   key={unit.key}
                   className="overflow-hidden rounded-lg border border-border/80 bg-background/60 px-1 py-3 text-center"
                 >
-                  <p className="font-mono text-xl font-semibold tabular-nums tracking-tight text-foreground sm:text-2xl">
+                  <p className="numeric-display text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
                     <span
                       key={value}
                       className={animate ? "countdown-value" : undefined}
@@ -176,7 +176,7 @@ export function Countdown() {
               key={unit.key}
               className="rounded-lg border border-border/80 bg-background/60 px-1 py-3 text-center"
             >
-              <p className="font-mono text-xl font-semibold text-muted sm:text-2xl">
+              <p className="numeric-display text-xl font-extrabold text-muted sm:text-2xl">
                 --
               </p>
               <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.12em] text-muted">

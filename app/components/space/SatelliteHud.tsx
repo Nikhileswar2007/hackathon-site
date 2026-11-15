@@ -82,7 +82,7 @@ export function SatelliteHud({ enabled }: { enabled: boolean }) {
             {hoverLabel.name}
           </p>
           <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted">
-            {hoverLabel.orbit} Â· click to track
+            {hoverLabel.orbit} · click to track
           </p>
         </div>
       ) : null}
@@ -99,7 +99,7 @@ export function SatelliteHud({ enabled }: { enabled: boolean }) {
             {hud.tracked.name}
           </p>
           <p className="mt-1 font-mono text-[0.55rem] uppercase tracking-[0.14em] text-muted">
-            {hud.tracked.orbit} Â· click satellite to release
+            {hud.tracked.orbit} · click satellite to release
           </p>
         </div>
       ) : null}

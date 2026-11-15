@@ -282,24 +282,36 @@ function TimelinePreview({ onNavigate }: { onNavigate?: () => void }) {
       <div
         ref={stripRef}
         className="timeline-mini-strip"
-        style={{ "--timeline-progress": "0.25" } as CSSProperties}
+        style={{ "--timeline-progress": "0.2857" } as CSSProperties}
         onPointerMove={(event) => updateProgress(event.clientX)}
         onPointerLeave={() => {
           setActiveId("kickoff");
-          stripRef.current?.style.setProperty("--timeline-progress", "0.25");
+          stripRef.current?.style.setProperty("--timeline-progress", "0.2857");
         }}
       >
         <span className="timeline-mini-line" aria-hidden="true" />
         <span className="timeline-mini-fill" aria-hidden="true" />
         <div className="timeline-mini-markers">
-          {timelinePreview.map((item) => (
+          {timelinePreview.map((item, index) => (
             <Link
               key={item.id}
               href={`/timeline#${item.id}`}
               prefetch={false}
               onClick={onNavigate}
-              onFocus={() => setActiveId(item.id)}
-              onPointerEnter={() => setActiveId(item.id)}
+              onFocus={() => {
+                setActiveId(item.id);
+                stripRef.current?.style.setProperty(
+                  "--timeline-progress",
+                  (index / Math.max(1, timelinePreview.length - 1)).toFixed(4),
+                );
+              }}
+              onPointerEnter={() => {
+                setActiveId(item.id);
+                stripRef.current?.style.setProperty(
+                  "--timeline-progress",
+                  (index / Math.max(1, timelinePreview.length - 1)).toFixed(4),
+                );
+              }}
               aria-label={`${item.when}: ${item.event}`}
               data-cursor="OPEN"
               className="timeline-mini-marker"

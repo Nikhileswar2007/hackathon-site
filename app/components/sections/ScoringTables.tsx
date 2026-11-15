@@ -95,7 +95,7 @@ function WeightBar({
       </div>
       <span
         className={cn(
-          "w-6 shrink-0 font-mono text-xs",
+          "w-6 shrink-0 font-ui text-xs font-bold tabular-nums",
           emphasised ? "font-semibold text-foreground" : "text-muted",
         )}
       >
@@ -147,7 +147,7 @@ export function ScoringTables() {
                 </div>,
                 <span
                   key={`${criterion.name}-points`}
-                  className="font-mono text-foreground"
+                  className="font-ui font-bold tabular-nums text-foreground"
                 >
                   {criterion.points}
                 </span>,
@@ -163,7 +163,7 @@ export function ScoringTables() {
                 <span key="total" className="font-medium text-foreground">
                   Total
                 </span>,
-                <span key="total-points" className="font-mono text-foreground">
+                <span key="total-points" className="font-ui font-bold tabular-nums text-foreground">
                   100
                 </span>,
                 "—",

@@ -142,7 +142,7 @@ export function TimelineView({ items }: { items: TimelineItem[] }) {
                         SEQ {String(index + 1).padStart(2, "0")}
                       </span>
                     </div>
-                    <p className="mt-2 font-medium leading-relaxed text-foreground">
+                    <p className="mt-2 font-ui text-[0.75rem] font-semibold leading-snug tracking-[0.025em] text-foreground">
                       {item.event}
                     </p>
                     {item.note ? (

@@ -1,7 +1,10 @@
+"use client";
+
 import {
   Fragment,
   type CSSProperties,
 } from "react";
+import { useEffectsMode } from "../effects/effects-provider";
 import { cn } from "../ui/cn";
 
 type LetterWaveTag = "span" | "p" | "h2" | "h3";
@@ -15,11 +18,16 @@ export function LetterWave({
   className?: string;
   as?: LetterWaveTag;
 }) {
+  const mode = useEffectsMode();
   const words = text.split(" ");
   let letterIndex = 0;
 
   return (
-    <Tag className={cn("letter-wave", className)} aria-label={text}>
+    <Tag
+      className={cn("letter-wave", className)}
+      aria-label={text}
+      data-mode={mode}
+    >
       <span aria-hidden="true">
         {words.map((word, wordIndex) => (
           <Fragment key={`${word}-${wordIndex}`}>

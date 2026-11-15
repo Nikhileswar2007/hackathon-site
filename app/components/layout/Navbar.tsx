@@ -359,6 +359,20 @@ export function Navbar() {
     itemRefs.current[nextIndex]?.focus();
   }
 
+  function handlePopoverKeyDown(event: React.KeyboardEvent<HTMLElement>) {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    event.preventDefault();
+    const index = siteConfig.navLinks.findIndex((link) => link.href === openId);
+    setOpenId(null);
+    setClosing(false);
+    window.requestAnimationFrame(() => {
+      itemRefs.current[index]?.focus();
+    });
+  }
+
   function handleFocusOut(event: React.FocusEvent<HTMLElement>) {
     const related = event.relatedTarget as Node | null;
 
@@ -399,7 +413,13 @@ export function Navbar() {
             >
               <span className="command-logo" aria-hidden="true">LOGO</span>
               <span className="command-wordmark-text">
-                <span className="wordmark">KAKSHYA</span>
+                <span
+                  className="wordmark holo-sheen"
+                  data-mode={mode}
+                  data-text="KAKSHYA"
+                >
+                  KAKSHYA
+                </span>
                 <span className="wordmark-sub">2026 · IIST</span>
               </span>
             </Link>
@@ -504,6 +524,7 @@ export function Navbar() {
           onPointerEnter={() => window.clearTimeout(closeTimer.current)}
           onPointerLeave={scheduleClose}
           onBlurCapture={handleFocusOut}
+          onKeyDown={handlePopoverKeyDown}
         >
           <span
             className="nav-popover-notch"

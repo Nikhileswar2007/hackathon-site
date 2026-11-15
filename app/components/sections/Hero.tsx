@@ -1,5 +1,7 @@
 import { siteConfig, TBA } from "@/app/content/site-config";
 import { ExtrudedTitle } from "../fx/ExtrudedTitle";
+import { TypeLine } from "../fx/TypeLine";
+import { PowerOn } from "../fx/PowerOn";
 import { Magnetic } from "../fx/Magnetic";
 import { ScrambleText } from "../fx/ScrambleText";
 import { Badge } from "../ui/Badge";
@@ -22,32 +24,39 @@ export function Hero() {
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
           <div className="max-w-2xl">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge tone="primary">{siteConfig.subtitle}</Badge>
-              <Badge
-                tone={siteConfig.registrationOpen ? "success" : "warning"}
-              >
-                {siteConfig.registrationOpen
-                  ? "Registration open"
-                  : "Registration not open yet"}
-              </Badge>
+              <PowerOn delay={40}>
+                <Badge tone="primary">{siteConfig.subtitle}</Badge>
+              </PowerOn>
+              <PowerOn delay={110}>
+                <Badge
+                  tone={siteConfig.registrationOpen ? "success" : "warning"}
+                >
+                  {siteConfig.registrationOpen
+                    ? "Registration open"
+                    : "Registration not open yet"}
+                </Badge>
+              </PowerOn>
             </div>
 
             <p className="telemetry mt-6 flex items-center gap-2 text-primary">
               <span className="status-dot" aria-hidden="true" />
-              {siteConfig.name} ·{" "}
-              <ScrambleText text="Mission brief 01" />
+              <span className="bracket-label">
+                <ScrambleText text="MISSION BRIEF 01" />
+              </span>
             </p>
 
             <ExtrudedTitle
               text={siteConfig.tagline}
-              className="display-title text-hero hero-title mt-4 max-w-xl text-balance uppercase tracking-[-0.04em] text-foreground"
+              className="display-title text-hero hero-title scanline-text mt-4 max-w-xl text-balance uppercase tracking-[-0.04em] text-foreground"
             />
 
-            <p className="mt-5 max-w-xl text-lead text-muted">
-              A national-level, online space hackathon. Beginner and Advanced
-              teams get 48 hours to turn a sealed mission brief into a working
-              submission.
-            </p>
+            <div className="mt-5 min-h-[6.4rem] max-w-xl text-lead text-muted sm:min-h-[5.4rem] lg:min-h-[3.4rem]">
+              <TypeLine
+                as="p"
+                text="A national-level, online space hackathon. Beginner and Advanced teams get 48 hours to turn a sealed mission brief into a working submission."
+                duration={1000}
+              />
+            </div>
 
             <p className="mt-6 border-l border-primary/40 pl-4 font-mono text-[0.6875rem] uppercase leading-relaxed tracking-[0.16em] text-muted">
               {siteConfig.factsLine}

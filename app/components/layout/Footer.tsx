@@ -3,6 +3,7 @@ import { siteConfig, TBA } from "@/app/content/site-config";
 import { SpotlightGroup } from "../fx/SpotlightGroup";
 import { SpotlightTile } from "../fx/SpotlightTile";
 import { TextRoll } from "../fx/TextRoll";
+import { HoloText } from "../fx/HoloText";
 import { EffectsToggle } from "./EffectsToggle";
 
 export function Footer() {
@@ -13,9 +14,10 @@ export function Footer() {
           className="relative flex items-end justify-between overflow-hidden border-b border-border/70 py-8 sm:py-10"
           aria-hidden="true"
         >
-          <p className="wordmark-outline text-[clamp(2.6rem,10vw,8.5rem)] leading-none">
-            KAKSHYA
-          </p>
+          <HoloText
+            text="KAKSHYA"
+            className="display-orbitron text-[clamp(2.6rem,10vw,8.5rem)] leading-none opacity-40"
+          />
           <p className="devanagari pointer-events-none absolute -bottom-2 right-2 select-none text-[clamp(3rem,9vw,7.5rem)] leading-none text-primary/[0.06] sm:right-6">
             कक्षा
           </p>
@@ -37,7 +39,7 @@ export function Footer() {
                 LOGO
               </span>
               <div className="leading-tight">
-                <p className="font-display text-sm font-semibold tracking-[0.2em] text-foreground">
+                <p className="display-orbitron text-sm text-foreground">
                   KAKSHYA
                 </p>
                 <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.24em] text-muted">
