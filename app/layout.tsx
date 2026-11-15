@@ -19,6 +19,7 @@ const displayFont = Orbitron({
   variable: "--font-orbitron-src",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
   fallback: ["Arial Black", "Segoe UI", "sans-serif"],
 });
 
@@ -26,6 +27,7 @@ const interfaceFont = Oxanium({
   variable: "--font-oxanium-src",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
   fallback: ["Arial Narrow", "Segoe UI", "sans-serif"],
 });
 
