@@ -21,7 +21,7 @@ export function TypeLine({
   const mode = useEffectsMode();
   const ref = useRef<HTMLElement | null>(null);
   const Tag = as as ElementType;
-  const [animatedText, setAnimatedText] = useState("");
+  const [animatedText, setAnimatedText] = useState(text);
   const visibleText = mode === "full" ? animatedText : text;
 
   useEffect(() => {
@@ -61,6 +61,7 @@ export function TypeLine({
       }
 
       started = true;
+      setAnimatedText("");
       frame = window.requestAnimationFrame(tick);
     }
 

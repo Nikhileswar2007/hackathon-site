@@ -2518,7 +2518,7 @@
   transform: scaleX(0);
 }
 
-.power-on[data-armed="true"]:not([data-visible="true"]) {
+html.js .power-on[data-armed="true"]:not([data-visible="true"]) {
   opacity: 0;
 }
 
@@ -2537,7 +2537,7 @@
   animation: page-in 0.34s var(--ease-out) both;
 }
 
-.reveal[data-armed="true"]:not([data-visible="true"]) {
+html.js .reveal[data-armed="true"]:not([data-visible="true"]) {
   opacity: 0;
   transform: translate3d(0, 1.6rem, 0);
 }
@@ -2556,10 +2556,9 @@
   white-space: pre;
 }
 
-.split-heading[data-armed="true"]:not([data-visible="true"]) .split-word {
+html.js .split-heading[data-armed="true"]:not([data-visible="true"]) .split-word {
   opacity: 0;
   transform: translate3d(0, 0.7em, 0) rotate(0.4deg);
-  will-change: transform, opacity;
 }
 
 .split-heading[data-visible="true"] .split-word {
@@ -2572,7 +2571,7 @@
   white-space: pre;
 }
 
-.split-text[data-armed="true"]:not([data-visible="true"]) .split-word {
+html.js .split-text[data-armed="true"]:not([data-visible="true"]) .split-word {
   opacity: 0;
   transform: translate3d(0, 0.7em, 0) rotate(0.4deg);
 }
@@ -2592,7 +2591,7 @@
   backface-visibility: hidden;
 }
 
-.split-text[data-armed="true"]:not([data-visible="true"]) .split-char {
+html.js .split-text[data-armed="true"]:not([data-visible="true"]) .split-char {
   opacity: 0;
   transform: translate3d(0, 0.6em, 0) rotateX(-62deg);
 }
@@ -3362,7 +3361,6 @@ a:focus-visible > .text-roll .text-roll-track {
     calc(var(--scene-progress) * var(--scene-intensity, 1) * -18px),
     0
   );
-  will-change: transform;
 }
 
 .scroll-scene[data-mode="off"] .scroll-scene-layer,
@@ -4561,7 +4559,7 @@ html.cursor-none
     animation: none;
   }
 
-  .reveal[data-armed="true"]:not([data-visible="true"]) {
+  html.js .reveal[data-armed="true"]:not([data-visible="true"]) {
     opacity: 1;
     transform: none;
   }
@@ -4900,4 +4898,35 @@ html.cursor-none
   color: color-mix(in srgb, var(--border-strong) 80%, var(--accent) 20%);
   opacity: 0.9;
   pointer-events: none;
+}
+/* ---------- Runtime lightness ---------- */
+
+/* Lite and Off: no backdrop blur anywhere; Full keeps it on two small elements only. */
+html[data-effects="lite"] .command-deck-inner,
+html[data-effects="lite"] .mobile-action-bar,
+html[data-effects="off"] .command-deck-inner,
+html[data-effects="off"] .mobile-action-bar {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Infinite CSS animations run only in Full (and while in view where gated). */
+html[data-effects="lite"] .status-dot,
+html[data-effects="off"] .status-dot,
+html[data-effects="lite"] .scroll-cue-track::after,
+html[data-effects="off"] .scroll-cue-track::after,
+html[data-effects="lite"] .orbiter-cursor[data-idle="true"] .orbiter-nozzle,
+html[data-effects="off"] .orbiter-cursor[data-idle="true"] .orbiter-nozzle {
+  animation: none;
+}
+
+/* Long below-the-fold sections skip layout until near the viewport. */
+#main-content section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 780px;
+}
+
+#main-content section.hero-space {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
 }

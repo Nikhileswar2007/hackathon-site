@@ -83,6 +83,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       data-scroll-behavior="smooth"
       className={`${displayFont.variable} ${interfaceFont.variable} ${bodyFont.variable} ${hudFont.variable} h-full antialiased`}
     >
+      <script
+        dangerouslySetInnerHTML={{
+          __html: "document.documentElement.classList.add('js')",
+        }}
+      />
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <ToastProvider>
           <EffectsProvider>

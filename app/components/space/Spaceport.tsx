@@ -216,6 +216,11 @@ function RocketPlume({
     attribute.needsUpdate = true;
   });
 
+  if (lite) {
+    /* Lite renders the spaceport scene without the plume glow. */
+    return null;
+  }
+
   return (
     <points ref={pointsRef} frustumCulled={false} position={[0, offset ?? 0, 0]}>
       <bufferGeometry>

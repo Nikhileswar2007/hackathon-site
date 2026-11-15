@@ -90,7 +90,6 @@ export function NavDecode({
   return (
     <span
       className={cn("text-roll nav-link-label glitch-hover", className)}
-      aria-hidden="true"
       data-mode={mode}
       data-text={text}
       onMouseEnter={startDecode}
@@ -103,7 +102,7 @@ export function NavDecode({
             {text}
           </span>
         </span>
-        <span className="text-roll-line">
+        <span className="text-roll-line" aria-hidden="true">
           <span ref={secondRef} style={sharedStyle}>
             {text}
           </span>

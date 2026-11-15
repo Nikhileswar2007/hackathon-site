@@ -4,6 +4,7 @@ export type EffectsMode = "full" | "lite" | "off";
 // The old brand name appears here intentionally and nowhere else.
 const LEGACY_STORAGE_KEY = "kakshya:effects";
 const STORAGE_KEY = "kosmodrome:effects";
+const GOVERNOR_SESSION_KEY = "kosmodrome:governor";
 const MODES: EffectsMode[] = ["full", "lite", "off"];
 
 let mode: EffectsMode | null = null;
@@ -41,11 +42,9 @@ function detectMode(): EffectsMode {
   const lowMemory =
     typeof navigatorWithMemory.deviceMemory === "number" &&
     navigatorWithMemory.deviceMemory <= 4;
-  const smallCoarse =
-    window.matchMedia("(pointer: coarse)").matches &&
-    Math.min(window.innerWidth, window.innerHeight) <= 820;
+  const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 
-  if (lowCpu || lowMemory || smallCoarse || !supportsWebGL()) {
+  if (lowCpu || lowMemory || coarsePointer || !supportsWebGL()) {
     return "lite";
   }
 
@@ -87,6 +86,31 @@ function readStoredMode(): EffectsMode | null {
   }
 }
 
+function readGovernorStep(): EffectsMode | null {
+  try {
+    const stored = window.sessionStorage.getItem(GOVERNOR_SESSION_KEY);
+    return stored === "lite" || stored === "off" ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeGovernorStep(step: EffectsMode) {
+  try {
+    window.sessionStorage.setItem(GOVERNOR_SESSION_KEY, step);
+  } catch {
+    /* Session storage can be unavailable. */
+  }
+}
+
+function clearGovernorStep() {
+  try {
+    window.sessionStorage.removeItem(GOVERNOR_SESSION_KEY);
+  } catch {
+    /* Session storage can be unavailable. */
+  }
+}
+
 function emit() {
   for (const listener of listeners) {
     listener();
@@ -103,6 +127,18 @@ function initialize() {
   userOverride = Boolean(stored);
   mode = stored ?? autoMode;
 
+  const governorStep = readGovernorStep();
+
+  if (governorStep && !userOverride) {
+    const forced = governorStep;
+    const currentRank = MODES.indexOf(mode);
+    const forcedRank = MODES.indexOf(forced);
+
+    if (forcedRank > currentRank) {
+      mode = forced;
+    }
+  }
+
   if (!motionBound) {
     motionBound = true;
     const motionQuery = window.matchMedia(
@@ -115,6 +151,13 @@ function initialize() {
       }
       autoMode = detectMode();
       mode = autoMode;
+
+      const governorStep = readGovernorStep();
+
+      if (governorStep && MODES.indexOf(governorStep) > MODES.indexOf(mode)) {
+        mode = governorStep;
+      }
+
       emit();
     });
   }
@@ -149,10 +192,36 @@ export function setEffectsMode(next: EffectsMode) {
   initialize();
   mode = next;
   userOverride = true;
+  clearGovernorStep();
   try {
     window.localStorage.setItem(STORAGE_KEY, next);
   } catch {
     /* Storage can be unavailable in private browsing. */
   }
   emit();
+}
+
+export function isEffectsUserOverride() {
+  initialize();
+  return userOverride;
+}
+
+export function stepDownEffectsMode(): EffectsMode | null {
+  initialize();
+
+  if (userOverride) {
+    return null;
+  }
+
+  const current = mode;
+  const next = current === "full" ? "lite" : current === "lite" ? "off" : null;
+
+  if (!next) {
+    return null;
+  }
+
+  mode = next;
+  writeGovernorStep(next);
+  emit();
+  return next;
 }
