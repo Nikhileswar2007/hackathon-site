@@ -35,7 +35,7 @@ export function DataTable({
       tabIndex={0}
       data-lenis-prevent
       className={cn(
-        "w-full overflow-auto overscroll-contain rounded-xl border border-border bg-surface/80",
+        "data-table-shell w-full overflow-auto overscroll-contain rounded-xl border border-border bg-surface/80",
         className,
       )}
     >

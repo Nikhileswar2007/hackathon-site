@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Button } from "@/app/components/ui/Button";
+import { TiltCard } from "@/app/components/fx/TiltCard";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
 import { Card } from "@/app/components/ui/Card";
 import { DataTable } from "@/app/components/ui/DataTable";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { fairPlayCards, fairPlayThreats } from "@/app/content/event-data";
@@ -25,9 +27,9 @@ export default function FairPlayPage() {
         title="Sealed problems, traceable work, auditable scores"
         description="The framework behind the three guarantees. Every control is designed to be verifiable, not just promised."
       >
-        <Button href="/scoring" variant="secondary">
+        <Button3D href="/scoring" variant="secondary">
           See scoring
-        </Button>
+        </Button3D>
       </PageHeader>
 
       <section
@@ -43,25 +45,27 @@ export default function FairPlayPage() {
         />
         <div className="mt-8 grid gap-5 lg:grid-cols-2">
           {fairPlayCards.map((card) => (
-            <Card key={card.id} className="h-full">
-              <h3 className="text-lg font-semibold tracking-tight text-foreground">
-                {card.title}
-              </h3>
-              <ul className="mt-4 space-y-2.5">
-                {card.points.map((point) => (
-                  <li
-                    key={point}
-                    className="flex gap-3 text-sm leading-relaxed text-muted"
-                  >
-                    <span
-                      className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
-                      aria-hidden="true"
-                    />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+            <TiltCard key={card.id} spotlight className="h-full rounded-xl">
+              <Card className="h-full">
+                <h3 className="text-lg font-semibold tracking-tight text-foreground">
+                  {card.title}
+                </h3>
+                <ul className="mt-4 space-y-2.5">
+                  {card.points.map((point) => (
+                    <li
+                      key={point}
+                      className="flex gap-3 text-sm leading-relaxed text-muted"
+                    >
+                      <span
+                        className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
+                        aria-hidden="true"
+                      />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </TiltCard>
           ))}
         </div>
       </section>
@@ -91,27 +95,29 @@ export default function FairPlayPage() {
         </div>
       </section>
 
-      <Callout title="Report an integrity concern" tone="primary" className="mt-12">
-        <p>
-          Anyone can report an integrity concern confidentially, and
-          retaliation is prohibited. Records are kept for 180 days. Use the{" "}
-          <Link
-            href="/contact"
-            className="text-primary underline underline-offset-4"
-          >
-            contact channels
-          </Link>{" "}
-          to reach the OC.
-        </p>
-      </Callout>
+      <Frame className="mt-12 rounded-xl">
+        <Callout title="Report an integrity concern" tone="primary">
+          <p>
+            Anyone can report an integrity concern confidentially, and
+            retaliation is prohibited. Records are kept for 180 days. Use the{" "}
+            <Link
+              href="/contact"
+              className="text-primary underline underline-offset-4"
+            >
+              contact channels
+            </Link>{" "}
+            to reach the OC.
+          </p>
+        </Callout>
+      </Frame>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Button href="/rules" variant="secondary">
+        <Button3D href="/rules" variant="secondary">
           Read the rules
-        </Button>
-        <Button href="/submission" variant="secondary">
+        </Button3D>
+        <Button3D href="/submission" variant="secondary">
           Submission requirements
-        </Button>
+        </Button3D>
       </div>
     </div>
   );

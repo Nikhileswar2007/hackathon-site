@@ -28,6 +28,8 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
     : rows;
   const dimBeginner = focus === "advanced";
   const dimAdvanced = focus === "beginner";
+  const highlightBeginner = focus === "beginner";
+  const highlightAdvanced = focus === "advanced";
 
   return (
     <div>
@@ -35,7 +37,7 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
         <div
           role="group"
           aria-label="Focus a track"
-          className="inline-flex flex-wrap gap-1 rounded-full border border-border bg-surface p-1"
+          className="inline-flex flex-wrap gap-1 rounded-full border border-border bg-surface p-1 shadow-[var(--elev-1)]"
         >
           {focusOptions.map((option) => {
             const selected = focus === option.id;
@@ -45,16 +47,17 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
                 key={option.id}
                 type="button"
                 aria-pressed={selected}
+                data-cursor="SWITCH"
                 onClick={() => setFocus(option.id)}
                 className={cn(
-                  "rounded-full px-3.5 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] transition-colors",
+                  "rounded-full px-3.5 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] transition-[background-color,color,transform] active:translate-y-px",
                   selected
                     ? option.id === "advanced"
-                      ? "bg-accent text-accent-foreground"
+                      ? "bg-accent text-accent-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
                       : option.id === "beginner"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-surface-strong text-foreground"
-                    : "text-muted hover:text-foreground",
+                        ? "bg-primary text-primary-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
+                        : "bg-surface-strong text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+                    : "text-muted hover:bg-surface-raised hover:text-foreground",
                 )}
               >
                 {option.label}
@@ -63,7 +66,7 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
           })}
         </div>
 
-        <label className="inline-flex cursor-pointer items-center gap-2 text-xs leading-relaxed text-muted">
+        <label className="inline-flex cursor-pointer items-center gap-2 text-xs leading-relaxed text-muted transition-colors hover:text-foreground">
           <input
             type="checkbox"
             checked={differencesOnly}
@@ -79,7 +82,7 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
         aria-label="Beginner and Advanced track comparison"
         tabIndex={0}
         data-lenis-prevent
-        className="mt-4 w-full overflow-auto overscroll-contain rounded-xl border border-border bg-surface/80"
+        className="data-table-shell mt-4 w-full overflow-auto overscroll-contain rounded-xl border border-border bg-surface/80"
       >
         <table className="w-full min-w-[46rem] border-collapse text-sm">
           <caption className="sr-only">
@@ -96,7 +99,8 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
               <th
                 scope="col"
                 className={cn(
-                  "border-b border-border px-4 py-3 text-left transition-opacity",
+                  "border-b border-border px-4 py-3 text-left transition-[opacity,background-color]",
+                  highlightBeginner && "bg-primary/[0.045]",
                   dimBeginner && "opacity-35",
                 )}
               >
@@ -105,7 +109,8 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
               <th
                 scope="col"
                 className={cn(
-                  "border-b border-border px-4 py-3 text-left transition-opacity",
+                  "border-b border-l border-border px-4 py-3 text-left transition-[opacity,background-color]",
+                  highlightAdvanced && "bg-accent/[0.045]",
                   dimAdvanced && "opacity-35",
                 )}
               >
@@ -138,7 +143,8 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
                   </th>
                   <td
                     className={cn(
-                      "px-4 py-3 leading-relaxed text-foreground transition-opacity",
+                      "px-4 py-3 leading-relaxed text-foreground transition-[opacity,background-color]",
+                      highlightBeginner && "bg-primary/[0.035]",
                       dimBeginner && "opacity-35",
                     )}
                   >
@@ -146,7 +152,8 @@ export function TrackCompare({ rows }: { rows: TrackCompareRow[] }) {
                   </td>
                   <td
                     className={cn(
-                      "px-4 py-3 leading-relaxed text-foreground transition-opacity",
+                      "border-l border-border/70 px-4 py-3 leading-relaxed text-foreground transition-[opacity,background-color]",
+                      highlightAdvanced && "bg-accent/[0.035]",
                       dimAdvanced && "opacity-35",
                     )}
                   >

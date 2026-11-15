@@ -5,6 +5,7 @@ import { scoringTabs } from "@/app/content/event-data";
 import { useEffectsMode } from "../effects/effects-provider";
 import { Badge } from "../ui/Badge";
 import { DataTable } from "../ui/DataTable";
+import { Frame } from "../ui/Frame";
 import { Tabs, type TabItem } from "../ui/Tabs";
 import { cn } from "../ui/cn";
 
@@ -83,13 +84,13 @@ function WeightBar({
       >
         <div
           className={cn(
-            "h-full rounded-full",
+            "h-full w-full origin-left rounded-full",
             barClassName,
             mode === "off"
               ? ""
-              : "transition-[width] duration-700 ease-out motion-reduce:transition-none",
+              : "transition-transform duration-700 ease-out motion-reduce:transition-none",
           )}
-          style={{ width: shown ? `${clamped}%` : "0%" }}
+          style={{ transform: `scaleX(${shown ? clamped / 100 : 0})` }}
         />
       </div>
       <span
@@ -183,5 +184,9 @@ export function ScoringTables() {
     };
   });
 
-  return <Tabs items={tabs} label="Scoring stage" />;
+  return (
+    <Frame className="rounded-2xl border border-border bg-surface/55 p-4 shadow-[var(--elev-2)] sm:p-6">
+      <Tabs items={tabs} label="Scoring stage" />
+    </Frame>
+  );
 }

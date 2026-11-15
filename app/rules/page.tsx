@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Accordion } from "@/app/components/ui/Accordion";
-import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { ruleSections } from "@/app/content/event-data";
@@ -41,31 +42,33 @@ export default function RulesPage() {
         description="A compact summary of the draft rulebook. Open a section for the short bullet version."
       >
         <div className="flex flex-wrap gap-3">
-          <Button href="/fair-play" variant="secondary">
+          <Button3D href="/fair-play" variant="secondary">
             Fair-play framework
-          </Button>
-          <Button href="/submission" variant="secondary">
+          </Button3D>
+          <Button3D href="/submission" variant="secondary">
             Submission rules
-          </Button>
+          </Button3D>
         </div>
       </PageHeader>
 
-      <Callout title="Rulebook status" tone="warning" className="mt-8">
-        <p>
-          The rulebook is a draft. Full rulebook:{" "}
-          {siteConfig.rulebookUrl ? (
-            <Link
-              href={siteConfig.rulebookUrl}
-              className="text-primary underline underline-offset-4"
-            >
-              Read the rulebook
-            </Link>
-          ) : (
-            <span className="font-medium text-foreground">{TBA}</span>
-          )}
-          .
-        </p>
-      </Callout>
+      <Frame className="mt-8 rounded-xl">
+        <Callout title="Rulebook status" tone="warning">
+          <p>
+            The rulebook is a draft. Full rulebook:{" "}
+            {siteConfig.rulebookUrl ? (
+              <Link
+                href={siteConfig.rulebookUrl}
+                className="text-primary underline underline-offset-4"
+              >
+                Read the rulebook
+              </Link>
+            ) : (
+              <span className="font-medium text-foreground">{TBA}</span>
+            )}
+            .
+          </p>
+        </Callout>
+      </Frame>
 
       <section
         className="mt-12"
@@ -78,20 +81,22 @@ export default function RulesPage() {
           title="Rulebook sections"
           description="Eligibility, teams, development, platform conduct, grievances, and IP and data."
         />
-        <Accordion
-          items={accordionItems}
-          defaultOpenIds={["eligibility"]}
-          className="mt-8"
-        />
+        <Frame className="mt-8 rounded-xl">
+          <Accordion
+            items={accordionItems}
+            defaultOpenIds={["eligibility"]}
+            className="rulebook"
+          />
+        </Frame>
       </section>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Button href="/register" variant="secondary">
+        <Button3D href="/register" variant="secondary">
           Register
-        </Button>
-        <Button href="/contact" variant="secondary">
+        </Button3D>
+        <Button3D href="/contact" variant="secondary">
           Ask the OC
-        </Button>
+        </Button3D>
       </div>
     </div>
   );

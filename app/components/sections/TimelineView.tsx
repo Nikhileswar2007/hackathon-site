@@ -5,6 +5,8 @@ import type { TimelineItem, TimelineType } from "@/app/content/event-data";
 import { useEffectsMode } from "../effects/effects-provider";
 import { subscribeScroll } from "../effects/scroll-store";
 import { Reveal } from "../fx/Reveal";
+import { SpotlightGroup } from "../fx/SpotlightGroup";
+import { SpotlightTile } from "../fx/SpotlightTile";
 import { Badge, type BadgeTone } from "../ui/Badge";
 import { cn } from "../ui/cn";
 
@@ -91,59 +93,66 @@ export function TimelineView({ items }: { items: TimelineItem[] }) {
       </span>
       <span className="timeline-rail-glow" aria-hidden="true" />
 
-      <ol ref={listRef} className="space-y-4">
-        {items.map((item, index) => {
-          const style = typeStyles[item.type];
-          const checkpoint = item.type === "checkpoint";
+      <SpotlightGroup>
+        <ol ref={listRef} className="space-y-4">
+          {items.map((item, index) => {
+            const style = typeStyles[item.type];
+            const checkpoint = item.type === "checkpoint";
 
-          return (
-            <li key={item.id} className="relative pl-8 sm:pl-10">
-              <span
-                className={cn(
-                  "timeline-node",
-                  checkpoint && "timeline-node-checkpoint",
-                )}
-                aria-hidden="true"
-              >
+            return (
+              <li key={item.id} className="relative pl-8 sm:pl-10">
                 <span
-                  className={cn("size-1.5 rounded-full", style.dot)}
-                />
-              </span>
-
-              <Reveal delay={Math.min(index * 35, 240)}>
-                <div
                   className={cn(
-                    "rounded-xl border p-4 transition-colors sm:p-5",
-                    checkpoint
-                      ? "border-warning/80 bg-warning-soft"
-                      : "border-border bg-surface/80 hover:border-border-strong",
+                    "timeline-node",
+                    checkpoint && "timeline-node-checkpoint",
                   )}
+                  aria-hidden="true"
                 >
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <span className="font-mono text-xs font-semibold text-primary">
-                      {item.when}
-                    </span>
-                    {item.clock ? (
-                      <span className="font-mono text-xs text-muted">
-                        {item.clock}
+                  <span className={cn("size-1.5 rounded-full", style.dot)} />
+                </span>
+
+                <Reveal delay={Math.min(index * 35, 240)}>
+                  <SpotlightTile
+                    className={cn(
+                      "timeline-card relative rounded-xl border p-4 transition-colors sm:p-5",
+                      checkpoint
+                        ? "border-warning/80 bg-warning-soft"
+                        : "border-border bg-surface/80 hover:border-border-strong",
+                    )}
+                    data-timeline-type={item.type}
+                  >
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                      <span className="font-mono text-xs font-semibold text-primary">
+                        {item.when}
                       </span>
-                    ) : null}
-                    <Badge tone={style.tone}>{style.label}</Badge>
-                  </div>
-                  <p className="mt-2 font-medium leading-relaxed text-foreground">
-                    {item.event}
-                  </p>
-                  {item.note ? (
-                    <p className="mt-1 text-sm leading-relaxed text-muted">
-                      {item.note}
+                      {item.clock ? (
+                        <span className="font-mono text-xs text-muted">
+                          {item.clock}
+                        </span>
+                      ) : null}
+                      <Badge tone={style.tone}>{style.label}</Badge>
+                      <span
+                        className="ml-auto hidden font-mono text-[0.5625rem] uppercase tracking-[0.18em] text-muted sm:inline"
+                        aria-hidden="true"
+                      >
+                        SEQ {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <p className="mt-2 font-medium leading-relaxed text-foreground">
+                      {item.event}
                     </p>
-                  ) : null}
-                </div>
-              </Reveal>
-            </li>
-          );
-        })}
-      </ol>
+                    {item.note ? (
+                      <p className="mt-1 text-sm leading-relaxed text-muted">
+                        {item.note}
+                      </p>
+                    ) : null}
+                  </SpotlightTile>
+                </Reveal>
+              </li>
+            );
+          })}
+        </ol>
+      </SpotlightGroup>
     </div>
   );
 }
