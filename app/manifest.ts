@@ -4,7 +4,7 @@ import { siteConfig } from "./content/site-config";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: siteConfig.name,
-    short_name: "Kakshya",
+    short_name: "Kosmodrome",
     description: siteConfig.description,
     start_url: "/",
     display: "standalone",

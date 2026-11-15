@@ -86,7 +86,7 @@ export function Countdown() {
     <div
       className="corner-frame w-full max-w-md rounded-2xl border border-border/80 bg-surface/90 p-5 shadow-glow sm:p-6"
       role="timer"
-      aria-label="Countdown to Kakshya 2026 kickoff"
+      aria-label="Countdown to Kosmodrome 2026 kickoff"
     >
       <div className="flex items-center justify-between gap-3">
         <p className="telemetry flex items-center gap-2 text-primary">
@@ -126,7 +126,7 @@ export function Countdown() {
       ) : started ? (
         <div className="mt-5 rounded-xl border border-primary bg-primary-soft/80 p-5">
           <p className="text-2xl font-semibold tracking-tight text-primary">
-            Kakshya 2026 has begun.
+            Kosmodrome 2026 has begun.
           </p>
           <p className="mt-2 text-sm leading-relaxed text-foreground">
             The 48-hour clock is running. Problem statements are live on the

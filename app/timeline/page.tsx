@@ -12,7 +12,7 @@ import { siteConfig, TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: "Timeline",
   description:
-    "The full Kakshya 2026 schedule: registration, kickoff, three checkpoints, hard close, blind judging, finals and results.",
+    "The full Kosmodrome 2026 schedule: registration, kickoff, three checkpoints, hard close, blind judging, finals and results.",
   alternates: {
     canonical: "/timeline",
   },

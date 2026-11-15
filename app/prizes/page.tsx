@@ -20,7 +20,7 @@ import { TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: "Prizes",
   description:
-    "Kakshya 2026 prizes: Beginner and Advanced track awards, participation, merit and achievement certificates, prize conditions and payment rules.",
+    "Kosmodrome 2026 prizes: Beginner and Advanced track awards, participation, merit and achievement certificates, prize conditions and payment rules.",
   alternates: {
     canonical: "/prizes",
   },

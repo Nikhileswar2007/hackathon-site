@@ -36,7 +36,7 @@ interface CommandItem {
 }
 
 const pages: Array<{ label: string; href: string; description: string }> = [
-  { label: "Home", href: "/", description: "Kakshya 2026 and the mission brief" },
+  { label: "Home", href: "/", description: "Kosmodrome 2026 and the mission brief" },
   { label: "About", href: "/about", description: "The event, guarantees and who can join" },
   { label: "Tracks", href: "/tracks", description: "Beginner and Advanced problem sets" },
   { label: "Timeline", href: "/timeline", description: "Twenty moments from D-14 to T+144" },

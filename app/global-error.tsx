@@ -26,7 +26,7 @@ export default function GlobalError({
     <html lang="en">
       <head>
         <style>{errorStyles}</style>
-        <title>Something went wrong — Kakshya 2026</title>
+        <title>Something went wrong — Kosmodrome 2026</title>
       </head>
       <body>
         <main>

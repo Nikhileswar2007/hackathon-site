@@ -11,7 +11,7 @@ import { faqGroups } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Answers about Kakshya 2026 eligibility, team size and tracks, fees, the 48-hour event, AI tools, code reuse, judging and appeals.",
+    "Answers about Kosmodrome 2026 eligibility, team size and tracks, fees, the 48-hour event, AI tools, code reuse, judging and appeals.",
   alternates: {
     canonical: "/faq",
   },

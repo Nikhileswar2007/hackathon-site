@@ -1,5 +1,18 @@
 export const TBA = "To be announced";
 
+export const brand = {
+  name: "Kosmodrome",
+  displayName: "KOSMODROME",
+  shortName: "Kosmodrome",
+  year: 2026,
+  tagline: "48 Hours to Orbit",
+  subtitle: "IIST National Space Hackathon",
+  conceptLine:
+    "A kosmodrome is a spaceport: the place every mission starts. Kosmodrome is where your idea leaves the pad.",
+  watermark: "КОСМОДРОМ",
+  organiser: "Indian Institute of Space Science and Technology (IIST)",
+} as const;
+
 export interface NavLink {
   label: string;
   href: string;
@@ -11,14 +24,17 @@ export interface NavGroup {
 }
 
 export const siteConfig = {
-  name: "Kakshya 2026",
-  tagline: "48 Hours to Orbit",
-  subtitle: "IIST National Space Hackathon",
-  organiser: "Indian Institute of Space Science and Technology (IIST)",
+  name: `${brand.name} ${brand.year}`,
+  displayName: brand.displayName,
+  shortName: brand.shortName,
+  year: brand.year,
+  tagline: brand.tagline,
+  subtitle: brand.subtitle,
+  organiser: brand.organiser,
   factsLine:
     "National level | Online | 48 hours | Beginner and Advanced tracks",
   description:
-    "Kakshya 2026: 48 Hours to Orbit is the IIST National Space Hackathon — a 48-hour, national-level, online event with Beginner and Advanced tracks.",
+    "Kosmodrome 2026: 48 Hours to Orbit is the IIST National Space Hackathon — a 48-hour, national-level, online event with Beginner and Advanced tracks.",
 
   siteUrl:
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??

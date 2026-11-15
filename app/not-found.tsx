@@ -9,7 +9,7 @@ import { Button3D } from "@/app/components/ui/Button3D";
 export const metadata: Metadata = {
   title: "Page not found",
   description:
-    "The page you are looking for does not exist on the Kakshya 2026 website.",
+    "The page you are looking for does not exist on the Kosmodrome 2026 website.",
 };
 
 const quickLinks = [

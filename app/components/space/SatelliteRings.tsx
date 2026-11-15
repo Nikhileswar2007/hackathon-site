@@ -161,8 +161,8 @@ export function SatelliteRings({
       <group rotation={[0.82, 0.15, 0.32]}>
         <OrbitLine radius={1.96} color="#6fe3f2" lite={lite} />
         <Satellite
-          id="kakshya-01"
-          name="Kakshya-01"
+          id="Kosmodrome-01"
+          name="Kosmodrome-01"
           orbit="Scout orbit"
           radius={1.96}
           color="#9ef3ff"
@@ -176,8 +176,8 @@ export function SatelliteRings({
       <group rotation={[-0.58, 0.35, 0.16]}>
         <OrbitLine radius={2.92} color="#ffb066" lite={lite} />
         <Satellite
-          id="kakshya-02"
-          name="Kakshya-02"
+          id="Kosmodrome-02"
+          name="Kosmodrome-02"
           orbit="Relay orbit"
           radius={2.92}
           color="#ffd1a1"
@@ -187,8 +187,8 @@ export function SatelliteRings({
           interactive={interactive}
         />
         <Satellite
-          id="kakshya-03"
-          name="Kakshya-03"
+          id="Kosmodrome-03"
+          name="Kosmodrome-03"
           orbit="Beacon orbit"
           radius={2.92}
           color="#9ef3ff"

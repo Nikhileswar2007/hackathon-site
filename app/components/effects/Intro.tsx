@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useEffects } from "./effects-provider";
 
-const SESSION_KEY = "kakshya:intro-seen";
+const LEGACY_SESSION_KEY = "kakshya:intro-seen";
+const SESSION_KEY = "kosmodrome:intro-seen";
 const CLOSE_AT = 620;
 const REMOVE_AT = 940;
 
@@ -23,6 +24,13 @@ export function Intro() {
       if (window.sessionStorage.getItem(SESSION_KEY)) {
         return;
       }
+
+      if (window.sessionStorage.getItem(LEGACY_SESSION_KEY)) {
+        window.sessionStorage.setItem(SESSION_KEY, "1");
+        window.sessionStorage.removeItem(LEGACY_SESSION_KEY);
+        return;
+      }
+
       window.sessionStorage.setItem(SESSION_KEY, "1");
     } catch {
       /* Session storage can be unavailable. */

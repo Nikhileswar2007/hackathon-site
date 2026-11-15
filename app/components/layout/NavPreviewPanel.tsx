@@ -46,7 +46,7 @@ const indexByPath = new Map(
 const featuredByPath: Record<FeaturedPath, { title: string; description: string }> = {
   "/about": {
     title: "The mission",
-    description: "Kakshya 2026: national, online and built around one 48-hour clock.",
+    description: "Kosmodrome 2026: national, online and built around one 48-hour clock.",
   },
   "/tracks": {
     title: "Pick your orbit",

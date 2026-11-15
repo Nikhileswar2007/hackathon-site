@@ -73,7 +73,7 @@ export function MobileActionBar() {
         className="mobile-action-menu"
         aria-label="Open command deck menu"
         data-cursor="EXPAND"
-        onClick={() => window.dispatchEvent(new CustomEvent("kakshya:open-navigation"))}
+        onClick={() => window.dispatchEvent(new CustomEvent("kosmodrome:open-navigation"))}
       >
         <MenuIcon className="size-5" />
         <span className="sr-only">Open navigation</span>

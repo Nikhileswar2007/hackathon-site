@@ -16,7 +16,7 @@ import { TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Contact the Kakshya 2026 organising committee: official channels, accessibility requests, integrity reports, technical support and a message preview.",
+    "Contact the Kosmodrome 2026 organising committee: official channels, accessibility requests, integrity reports, technical support and a message preview.",
   alternates: {
     canonical: "/contact",
   },

@@ -11,7 +11,7 @@ import { submission } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "Submission",
   description:
-    "Kakshya 2026 submission window, Beginner and Advanced submission packs, blind-judging rules and the pre-flight checklist.",
+    "Kosmodrome 2026 submission window, Beginner and Advanced submission packs, blind-judging rules and the pre-flight checklist.",
   alternates: {
     canonical: "/submission",
   },

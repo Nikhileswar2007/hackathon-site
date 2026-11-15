@@ -14,7 +14,7 @@ import { trackRules, tracks, trackThemesNote } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "Tracks",
   description:
-    "Compare the Beginner and Advanced tracks at Kakshya 2026: eligibility, problem style, evaluation, submission pack, finalists and themes.",
+    "Compare the Beginner and Advanced tracks at Kosmodrome 2026: eligibility, problem style, evaluation, submission pack, finalists and themes.",
   alternates: {
     canonical: "/tracks",
   },

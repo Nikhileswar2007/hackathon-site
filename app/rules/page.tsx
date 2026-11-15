@@ -12,7 +12,7 @@ import { siteConfig, TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: "Rules",
   description:
-    "A short summary of the Kakshya 2026 draft rulebook: eligibility, teams, development, platform conduct, grievances, IP and data.",
+    "A short summary of the Kosmodrome 2026 draft rulebook: eligibility, teams, development, platform conduct, grievances, IP and data.",
   alternates: {
     canonical: "/rules",
   },

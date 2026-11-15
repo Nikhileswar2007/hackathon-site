@@ -50,7 +50,7 @@ export function MissionClock({ className }: { className?: string }) {
       role="timer"
       aria-label={
         validTarget
-          ? "Countdown to Kakshya 2026 kickoff"
+          ? "Countdown to Kosmodrome 2026 kickoff"
           : "Kickoff time to be announced"
       }
     >

@@ -17,7 +17,7 @@ import { siteConfig, TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: "Register",
   description:
-    "Kakshya 2026 registration preview: eligibility, the five-step registration process, team details and the frontend-only registration form.",
+    "Kosmodrome 2026 registration preview: eligibility, the five-step registration process, team details and the frontend-only registration form.",
   alternates: {
     canonical: "/register",
   },

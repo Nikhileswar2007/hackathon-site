@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { siteConfig, TBA } from "@/app/content/site-config";
+import { brand, siteConfig, TBA } from "@/app/content/site-config";
 import { SpotlightGroup } from "../fx/SpotlightGroup";
 import { SpotlightTile } from "../fx/SpotlightTile";
 import { TextRoll } from "../fx/TextRoll";
-import { HoloText } from "../fx/HoloText";
+import { BrandMark } from "../ui/BrandMark";
+import { Wordmark } from "../ui/Wordmark";
 import { EffectsToggle } from "./EffectsToggle";
 
 export function Footer() {
@@ -14,17 +15,17 @@ export function Footer() {
           className="relative flex items-end justify-between overflow-hidden border-b border-border/70 py-8 sm:py-10"
           aria-hidden="true"
         >
-          <HoloText
-            text="KAKSHYA"
-            className="display-orbitron text-[clamp(2.6rem,10vw,8.5rem)] leading-none opacity-40"
-          />
-          <p className="devanagari pointer-events-none absolute -bottom-2 right-2 select-none text-[clamp(3rem,9vw,7.5rem)] leading-none text-primary/[0.06] sm:right-6">
-            कक्षा
+          <Wordmark size="footer" />
+          <p
+            className="cyrillic-watermark pointer-events-none absolute -bottom-2 right-2 select-none text-[clamp(3rem,9vw,7.5rem)] leading-none text-primary/[0.06] sm:right-6"
+            aria-hidden="true"
+          >
+            {brand.watermark}
           </p>
           <div className="mb-2 hidden shrink-0 flex-col items-end gap-2 sm:flex">
-            <span className="telemetry text-[0.5rem]">Escape velocity</span>
+            <span className="telemetry text-[0.5rem]">LAUNCH COMPLEX</span>
             <span className="font-mono text-[0.625rem] text-primary">
-              ALT 400 KM
+              ALL SYSTEMS GO
             </span>
           </div>
         </div>
@@ -33,15 +34,13 @@ export function Footer() {
           <SpotlightTile className="max-w-sm space-y-4 rounded-lg">
             <div className="flex items-center gap-3">
               <span
-                className="grid size-9 shrink-0 place-items-center rounded-md border border-dashed border-border-strong text-[0.5rem] tracking-[0.12em] text-muted"
+                className="grid size-9 shrink-0 place-items-center text-primary"
                 aria-hidden="true"
               >
-                LOGO
+                <BrandMark className="size-9" />
               </span>
               <div className="leading-tight">
-                <p className="display-orbitron text-sm text-foreground">
-                  KAKSHYA
-                </p>
+                <Wordmark className="display-orbitron text-[0.78rem] uppercase" />
                 <p className="mt-1 font-mono text-[0.5625rem] uppercase tracking-[0.24em] text-muted">
                   2026 · IIST
                 </p>
@@ -113,11 +112,11 @@ export function Footer() {
 
         <div className="flex flex-col gap-3 border-t border-border py-6 text-xs leading-relaxed text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © 2026 {siteConfig.name}. A national space hackathon by{" "}
+            © {brand.year} {brand.name}. A national space hackathon by{" "}
             {siteConfig.organiser}.
           </p>
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.14em]">
-            Saffron orbit · cyan telemetry · built to fly
+            T-minus · all systems go
           </p>
         </div>
       </div>

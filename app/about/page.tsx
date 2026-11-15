@@ -14,7 +14,7 @@ import { about, guarantees } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Kakshya 2026, the IIST National Space Hackathon: a 48-hour national-level online event with Beginner and Advanced tracks.",
+    "About Kosmodrome 2026, the IIST National Space Hackathon: a 48-hour national-level online event with Beginner and Advanced tracks.",
   alternates: {
     canonical: "/about",
   },
@@ -29,7 +29,7 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="About"
         title="A national space hackathon, built for 48 hours"
-        description="Kakshya 2026 is the IIST National Space Hackathon: national level, online, and built around a single 48-hour build window."
+        description="Kosmodrome 2026 is the IIST National Space Hackathon: national level, online, and built around a single 48-hour build window."
       />
 
       <div className="mt-12 space-y-16">
@@ -41,7 +41,7 @@ export default function AboutPage() {
             <SectionHeading
               id="story-heading"
               eyebrow="The event"
-              title="What Kakshya is"
+              title="What Kosmodrome is"
             />
             <div className="mt-5 space-y-4">
               {about.intro.map((paragraph) => (
@@ -113,7 +113,7 @@ export default function AboutPage() {
             id="who-can-join-heading"
             eyebrow="Eligibility"
             title="Who can join"
-            description="Kakshya 2026 is open to students at recognised Indian institutions, with a separate Advanced route for graduates."
+            description="Kosmodrome 2026 is open to students at recognised Indian institutions, with a separate Advanced route for graduates."
           />
           <SpotlightGroup className="mt-8">
             <ul className="grid gap-3 sm:grid-cols-2">

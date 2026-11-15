@@ -106,7 +106,7 @@ function buildEvent(item: TimelineItem, t0: number) {
 
   return [
     "BEGIN:VEVENT",
-    `UID:kakshya-${item.id}@kakshya2026.invalid`,
+    `UID:kosmodrome-${item.id}@kosmodrome2026.invalid`,
     `DTSTAMP:${formatIcs(new Date())}`,
     `DTSTART:${formatIcs(start)}`,
     `DTEND:${formatIcs(end)}`,
@@ -120,7 +120,7 @@ function buildCalendar(items: TimelineItem[], t0: number) {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//IIST//Kakshya 2026//EN",
+    "PRODID:-//IIST//Kosmodrome 2026//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     ...items.map((item) => buildEvent(item, t0)),
@@ -180,7 +180,7 @@ export function CalendarDownload() {
           className="calendar-add-all"
           data-cursor="OPEN"
           onClick={() => {
-            downloadCalendar("kakshya-2026-all.ics", buildCalendar(timeline, t0));
+            downloadCalendar("kosmodrome-2026-all.ics", buildCalendar(timeline, t0));
             toast({ title: "Calendar downloaded", tone: "success" });
           }}
         >
@@ -196,7 +196,7 @@ export function CalendarDownload() {
                 className="calendar-item-download"
                 data-cursor="OPEN"
                 onClick={() => {
-                  downloadCalendar(`kakshya-${item.id}.ics`, buildCalendar([item], t0));
+                  downloadCalendar(`kosmodrome-${item.id}.ics`, buildCalendar([item], t0));
                   toast({ title: "Milestone downloaded", tone: "success" });
                 }}
               >

@@ -13,7 +13,7 @@ import { fairPlayCards, fairPlayThreats } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "Fair play",
   description:
-    "Kakshya 2026 fair play: sealed problems, leak tracing, integrity checks, blind judging, winner audits and the threat-control framework.",
+    "Kosmodrome 2026 fair play: sealed problems, leak tracing, integrity checks, blind judging, winner audits and the threat-control framework.",
   alternates: {
     canonical: "/fair-play",
   },

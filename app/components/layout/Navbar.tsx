@@ -10,6 +10,8 @@ import { useMediaQuery } from "../effects/use-media-query";
 import { subscribeScroll } from "../effects/scroll-store";
 import { Magnetic } from "../fx/Magnetic";
 import { Button3D } from "../ui/Button3D";
+import { BrandMark } from "../ui/BrandMark";
+import { Wordmark } from "../ui/Wordmark";
 import { CloseIcon, MenuIcon, SearchIcon } from "../ui/icons";
 import { useCommandPalette } from "../effects/CommandPaletteProvider";
 import { Frame } from "../ui/Frame";
@@ -91,10 +93,10 @@ export function Navbar() {
     }
 
     window.addEventListener("popstate", onPopState);
-    window.addEventListener("kakshya:open-navigation", onOpenNavigation);
+    window.addEventListener("kosmodrome:open-navigation", onOpenNavigation);
     return () => {
       window.removeEventListener("popstate", onPopState);
-      window.removeEventListener("kakshya:open-navigation", onOpenNavigation);
+      window.removeEventListener("kosmodrome:open-navigation", onOpenNavigation);
     };
   }, []);
 
@@ -428,15 +430,14 @@ export function Navbar() {
               aria-label={`${siteConfig.name} home`}
               data-cursor="HOME"
             >
-              <span className="command-logo" aria-hidden="true">LOGO</span>
+              <span className="command-logo" aria-hidden="true">
+                <BrandMark className="size-6" />
+              </span>
               <span className="command-wordmark-text">
-                <span
-                  className="wordmark holo-sheen"
-                  data-mode={mode}
-                  data-text="KAKSHYA"
-                >
-                  KAKSHYA
-                </span>
+                <Wordmark
+                  className="wordmark-navbar holo-sheen"
+                  dataMode={mode}
+                />
                 <span className="wordmark-sub">2026 · IIST</span>
               </span>
             </Link>

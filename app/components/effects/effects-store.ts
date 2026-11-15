@@ -1,6 +1,9 @@
 export type EffectsMode = "full" | "lite" | "off";
 
-const STORAGE_KEY = "kakshya:effects";
+// Legacy key retained only for one-time migration of saved Effects mode.
+// The old brand name appears here intentionally and nowhere else.
+const LEGACY_STORAGE_KEY = "kakshya:effects";
+const STORAGE_KEY = "kosmodrome:effects";
 const MODES: EffectsMode[] = ["full", "lite", "off"];
 
 let mode: EffectsMode | null = null;
@@ -64,7 +67,21 @@ export function supportsWebGL() {
 function readStoredMode(): EffectsMode | null {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    return MODES.find((entry) => entry === stored) ?? null;
+    const direct = MODES.find((entry) => entry === stored);
+
+    if (direct) {
+      return direct;
+    }
+
+    const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+    const migrated = MODES.find((entry) => entry === legacy) ?? null;
+
+    if (migrated) {
+      window.localStorage.setItem(STORAGE_KEY, migrated);
+      window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+    }
+
+    return migrated;
   } catch {
     return null;
   }
