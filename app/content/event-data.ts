@@ -1038,12 +1038,12 @@ export const programmeOptions: string[] = [
 
 export const about = {
   intro: [
-    "Kakshya 2026 is the IIST National Space Hackathon. It is a national-level, online event with 48 hours on the clock and two tracks: Beginner and Advanced.",
+    "Kosmodrome 2026 is the IIST National Space Hackathon — a launch complex for your best work. A national-level, online event with 48 hours on the clock and two tracks: Beginner and Advanced.",
     "Teams of two to four work on space-domain problems under sealed conditions. Problem statements stay sealed until kickoff, every submission is traceable to work done inside the 48-hour window, and every score can be audited.",
     "Beginner teams get guided problems with clear specifications, starter code, curated data and a must-have feature list. Advanced teams work on open-ended mission problems with realistic constraints, noisy data and a hidden private test set.",
   ],
   organiser:
-    "Kakshya 2026 is organised by the Indian Institute of Space Science and Technology (IIST).",
+    "Kosmodrome 2026 is organised by the Indian Institute of Space Science and Technology (IIST).",
   whoCanJoin: [
     "Students at recognised Indian institutions.",
     "Beginner: Diploma and 1st/2nd-year UG students with no top-3 finish at a national-level hackathon.",

@@ -1,4 +1,6 @@
 import { TBA } from "@/app/content/site-config";
+import { SpotlightGroup } from "../fx/SpotlightGroup";
+import { SpotlightTile } from "../fx/SpotlightTile";
 import { SectionHeading } from "../ui/SectionHeading";
 
 export function SponsorsStrip() {
@@ -6,6 +8,7 @@ export function SponsorsStrip() {
     <section
       aria-labelledby="sponsors-heading"
       className="border-y border-border bg-surface"
+      data-hud="SUPPORT"
     >
       <div className="mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <SectionHeading
@@ -14,10 +17,11 @@ export function SponsorsStrip() {
           title="Sponsors"
           description={`Sponsors: ${TBA}.`}
         />
-        <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <SpotlightGroup className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {["Partner", "Partner", "Partner", "Partner"].map(
             (label, index) => (
-              <li
+              <SpotlightTile
+                as="li"
                 key={index}
                 className="flex min-h-20 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border bg-background px-3 py-4 text-center"
               >
@@ -27,10 +31,10 @@ export function SponsorsStrip() {
                 <span className="text-sm font-medium text-foreground">
                   {TBA}
                 </span>
-              </li>
+              </SpotlightTile>
             ),
           )}
-        </ul>
+        </SpotlightGroup>
       </div>
     </section>
   );

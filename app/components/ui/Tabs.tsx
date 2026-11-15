@@ -58,7 +58,7 @@ export function Tabs({
       <div
         role="tablist"
         aria-label={label}
-        className="flex flex-wrap gap-1 rounded-full border border-border bg-surface p-1 sm:inline-flex"
+        className="flex flex-wrap gap-1 border-b border-border"
       >
         {items.map((item, index) => {
           const selected = item.id === activeItem.id;
@@ -73,17 +73,23 @@ export function Tabs({
               id={`${baseId}-${item.id}-tab`}
               aria-selected={selected}
               aria-controls={`${baseId}-${item.id}-panel`}
+              data-cursor="SWITCH"
               tabIndex={selected ? 0 : -1}
               onClick={() => setActiveId(item.id)}
               onKeyDown={(event) => handleKeyDown(event, index)}
               className={cn(
-                "flex-1 rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-offset-[-2px] sm:flex-none",
+                "relative px-4 py-3 font-ui text-[0.6875rem] font-bold uppercase tracking-[0.12em] transition-colors focus-visible:outline-offset-[-2px]",
                 selected
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted hover:bg-surface-raised hover:text-foreground",
+                  ? "text-foreground"
+                  : "text-muted hover:text-foreground",
               )}
             >
               {item.label}
+              <span
+                className="tab-underline"
+                data-active={selected}
+                aria-hidden="true"
+              />
             </button>
           );
         })}

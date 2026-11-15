@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { TrackCompare } from "@/app/components/sections/TrackCompare";
+import { TiltCard } from "@/app/components/fx/TiltCard";
 import { Badge } from "@/app/components/ui/Badge";
-import { Button } from "@/app/components/ui/Button";
+import { BeamBorder } from "@/app/components/ui/BeamBorder";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
 import { Card } from "@/app/components/ui/Card";
-import { DataTable } from "@/app/components/ui/DataTable";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { trackRules, tracks, trackThemesNote } from "@/app/content/event-data";
@@ -12,7 +14,10 @@ import { trackRules, tracks, trackThemesNote } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "Tracks",
   description:
-    "Compare the Beginner and Advanced tracks at Kakshya 2026: eligibility, problem style, evaluation, submission pack, finalists and themes.",
+    "Compare the Beginner and Advanced tracks at Kosmodrome 2026: eligibility, problem style, evaluation, submission pack, finalists and themes.",
+  alternates: {
+    canonical: "/tracks",
+  },
 };
 
 const pageContainer =
@@ -58,59 +63,36 @@ export default function TracksPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Tracks"
+        eyebrow="Launch pads"
         title="Two tracks. Separate problem sets."
         description="The most senior member sets the track. Opting up is allowed; moving down is never allowed. Tracks never compete against each other."
       >
-        <Button href="/register">Register your team</Button>
+        <Button3D href="/register" data-cursor="LAUNCH">
+          Register your team
+        </Button3D>
       </PageHeader>
 
-      <section className="mt-12" aria-labelledby="comparison-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="comparison-heading"
+        data-hud="LAUNCH PADS"
+      >
         <SectionHeading
           id="comparison-heading"
           eyebrow="Side by side"
           title="Beginner vs Advanced"
-          description="Same 48-hour window, different starting points and submission packs."
+          description="Same 48-hour window, different starting points and submission packs. Focus a column or hide the rows that match."
         />
-        <div className="mt-8">
-          <DataTable
-            caption="Comparison of the Beginner and Advanced tracks"
-            columns={[
-              { label: "Detail" },
-              { label: "Beginner" },
-              { label: "Advanced" },
-            ]}
-            rows={[
-              ...comparisonRows.map((row) => [
-                row.label,
-                row.beginner,
-                row.advanced,
-              ]),
-              [
-                "Scoring",
-                <Link
-                  key="beginner-scoring"
-                  href="/scoring"
-                  className="text-primary underline underline-offset-4"
-                >
-                  Criteria and weights
-                </Link>,
-                <Link
-                  key="advanced-scoring"
-                  href="/scoring"
-                  className="text-primary underline underline-offset-4"
-                >
-                  Criteria and weights
-                </Link>,
-              ],
-            ]}
-            rowHeaders
-            minWidth="48rem"
-          />
-        </div>
+        <BeamBorder className="mt-8 rounded-2xl">
+          <TrackCompare rows={comparisonRows} />
+        </BeamBorder>
       </section>
 
-      <section className="mt-16" aria-labelledby="themes-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="themes-heading"
+        data-hud="PROBLEM SPACE"
+      >
         <SectionHeading
           id="themes-heading"
           eyebrow="Problem space"
@@ -119,74 +101,83 @@ export default function TracksPage() {
         />
         <div className="mt-8 grid gap-5 lg:grid-cols-2">
           {tracks.map((track) => (
-            <Card
+            <TiltCard
               key={track.id}
               id={track.id}
-              className="h-full scroll-mt-24"
+              spotlight
+              className="h-full scroll-mt-24 rounded-xl"
             >
-              <div className="flex items-center justify-between gap-3">
-                <Badge
-                  tone={track.id === "beginner" ? "primary" : "accent"}
-                >
-                  {track.name}
-                </Badge>
-                <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">
-                  {track.finalists}
-                </span>
-              </div>
-              <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">
-                {track.name} themes
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                {track.summary}
-              </p>
-              <ul className="mt-4 space-y-2.5">
-                {track.themes.map((theme) => (
-                  <li
-                    key={theme}
-                    className="flex gap-3 text-sm leading-relaxed text-foreground"
+              <Card className="h-full">
+                <div className="flex items-center justify-between gap-3">
+                  <Badge
+                    tone={track.id === "beginner" ? "primary" : "accent"}
                   >
-                    <span
-                      className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
-                      aria-hidden="true"
-                    />
-                    <span>{theme}</span>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+                    {track.name}
+                  </Badge>
+                  <span className="font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">
+                    {track.finalists}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-xl font-semibold tracking-tight text-foreground">
+                  {track.name} themes
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  {track.summary}
+                </p>
+                <ul className="mt-4 space-y-2.5">
+                  {track.themes.map((theme) => (
+                    <li
+                      key={theme}
+                      className="flex gap-3 text-sm leading-relaxed text-foreground"
+                    >
+                      <span
+                        className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
+                        aria-hidden="true"
+                      />
+                      <span>{theme}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </TiltCard>
           ))}
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="track-rules-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="track-rules-heading"
+        data-hud="BOUNDARIES"
+      >
         <SectionHeading
           id="track-rules-heading"
           eyebrow="Boundaries"
           title="Track rules"
         />
-        <Callout title="Track assignment is final at D-3" tone="primary">
-          <ul className="mt-1 space-y-2">
-            {trackRules.map((rule) => (
-              <li key={rule} className="flex gap-3">
-                <span
-                  className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
-                  aria-hidden="true"
-                />
-                <span>{rule}</span>
-              </li>
-            ))}
-          </ul>
-        </Callout>
+        <Frame className="mt-8 rounded-xl">
+          <Callout title="Track assignment is final at D-3" tone="primary">
+            <ul className="mt-1 space-y-2">
+              {trackRules.map((rule) => (
+                <li key={rule} className="flex gap-3">
+                  <span
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
+                  <span>{rule}</span>
+                </li>
+              ))}
+            </ul>
+          </Callout>
+        </Frame>
       </section>
 
       <div className="mt-12 flex flex-wrap gap-3">
-        <Button href="/scoring" variant="secondary">
+        <Button3D href="/scoring" variant="secondary">
           See scoring
-        </Button>
-        <Button href="/submission" variant="secondary">
+        </Button3D>
+        <Button3D href="/submission" variant="secondary">
           Submission requirements
-        </Button>
+        </Button3D>
       </div>
     </div>
   );

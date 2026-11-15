@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { SubmissionChecklist } from "@/app/components/sections/SubmissionChecklist";
-import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
 import { DataTable } from "@/app/components/ui/DataTable";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { submission } from "@/app/content/event-data";
@@ -10,7 +11,10 @@ import { submission } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "Submission",
   description:
-    "Kakshya 2026 submission window, Beginner and Advanced submission packs, blind-judging rules and the pre-flight checklist.",
+    "Kosmodrome 2026 submission window, Beginner and Advanced submission packs, blind-judging rules and the pre-flight checklist.",
+  alternates: {
+    canonical: "/submission",
+  },
 };
 
 const pageContainer =
@@ -20,27 +24,33 @@ export default function SubmissionPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Submission"
+        eyebrow="Payload integration"
         title="Ship the right pack, before the hard close"
         description="The submission window and the exact pack for each track. The evaluated version is the repository snapshot at hard close."
       >
-        <Button href="/timeline" variant="secondary">
+        <Button3D href="/timeline" variant="secondary">
           See the full schedule
-        </Button>
+        </Button3D>
       </PageHeader>
 
-      <Callout title="Submission window: T+40 to T+48" tone="primary" className="mt-8">
-        <p>{submission.window}</p>
-      </Callout>
+      <Frame className="mt-8 rounded-xl">
+        <Callout title="Submission window: T+40 to T+48" tone="primary">
+          <p>{submission.window}</p>
+        </Callout>
+      </Frame>
 
-      <section className="mt-12" aria-labelledby="pack-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="pack-heading"
+        data-hud="PACK BY TRACK"
+      >
         <SectionHeading
           id="pack-heading"
           eyebrow="Pack by track"
           title="What each track submits"
           description="Both tracks need a repository, README and signed Integrity Declaration. The report, demo and environment requirements differ."
         />
-        <div className="mt-8">
+        <Frame className="mt-8 rounded-2xl border border-border bg-surface/55 p-4 shadow-[var(--elev-2)] sm:p-6">
           <DataTable
             caption="Beginner and Advanced submission requirements"
             columns={[
@@ -56,27 +66,39 @@ export default function SubmissionPage() {
             rowHeaders
             minWidth="44rem"
           />
-        </div>
+        </Frame>
       </section>
 
-      <section className="mt-12" aria-labelledby="submission-rules-heading">
+      <section
+        className="mt-12"
+        aria-labelledby="submission-rules-heading"
+        data-hud="INTEGRITY"
+      >
         <SectionHeading
           id="submission-rules-heading"
           eyebrow="Integrity"
           title="Blind judging and penalties"
         />
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
-          <Callout title="Blind judging" tone="warning">
-            <p>{submission.blindJudging}</p>
-          </Callout>
-          <Callout title="Missing items and grace" tone="danger">
-            <p>{submission.missingItem}</p>
-            <p className="mt-2">{submission.grace}</p>
-          </Callout>
+          <Frame className="rounded-xl">
+            <Callout title="Blind judging" tone="warning">
+              <p>{submission.blindJudging}</p>
+            </Callout>
+          </Frame>
+          <Frame className="rounded-xl">
+            <Callout title="Missing items and grace" tone="danger">
+              <p>{submission.missingItem}</p>
+              <p className="mt-2">{submission.grace}</p>
+            </Callout>
+          </Frame>
         </div>
       </section>
 
-      <section className="mt-16" aria-labelledby="checklist-heading">
+      <section
+        className="mt-16"
+        aria-labelledby="checklist-heading"
+        data-hud="FINAL CHECKS"
+      >
         <SectionHeading
           id="checklist-heading"
           eyebrow="Final checks"
@@ -89,12 +111,12 @@ export default function SubmissionPage() {
       </section>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Button href="/fair-play" variant="secondary">
+        <Button3D href="/fair-play" variant="secondary">
           Fair play
-        </Button>
-        <Button href="/register" variant="secondary">
+        </Button3D>
+        <Button3D href="/register" variant="secondary">
           Register
-        </Button>
+        </Button3D>
       </div>
     </div>
   );

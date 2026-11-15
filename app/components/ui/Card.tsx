@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "./cn";
+import { Surface } from "./Surface";
 
 type CardElement = "div" | "article" | "section" | "li";
 
@@ -15,14 +16,16 @@ export function Card({
   id?: string;
 }) {
   return (
-    <Component
+    <Surface
+      as={Component}
       id={id}
+      depth={2}
       className={cn(
-        "rounded-xl border border-border bg-surface p-6",
+        "corner-frame p-6 transition-colors duration-300",
         className,
       )}
     >
       {children}
-    </Component>
+    </Surface>
   );
 }

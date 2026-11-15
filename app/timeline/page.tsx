@@ -1,39 +1,54 @@
 import type { Metadata } from "next";
-import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { TimelineView } from "@/app/components/sections/TimelineView";
+import { CalendarDownload } from "@/app/components/sections/CalendarDownload";
 import { timeline } from "@/app/content/event-data";
 import { siteConfig, TBA } from "@/app/content/site-config";
 
 export const metadata: Metadata = {
   title: "Timeline",
   description:
-    "The full Kakshya 2026 schedule: registration, kickoff, three checkpoints, hard close, blind judging, finals and results.",
+    "The full Kosmodrome 2026 schedule: registration, kickoff, three checkpoints, hard close, blind judging, finals and results.",
+  alternates: {
+    canonical: "/timeline",
+  },
 };
 
 export default function TimelinePage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
       <PageHeader
-        eyebrow="Schedule"
+        eyebrow="Launch sequence"
         title="From registration to the final result"
         description="Twenty moments across registration, the 48-hour build, judging and the closing ceremony. Checkpoints are highlighted."
       >
-        <Button href="/rules" variant="secondary">
+        <Button3D href="/rules" variant="secondary">
           Read the rules
-        </Button>
+        </Button3D>
       </PageHeader>
 
-      <Callout title="Time base" tone="primary" className="mt-8">
-        <p>All times IST. Clock times assume a 10:00 IST kickoff.</p>
-        {siteConfig.eventStartISO ? null : (
-          <p className="mt-2 text-muted">Calendar dates: {TBA}.</p>
-        )}
-      </Callout>
+      <Frame className="mt-8 rounded-xl">
+        <Callout title="Time base" tone="primary">
+          <p>All times IST. Clock times assume a 10:00 IST kickoff.</p>
+          {siteConfig.eventStartISO ? null : (
+            <p className="mt-2 text-muted">Calendar dates: {TBA}.</p>
+          )}
+        </Callout>
+      </Frame>
 
-      <section className="mt-12" aria-labelledby="full-timeline-heading">
+      <div className="mt-6">
+        <CalendarDownload />
+      </div>
+
+      <section
+        className="mt-12"
+        aria-labelledby="full-timeline-heading"
+        data-hud="LAUNCH SEQUENCE"
+      >
         <SectionHeading
           id="full-timeline-heading"
           eyebrow="Full schedule"

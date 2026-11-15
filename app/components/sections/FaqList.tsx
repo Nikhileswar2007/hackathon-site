@@ -13,7 +13,7 @@ export function FaqList({
 }) {
   return (
     <div className={cn("space-y-10", className)}>
-      {groups.map((group) => {
+      {groups.map((group, groupIndex) => {
         const items: AccordionItem[] = group.items.map((item) => ({
           id: item.id,
           title: item.question,
@@ -29,14 +29,20 @@ export function FaqList({
             {showGroupTitles ? (
               <h2
                 id={headingId}
-                className="text-lg font-semibold tracking-tight text-foreground"
+                className="flex items-baseline gap-2.5 text-lg font-semibold tracking-tight text-foreground"
               >
+                <span
+                  className="font-mono text-[0.625rem] font-normal text-primary/70"
+                  aria-hidden="true"
+                >
+                  {String(groupIndex + 1).padStart(2, "0")}
+                </span>
                 {group.title}
               </h2>
             ) : null}
             <Accordion
               items={items}
-              className={showGroupTitles ? "mt-4" : undefined}
+              className={cn("faq-accordion", showGroupTitles ? "mt-4" : undefined)}
             />
           </section>
         );

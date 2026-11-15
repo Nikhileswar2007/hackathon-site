@@ -1,4 +1,7 @@
 import type { ReactNode } from "react";
+import { LetterWave } from "../fx/LetterWave";
+import { SplitHeading } from "../fx/SplitHeading";
+import { TechRule } from "../fx/TechRule";
 import { cn } from "./cn";
 
 export function SectionHeading({
@@ -27,16 +30,25 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-primary">
-          {eyebrow}
+        <p
+          className={cn(
+            "telemetry flex items-center gap-2 text-primary",
+            align === "center" && "justify-center",
+          )}
+        >
+          <span className="status-dot" aria-hidden="true" />
+          <LetterWave text={eyebrow} />
         </p>
       ) : null}
-      <h2
+      <SplitHeading
+        as="h2"
         id={id}
-        className="text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
-      >
-        {title}
-      </h2>
+        text={title}
+        className="display-oxanium text-h2 text-foreground"
+      />
+      <span className={cn("block", align === "center" && "mx-auto")}>
+        <TechRule align={align} />
+      </span>
       {description ? (
         <div
           className={cn(

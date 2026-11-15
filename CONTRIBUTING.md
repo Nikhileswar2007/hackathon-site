@@ -31,8 +31,9 @@ On GitHub click "Compare & pull request". Base = main, compare = your branch. Fi
 Everyone runs: git pull origin main (while on their own branch).
 
 ## Folder ownership (to avoid merge conflicts)
-- Frontend (Nikhil): app/ pages and app/components/
+- Frontend (Nikhil): app pages (`app/**/page.tsx`), app/components/, app/content/, app/services/, app/types/, app/globals.css, public/, docs/
 - Backend: app/api/ and lib/
+- Note: `app/content/` and `app/services/` are frontend-owned; backend owns the API surface they call (`/api/register`, `/api/contact`) and anything under app/api/ and lib/. Shared content edits: coordinate in the PR.
 
 ## Merge conflicts
 VS Code shows "Resolve in Merge Editor". Pick the lines to keep, save, then commit.

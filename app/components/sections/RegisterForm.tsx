@@ -5,8 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { programmeOptions, tracks } from "@/app/content/event-data";
 import { siteConfig, TBA } from "@/app/content/site-config";
+import { isMockMode, registerTeam } from "@/app/services/api";
+import type { RegisterPayload } from "@/app/types/api";
+import { useToast } from "../effects/ToastProvider";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
+import { Button3D } from "../ui/Button3D";
 import { cn } from "../ui/cn";
 
 interface MemberForm {
@@ -39,6 +43,36 @@ const advancedProgrammes = new Set([
   "PhD",
   "Graduate within six months",
 ]);
+
+const steps = [
+  {
+    id: "team",
+    label: "Team details",
+    description:
+      "Name the team, choose a track and set the leader contact for OC updates.",
+  },
+  {
+    id: "crew",
+    label: "Crew and IDs",
+    description:
+      "Add 2 to 4 members with institutional emails and a college ID for each.",
+  },
+  {
+    id: "clearance",
+    label: "Consent and review",
+    description:
+      "Accept the rulebook, integrity declaration and seniority check before launch.",
+  },
+] as const;
+
+const stepFieldMatchers: Array<(key: string) => boolean> = [
+  (key) => key === "teamName" || key === "track" || key === "leaderEmail",
+  (key) => key === "form" || key.startsWith("members."),
+  (key) =>
+    key === "rulebookAccepted" ||
+    key === "declarationAccepted" ||
+    key === "seniorityConfirmed",
+];
 
 const fieldBase =
   "mt-2 w-full rounded-md border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted transition-colors";
@@ -154,7 +188,20 @@ function validate(state: RegistrationState): FieldErrors {
   return errors;
 }
 
+function errorsForStep(errors: FieldErrors, step: number): FieldErrors {
+  const matcher = stepFieldMatchers[step];
+
+  if (!matcher) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(errors).filter(([key]) => matcher(key)),
+  );
+}
+
 export function RegisterForm() {
+  const { toast } = useToast();
   const [form, setForm] = useState<RegistrationState>({
     teamName: "",
     track: "",
@@ -164,9 +211,15 @@ export function RegisterForm() {
     declarationAccepted: false,
     seniorityConfirmed: false,
   });
-  const [attempted, setAttempted] = useState(false);
+  const [step, setStep] = useState(0);
+  const [attemptedSteps, setAttemptedSteps] = useState<Record<number, boolean>>(
+    {},
+  );
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverFieldErrors, setServerFieldErrors] = useState<FieldErrors>({});
   const nextMemberId = useRef(3);
+  const formRef = useRef<HTMLFormElement>(null);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -175,8 +228,26 @@ export function RegisterForm() {
     }
   }, [submitted]);
 
-  const errors: FieldErrors = attempted ? validate(form) : {};
+  useEffect(() => {
+    if (step > 0) {
+      const behavior: ScrollBehavior = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
+        ? "auto"
+        : "smooth";
+
+      formRef.current?.scrollIntoView({ block: "start", behavior });
+    }
+  }, [step]);
+
+  const allErrors = validate(form);
+  const serverErrorCount = Object.keys(serverFieldErrors).length;
+  const allErrorCount = Object.keys(allErrors).length + serverErrorCount;
+  const errors: FieldErrors = attemptedSteps[step]
+    ? { ...errorsForStep(allErrors, step), ...errorsForStep(serverFieldErrors, step) }
+    : errorsForStep(serverFieldErrors, step);
   const errorCount = Object.keys(errors).length;
+  const lastStep = steps.length - 1;
 
   const hasAdvancedProgramme = form.members.some((member) =>
     advancedProgrammes.has(member.programme),
@@ -220,18 +291,132 @@ export function RegisterForm() {
     }));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setAttempted(true);
+  function goNext() {
+    const currentErrors = errorsForStep(allErrors, step);
 
-    const nextErrors = validate(form);
-
-    if (Object.keys(nextErrors).length > 0) {
+    if (Object.keys(currentErrors).length > 0) {
+      setAttemptedSteps((current) => ({ ...current, [step]: true }));
       return;
     }
 
-    // TODO: connect backend — POST the validated registration payload to the registration API.
-    setSubmitted(true);
+    setStep((current) => Math.min(lastStep, current + 1));
+  }
+
+  function mapServerFieldErrors(
+    fieldErrors: Record<string, string>,
+  ): FieldErrors {
+    const mapped: FieldErrors = {};
+
+    for (const [key, value] of Object.entries(fieldErrors)) {
+      const indexed = /^members\.(\d+)\.(.+)$/.exec(key);
+
+      if (indexed) {
+        const member = form.members[Number(indexed[1])];
+        const field = indexed[2];
+        mapped[member ? `members.${member.id}.${field}` : key] = value;
+        continue;
+      }
+
+      mapped[key] = value;
+    }
+
+    return mapped;
+  }
+
+  async function submitRegistration() {
+    const payload: RegisterPayload = {
+      teamName: form.teamName.trim(),
+      track: form.track,
+      leaderEmail: form.leaderEmail.trim(),
+      // The college ID file is not sent. File upload to be implemented by the
+      // backend (suggest signed upload URL or multipart) — see docs/api-contract.md.
+      members: form.members.map((member) => ({
+        fullName: member.fullName.trim(),
+        email: member.email.trim(),
+        college: member.college.trim(),
+        programme: member.programme,
+      })),
+      rulebookAccepted: form.rulebookAccepted,
+      declarationAccepted: form.declarationAccepted,
+      seniorityConfirmed: form.seniorityConfirmed,
+    };
+
+    setSubmitting(true);
+    setServerFieldErrors({});
+
+    try {
+      const result = await registerTeam(payload);
+
+      if (result.ok) {
+        setSubmitted(true);
+        toast(
+          isMockMode()
+            ? {
+                title: "Boarding pass issued",
+                description:
+                  "This preview validates locally. Nothing is sent or stored.",
+                tone: "success",
+              }
+            : {
+                title: "Boarding pass issued",
+                description:
+                  "Your registration was received. The OC verifies institutional emails and college IDs by D-3.",
+                tone: "success",
+              },
+        );
+        return;
+      }
+
+      if (result.fieldErrors) {
+        const mapped = mapServerFieldErrors(result.fieldErrors);
+        setServerFieldErrors(mapped);
+        setAttemptedSteps({ 0: true, 1: true, 2: true });
+        const firstInvalidStep = stepFieldMatchers.findIndex((matcher) =>
+          Object.keys(mapped).some((key) => matcher(key)),
+        );
+        setStep(firstInvalidStep === -1 ? 0 : firstInvalidStep);
+      }
+
+      toast({
+        title: "Registration not sent",
+        description: result.message,
+        tone: "warning",
+        action: {
+          label: "Retry",
+          onAction: () => {
+            void submitRegistration();
+          },
+        },
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (step < lastStep) {
+      goNext();
+      return;
+    }
+
+    if (submitting) {
+      return;
+    }
+
+    setAttemptedSteps({ 0: true, 1: true, 2: true });
+
+    if (allErrorCount > 0) {
+      const firstInvalidStep = stepFieldMatchers.findIndex((matcher) =>
+        Object.keys(allErrors).some((key) => matcher(key)),
+      );
+
+      setStep(firstInvalidStep === -1 ? 0 : firstInvalidStep);
+      return;
+    }
+
+    void submitRegistration();
   }
 
   if (submitted) {
@@ -239,21 +424,27 @@ export function RegisterForm() {
       <div
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-success bg-success-soft p-6"
+        className="success-panel rounded-xl border border-success bg-success-soft p-6 shadow-[var(--elev-2)]"
       >
-        <Badge tone="success">Preview complete</Badge>
+        <Badge tone="success">Boarding pass issued</Badge>
         <h3
           ref={successHeadingRef}
           tabIndex={-1}
           className="mt-4 text-xl font-semibold tracking-tight text-foreground"
         >
-          Registration preview ready.
+          Cleared for launch prep.
         </h3>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
-          Nothing was sent and nothing was stored.{" "}
-          {siteConfig.registrationOpen
-            ? "The backend connection is still to be added."
-            : "Registration is not open yet, so this was a preview only."}
+          {isMockMode() ? (
+            <>
+              Nothing was sent and nothing was stored.{" "}
+              {siteConfig.registrationOpen
+                ? "The backend connection is still to be added."
+                : "Registration is not open yet, so this was a preview only."}
+            </>
+          ) : (
+            "Your registration was received. The organising committee will verify institutional emails and college IDs by D-3."
+          )}
         </p>
 
         <dl className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -284,21 +475,99 @@ export function RegisterForm() {
         </dl>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button type="button" onClick={() => setSubmitted(false)}>
+          <Button3D
+            type="button"
+            onClick={() => {
+              setSubmitted(false);
+              setStep(lastStep);
+            }}
+          >
             Back to edit
-          </Button>
-          <Button href="/rules" variant="secondary">
+          </Button3D>
+          <Button3D href="/rules" variant="secondary">
             Read the rules
-          </Button>
+          </Button3D>
         </div>
       </div>
     );
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="space-y-6">
+    <form
+      ref={formRef}
+      noValidate
+      onSubmit={handleSubmit}
+      className="scroll-mt-24 space-y-6"
+    >
+      <p className="sr-only" role="status" aria-live="polite">
+        Step {step + 1} of {steps.length}: {steps[step].label}
+      </p>
+      <div
+        className="registration-progress rounded-xl border border-border bg-surface/80 p-4 shadow-[var(--elev-1)] sm:p-5"
+        role="group"
+        aria-label="Registration progress"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-primary">
+            Step {step + 1} of {steps.length}
+          </p>
+          <Badge tone={step === lastStep ? "success" : "primary"}>
+            {steps[step].label}
+          </Badge>
+        </div>
+        <ol className="mt-4 grid gap-2 sm:grid-cols-3">
+          {steps.map((entry, index) => {
+            const done = index < step;
+            const current = index === step;
+
+            return (
+              <li
+                key={entry.id}
+                className="min-w-0"
+                aria-current={current ? "step" : undefined}
+              >
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "block h-1.5 rounded-full shadow-[inset_0_1px_1px_rgba(0,0,0,0.25)] transition-colors",
+                    done
+                      ? "bg-primary/70"
+                      : current
+                        ? "bg-primary"
+                        : "bg-border",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "mt-2 block font-mono text-[0.625rem] uppercase tracking-[0.12em]",
+                    current
+                      ? "text-foreground"
+                      : done
+                        ? "text-primary"
+                        : "text-muted",
+                  )}
+                >
+                  {entry.label}
+                  <span className="sr-only">
+                    {done
+                      ? " — complete"
+                      : current
+                        ? " — current step"
+                        : " — upcoming"}
+                  </span>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="mt-3 text-xs leading-relaxed text-muted">
+          {steps[step].description}
+        </p>
+      </div>
+
       <section
-        className="rounded-xl border border-border bg-surface p-5 sm:p-6"
+        hidden={step !== 0}
+        className="form-panel rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="team-details-heading"
       >
         <h3
@@ -444,7 +713,8 @@ export function RegisterForm() {
       </section>
 
       <section
-        className="rounded-xl border border-border bg-surface p-5 sm:p-6"
+        hidden={step !== 1}
+        className="form-panel rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="members-heading"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -476,11 +746,11 @@ export function RegisterForm() {
             return (
               <div
                 key={member.id}
-                className="rounded-xl border border-border bg-background"
+                className="boarding-pass rounded-xl border border-border bg-background shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
               >
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-5">
                   <h4 className="text-sm font-semibold text-foreground">
-                    Member {index + 1}
+                    Crew pass 0{index + 1}
                   </h4>
                   <Button
                     type="button"
@@ -690,8 +960,7 @@ export function RegisterForm() {
                       id={`${member.id}-college-id-note`}
                       className="mt-2 text-xs leading-relaxed text-muted"
                     >
-                      UI only: the file stays in this browser and is not
-                      uploaded.
+                      UI only: the file is never sent anywhere. File upload to be implemented by the backend (suggest signed upload URL or multipart).
                     </p>
                     {errors[`${prefix}.collegeId`] ? (
                       <p
@@ -710,7 +979,8 @@ export function RegisterForm() {
       </section>
 
       <section
-        className="rounded-xl border border-border bg-surface p-5 sm:p-6"
+        hidden={step !== 2}
+        className="form-panel rounded-xl border border-border bg-surface p-5 sm:p-6"
         aria-labelledby="consent-heading"
       >
         <h3
@@ -841,12 +1111,12 @@ export function RegisterForm() {
         <p className="text-sm leading-relaxed text-danger">{errors.form}</p>
       ) : null}
 
-      {attempted && errorCount > 0 ? (
+      {attemptedSteps[step] && errorCount > 0 ? (
         <div
           role="alert"
           className="rounded-lg border border-danger bg-danger-soft p-4 text-sm leading-relaxed text-danger"
         >
-          Please fix the highlighted fields before submitting.{" "}
+          Please fix the highlighted fields before continuing.{" "}
           {errorCount === 1
             ? "One field needs attention."
             : `${errorCount} fields need attention.`}
@@ -855,10 +1125,34 @@ export function RegisterForm() {
 
       <div className="flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs leading-relaxed text-muted">
-          Fee: {siteConfig.registrationFee ?? TBA}. Nothing is sent in this
-          preview.
+          Step {step + 1} of {steps.length} A� Fee:{" "}
+          {siteConfig.registrationFee ?? TBA}.{" "}
+          {isMockMode()
+            ? "Nothing is sent in this preview."
+            : "Submissions go straight to the organiser."}
         </p>
-        <Button type="submit">Submit registration</Button>
+        <div className="flex flex-wrap gap-3">
+          {step > 0 ? (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() =>
+                setStep((current) => Math.max(0, current - 1))
+              }
+            >
+              Back
+            </Button>
+          ) : null}
+          {step < lastStep ? (
+            <Button3D type="button" onClick={goNext}>
+              Continue
+            </Button3D>
+          ) : (
+            <Button3D type="submit" disabled={submitting} aria-busy={submitting}>
+              {submitting ? "Submitting…" : "Submit registration"}
+            </Button3D>
+          )}
+        </div>
       </div>
     </form>
   );

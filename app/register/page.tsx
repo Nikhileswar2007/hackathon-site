@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { RegisterForm } from "@/app/components/sections/RegisterForm";
+import { SpotlightGroup } from "@/app/components/fx/SpotlightGroup";
+import { SpotlightTile } from "@/app/components/fx/SpotlightTile";
 import { Badge } from "@/app/components/ui/Badge";
-import { Button } from "@/app/components/ui/Button";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import {
@@ -14,7 +17,10 @@ import { siteConfig, TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: "Register",
   description:
-    "Kakshya 2026 registration preview: eligibility, the five-step registration process, team details and the frontend-only registration form.",
+    "Kosmodrome 2026 registration preview: eligibility, the five-step registration process, team details and the frontend-only registration form.",
+  alternates: {
+    canonical: "/register",
+  },
 };
 
 const pageContainer =
@@ -27,7 +33,7 @@ export default function RegisterPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="Register"
+        eyebrow="Crew manifest"
         title={isOpen ? "Register your team" : "Registration preview"}
         description="Check eligibility, prepare every member's details and see how the registration flow will work. Teams have two to four members."
       >
@@ -38,24 +44,22 @@ export default function RegisterPage() {
           <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
             Fee: {fee}
           </span>
-          <Button href="/rules" variant="secondary" size="sm">
+          <Button3D href="/rules" variant="secondary" size="sm">
             Read the draft rules
-          </Button>
+          </Button3D>
         </div>
       </PageHeader>
 
       {!isOpen ? (
-        <Callout
-          title="Preview: registration is not open yet"
-          tone="warning"
-          className="mt-8"
-        >
-          <p>
-            This form validates locally and nothing is sent or stored.
-            Registration dates, the fee and the official portal link are still
-            to be announced.
-          </p>
-        </Callout>
+        <Frame className="mt-8 rounded-xl">
+          <Callout title="Preview: registration is not open yet" tone="warning">
+            <p>
+              This form validates locally and nothing is sent or stored.
+              Registration dates, the fee and the official portal link are still
+              to be announced.
+            </p>
+          </Callout>
+        </Frame>
       ) : null}
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2">
@@ -66,20 +70,23 @@ export default function RegisterPage() {
             title="Before you apply"
             description="Every member must meet these requirements before the team can be locked."
           />
-          <ul className="mt-6 space-y-3">
-            {registrationEligibility.map((item) => (
-              <li
-                key={item}
-                className="flex gap-3 rounded-lg border border-border bg-surface p-4 text-sm leading-relaxed text-foreground"
-              >
-                <span
-                  className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
-                  aria-hidden="true"
-                />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+          <SpotlightGroup className="mt-6">
+            <ul className="space-y-3">
+              {registrationEligibility.map((item) => (
+                <SpotlightTile
+                  as="li"
+                  key={item}
+                  className="flex gap-3 rounded-lg border border-border bg-surface p-4 text-sm leading-relaxed text-foreground"
+                >
+                  <span
+                    className="mt-2 size-1.5 shrink-0 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
+                  <span>{item}</span>
+                </SpotlightTile>
+              ))}
+            </ul>
+          </SpotlightGroup>
         </section>
 
         <section aria-labelledby="process-heading">
@@ -89,26 +96,29 @@ export default function RegisterPage() {
             title="Five steps to team lock"
             description="From eligibility checks to the mandatory briefing."
           />
-          <ol className="mt-6 space-y-3">
-            {registrationSteps.map((step, index) => (
-              <li
-                key={step.title}
-                className="flex gap-4 rounded-xl border border-border bg-surface p-4 sm:p-5"
-              >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-primary bg-primary-soft font-mono text-sm text-primary">
-                  {index + 1}
-                </span>
-                <div>
-                  <h3 className="text-sm font-semibold text-foreground">
-                    {step.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted">
-                    {step.description}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <SpotlightGroup className="mt-6">
+            <ol className="space-y-3">
+              {registrationSteps.map((step, index) => (
+                <SpotlightTile
+                  as="li"
+                  key={step.title}
+                  className="registration-step flex gap-4 rounded-xl border border-border bg-surface p-4 sm:p-5"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-primary bg-primary-soft font-mono text-sm text-primary shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                    {index + 1}
+                  </span>
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-muted">
+                      {step.description}
+                    </p>
+                  </div>
+                </SpotlightTile>
+              ))}
+            </ol>
+          </SpotlightGroup>
         </section>
       </div>
 
@@ -116,6 +126,7 @@ export default function RegisterPage() {
         className="mt-16 scroll-mt-24"
         id="registration-form"
         aria-labelledby="registration-form-heading"
+        data-hud="CREW MANIFEST"
       >
         <SectionHeading
           id="registration-form-heading"
@@ -129,15 +140,15 @@ export default function RegisterPage() {
       </section>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Button href="/tracks" variant="secondary">
+        <Button3D href="/tracks" variant="secondary">
           Compare tracks
-        </Button>
-        <Button href="/faq" variant="secondary">
+        </Button3D>
+        <Button3D href="/faq" variant="secondary">
           Read the FAQ
-        </Button>
-        <Button href="/contact" variant="secondary">
+        </Button3D>
+        <Button3D href="/contact" variant="secondary">
           Ask the OC
-        </Button>
+        </Button3D>
       </div>
     </div>
   );

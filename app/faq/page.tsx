@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FaqList } from "@/app/components/sections/FaqList";
-import { Button } from "@/app/components/ui/Button";
+import { FaqExplorer } from "@/app/components/sections/FaqExplorer";
+import { Button3D } from "@/app/components/ui/Button3D";
 import { Callout } from "@/app/components/ui/Callout";
+import { Frame } from "@/app/components/ui/Frame";
 import { PageHeader } from "@/app/components/ui/PageHeader";
 import { SectionHeading } from "@/app/components/ui/SectionHeading";
 import { faqGroups } from "@/app/content/event-data";
@@ -10,7 +11,10 @@ import { faqGroups } from "@/app/content/event-data";
 export const metadata: Metadata = {
   title: "FAQ",
   description:
-    "Answers about Kakshya 2026 eligibility, team size and tracks, fees, the 48-hour event, AI tools, code reuse, judging and appeals.",
+    "Answers about Kosmodrome 2026 eligibility, team size and tracks, fees, the 48-hour event, AI tools, code reuse, judging and appeals.",
+  alternates: {
+    canonical: "/faq",
+  },
 };
 
 const pageContainer =
@@ -20,42 +24,42 @@ export default function FaqPage() {
   return (
     <div className={pageContainer}>
       <PageHeader
-        eyebrow="FAQ"
+        eyebrow="Ground support"
         title="Answers before you build"
         description="Eligibility, teams, tools, integrity, judging and appeals. Open a question to read the short answer."
       >
-        <Button href="/contact" variant="secondary">
+        <Button3D href="/contact" variant="secondary">
           Contact the OC
-        </Button>
+        </Button3D>
       </PageHeader>
 
       <section className="mt-12" aria-labelledby="faq-list-heading">
         <SectionHeading
           id="faq-list-heading"
-          eyebrow="Browse by topic"
+          eyebrow="Search and filter"
           title="Questions from teams"
-          description={`${faqGroups.length} topic groups covering the details teams ask about most.`}
+          description={`Search every answer, or filter across ${faqGroups.length} topic groups.`}
         />
-        <FaqList
-          groups={faqGroups}
-          showGroupTitles
-          className="mt-8"
-        />
+        <div className="mt-8">
+          <FaqExplorer groups={faqGroups} />
+        </div>
       </section>
 
-      <Callout title="Still need an answer?" tone="primary" className="mt-12">
-        <p>
-          Use the official{" "}
-          <Link
-            href="/contact"
-            className="text-primary underline underline-offset-4"
-          >
-            contact channels
-          </Link>{" "}
-          for registration questions, accessibility requests, technical support
-          and integrity reports.
-        </p>
-      </Callout>
+      <Frame className="mt-12 rounded-xl">
+        <Callout title="Still need an answer?" tone="primary">
+          <p>
+            Use the official{" "}
+            <Link
+              href="/contact"
+              className="text-primary underline underline-offset-4"
+            >
+              contact channels
+            </Link>{" "}
+            for registration questions, accessibility requests, technical support
+            and integrity reports.
+          </p>
+        </Callout>
+      </Frame>
     </div>
   );
 }
