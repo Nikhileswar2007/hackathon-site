@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type MutableRefObject } from "react";
 import { onTick } from "./ticker";
-import { CURSOR, safeNumber } from "./OrbiterCursor";
+import { CURSOR, safeNumber } from "./cursor-utils";
 
 export interface ExhaustMotion {
   x: number;

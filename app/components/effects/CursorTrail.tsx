@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useEffects } from "./effects-provider";
 import { useMediaQuery } from "./use-media-query";
 import { onTick } from "./ticker";
-import { safeNumber } from "./OrbiterCursor";
+import { safeNumber } from "./cursor-utils";
 
 interface TrailPoint {
   x: number;

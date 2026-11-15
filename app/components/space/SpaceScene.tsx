@@ -3,7 +3,7 @@
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import * as THREE from "three";
+import { MathUtils, type Group } from "three";
 import type { EffectsMode } from "../effects/effects-store";
 import { getScrollState } from "../effects/scroll-store";
 import { Nebula } from "./Nebula";
@@ -36,7 +36,7 @@ function ArrivalGlobe({
 }: {
   lite: boolean;
 }) {
-  const ref = useRef<THREE.Group>(null);
+  const ref = useRef<Group>(null);
 
   useFrame(() => {
     const group = ref.current;
@@ -46,7 +46,7 @@ function ArrivalGlobe({
     }
 
     const progress = getScrollState().progress;
-    const lift = THREE.MathUtils.clamp((progress - 0.34) / 0.4, 0, 1);
+    const lift = MathUtils.clamp((progress - 0.34) / 0.4, 0, 1);
     const ease = 1 - Math.pow(1 - lift, 3);
 
     group.visible = ease > 0.02;

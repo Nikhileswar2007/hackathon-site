@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useEffects } from "../effects/effects-provider";
 import { supportsWebGL } from "../effects/effects-store";
 
@@ -24,11 +24,40 @@ function getServerWebGL() {
 
 export function SpaceCanvas() {
   const { mode, ready } = useEffects();
+  const [idle, setIdle] = useState(false);
   const webgl = useSyncExternalStore(
     subscribeNothing,
     getWebGL,
     getServerWebGL,
   );
+
+  useEffect(() => {
+    if (!ready || mode === "off" || !webgl) {
+      return;
+    }
+
+    let cancelled = false;
+    const requestIdle =
+      typeof window.requestIdleCallback === "function"
+        ? (callback: () => void) =>
+            window.requestIdleCallback(callback, { timeout: 2000 })
+        : (callback: () => void) => window.setTimeout(callback, 1200);
+
+    const handle = requestIdle(() => {
+      if (!cancelled) {
+        setIdle(true);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      if (typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(handle as number);
+      } else {
+        window.clearTimeout(handle as number);
+      }
+    };
+  }, [ready, mode, webgl]);
 
   if (!ready) {
     return null;
@@ -46,6 +75,10 @@ export function SpaceCanvas() {
         </svg>
       </div>
     );
+  }
+
+  if (!idle) {
+    return null;
   }
 
   return (

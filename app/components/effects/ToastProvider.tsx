@@ -10,13 +10,19 @@ import {
   useState,
 } from "react";
 import type { ReactNode } from "react";
-import { cn } from "../ui/cn";
+import dynamic from "next/dynamic";
 
 export interface ToastInput {
   title: string;
   description?: string;
   tone?: "primary" | "success" | "warning";
 }
+
+const ToastViewport = dynamic(
+  () =>
+    import("./ToastViewport").then((mod) => mod.ToastViewport),
+  { ssr: false },
+);
 
 interface Toast extends ToastInput {
   id: number;
@@ -32,6 +38,7 @@ const MAX_VISIBLE = 3;
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [viewportRequested, setViewportRequested] = useState(false);
   const nextId = useRef(0);
   const timers = useRef(new Set<ReturnType<typeof setTimeout>>());
 
@@ -43,6 +50,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     (input: ToastInput) => {
       const id = nextId.current + 1;
       nextId.current = id;
+      setViewportRequested(true);
       setToasts((current) => [...current, { ...input, id }].slice(-MAX_VISIBLE));
 
       const timer = setTimeout(() => {
@@ -70,35 +78,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="toast-region" role="status" aria-live="polite" aria-atomic="true">
-        {toasts.map((entry) => (
-          <div
-            key={entry.id}
-            role="status"
-            className={cn(
-              "toast",
-              entry.tone === "success" && "toast-success",
-              entry.tone === "warning" && "toast-warning",
-            )}
-            data-cursor="INSPECT"
-          >
-            <div className="toast-body">
-              <p className="toast-title">{entry.title}</p>
-              {entry.description ? (
-                <p className="toast-description">{entry.description}</p>
-              ) : null}
-            </div>
-            <button
-              type="button"
-              className="toast-close"
-              aria-label="Dismiss notification"
-              onClick={() => dismiss(entry.id)}
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
+      {viewportRequested ? (
+        <ToastViewport toasts={toasts} onDismiss={dismiss} />
+      ) : null}
     </ToastContext.Provider>
   );
 }

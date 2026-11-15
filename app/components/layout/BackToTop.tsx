@@ -1,91 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useEffectsMode } from "../effects/effects-provider";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { subscribeScroll } from "../effects/scroll-store";
-import { scrollToTop } from "../effects/scroll-lock";
-import { OrbitMark } from "../ui/icons";
-import { cn } from "../ui/cn";
+
+const BackToTopButton = dynamic(
+  () => import("./BackToTopButton").then((mod) => mod.BackToTopButton),
+  { ssr: false },
+);
 
 export function BackToTop() {
-  const mode = useEffectsMode();
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const ringRef = useRef<SVGCircleElement>(null);
-  const [visible, setVisible] = useState(false);
-  const [launching, setLaunching] = useState(false);
-  const launchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [armed, setArmed] = useState(false);
 
   useEffect(
     () =>
-      subscribeScroll((state) => {
-        const threshold = window.innerHeight * 1.5;
-        setVisible(window.scrollY > threshold);
-        ringRef.current?.style.setProperty(
-          "stroke-dashoffset",
-          String(1 - Math.min(1, Math.max(0, state.progress))),
-        );
+      subscribeScroll(() => {
+        if (window.scrollY > window.innerHeight * 1.5) {
+          setArmed(true);
+        }
       }),
     [],
   );
 
-  useEffect(
-    () => () => {
-      if (launchTimer.current) {
-        clearTimeout(launchTimer.current);
-      }
-    },
-    [],
-  );
-
-  function launch() {
-    if (mode === "full") {
-      setLaunching(true);
-      if (launchTimer.current) {
-        clearTimeout(launchTimer.current);
-      }
-      launchTimer.current = setTimeout(() => {
-        setLaunching(false);
-        launchTimer.current = null;
-      }, 650);
-    }
-
-    scrollToTop();
+  if (!armed) {
+    return null;
   }
 
-  return (
-    <button
-      ref={buttonRef}
-      type="button"
-      className={cn(
-        "back-to-top",
-        visible && "is-visible",
-        launching && "is-launching",
-      )}
-      aria-label="Return to pad"
-      data-cursor="LAUNCH"
-      onClick={launch}
-      tabIndex={visible ? 0 : -1}
-      aria-hidden={!visible}
-    >
-      <svg
-        className="back-to-top-ring"
-        viewBox="0 0 48 48"
-        aria-hidden="true"
-      >
-        <circle className="back-to-top-track" cx="24" cy="24" r="19" pathLength={1} />
-        <circle
-          ref={ringRef}
-          className="back-to-top-progress"
-          cx="24"
-          cy="24"
-          r="19"
-          pathLength={1}
-          strokeDasharray="1"
-          strokeDashoffset="1"
-        />
-      </svg>
-      <OrbitMark className="back-to-top-icon" />
-      <span className="sr-only">Return to pad</span>
-    </button>
-  );
+  return <BackToTopButton />;
 }

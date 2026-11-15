@@ -2,11 +2,11 @@
 
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import * as THREE from "three";
+import { AdditiveBlending, DoubleSide, type ShaderMaterial } from "three";
 import { NEBULA_FRAGMENT, NEBULA_VERTEX } from "./shaders";
 
 export function Nebula() {
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
@@ -30,8 +30,8 @@ export function Nebula() {
         fragmentShader={NEBULA_FRAGMENT}
         transparent
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
-        side={THREE.DoubleSide}
+        blending={AdditiveBlending}
+        side={DoubleSide}
         toneMapped={false}
       />
     </mesh>

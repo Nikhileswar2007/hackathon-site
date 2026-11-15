@@ -2,7 +2,14 @@
 
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import * as THREE from "three";
+import {
+  AdditiveBlending,
+  BackSide,
+  Color,
+  MathUtils,
+  type Group,
+  type ShaderMaterial,
+} from "three";
 import { createRandom } from "./random";
 import {
   ATMOSPHERE_FRAGMENT,
@@ -13,7 +20,7 @@ import {
   EARTH_VERTEX,
 } from "./shaders";
 
-const AXIAL_TILT = THREE.MathUtils.degToRad(23.4);
+const AXIAL_TILT = MathUtils.degToRad(23.4);
 
 function fibonacciSphere(count: number, radius: number) {
   const positions = new Float32Array(count * 3);
@@ -23,10 +30,10 @@ function fibonacciSphere(count: number, radius: number) {
   const random = createRandom(0x6f726269 + count);
 
   const palette = [
-    new THREE.Color("#d9e8ff"),
-    new THREE.Color("#8fe8f4"),
-    new THREE.Color("#ffb066"),
-    new THREE.Color("#7fa8d8"),
+    new Color("#d9e8ff"),
+    new Color("#8fe8f4"),
+    new Color("#ffb066"),
+    new Color("#7fa8d8"),
   ];
 
   for (let index = 0; index < count; index += 1) {
@@ -61,7 +68,7 @@ function fibonacciSphere(count: number, radius: number) {
 }
 
 function DottedShell({ lite }: { lite: boolean }) {
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
   const dpr = useThree((state) => state.viewport.dpr);
   const data = useMemo(
     () => fibonacciSphere(lite ? 360 : 920, 1.672),
@@ -97,7 +104,7 @@ function DottedShell({ lite }: { lite: boolean }) {
         fragmentShader={DOT_FRAGMENT}
         transparent
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
         toneMapped={false}
       />
     </points>
@@ -105,16 +112,16 @@ function DottedShell({ lite }: { lite: boolean }) {
 }
 
 export function Globe({ lite }: { lite: boolean }) {
-  const spinRef = useRef<THREE.Group>(null);
-  const surfaceRef = useRef<THREE.ShaderMaterial>(null);
-  const atmosphereRef = useRef<THREE.ShaderMaterial>(null);
+  const spinRef = useRef<Group>(null);
+  const surfaceRef = useRef<ShaderMaterial>(null);
+  const atmosphereRef = useRef<ShaderMaterial>(null);
 
   const earthUniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uOcean: { value: new THREE.Color("#050b16") },
-      uLand: { value: new THREE.Color("#0b2024") },
-      uLight: { value: new THREE.Color("#ff9e45") },
+      uOcean: { value: new Color("#050b16") },
+      uLand: { value: new Color("#0b2024") },
+      uLight: { value: new Color("#ff9e45") },
     }),
     [],
   );
@@ -168,8 +175,8 @@ export function Globe({ lite }: { lite: boolean }) {
           fragmentShader={ATMOSPHERE_FRAGMENT}
           transparent
           depthWrite={false}
-          side={THREE.BackSide}
-          blending={THREE.AdditiveBlending}
+          side={BackSide}
+          blending={AdditiveBlending}
           toneMapped={false}
         />
       </mesh>

@@ -2,30 +2,35 @@
 
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import * as THREE from "three";
+import {
+  AdditiveBlending,
+  Color,
+  type Points,
+  type ShaderMaterial,
+} from "three";
 import { getPointer } from "../effects/pointer-store";
 import { createRandom } from "./random";
 import { STAR_FRAGMENT, STAR_VERTEX } from "./shaders";
 
 function starColor(random: number) {
   if (random < 0.6) {
-    return new THREE.Color("#cfe0ff");
+    return new Color("#cfe0ff");
   }
   if (random < 0.79) {
-    return new THREE.Color("#9db9d9");
+    return new Color("#9db9d9");
   }
   if (random < 0.91) {
-    return new THREE.Color("#8fe8f4");
+    return new Color("#8fe8f4");
   }
   if (random < 0.97) {
-    return new THREE.Color("#ffb066");
+    return new Color("#ffb066");
   }
-  return new THREE.Color("#ffffff");
+  return new Color("#ffffff");
 }
 
 export function Starfield({ lite }: { lite: boolean }) {
-  const pointsRef = useRef<THREE.Points>(null);
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const pointsRef = useRef<Points>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
   const dpr = useThree((state) => state.viewport.dpr);
   const count = lite ? 760 : 2800;
 
@@ -107,7 +112,7 @@ export function Starfield({ lite }: { lite: boolean }) {
         fragmentShader={STAR_FRAGMENT}
         transparent
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
         toneMapped={false}
       />
     </points>

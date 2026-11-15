@@ -2,7 +2,19 @@
 
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
+import {
+  AdditiveBlending,
+  BufferAttribute,
+  Color,
+  MathUtils,
+  Object3D,
+  Vector3,
+  type Group,
+  type InstancedMesh,
+  type MeshBasicMaterial,
+  type Points,
+  type ShaderMaterial,
+} from "three";
 import { useRouter } from "next/navigation";
 import { getPointer } from "../effects/pointer-store";
 import { getScrollState } from "../effects/scroll-store";
@@ -12,7 +24,7 @@ import { createRandom } from "./random";
 const HOVER_RADIUS = 64;
 
 function HorizonGlow() {
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const materialRef = useRef<ShaderMaterial>(null);
   const uniforms = useMemo(
     () => ({ uTime: { value: 0 } }),
     [],
@@ -90,10 +102,10 @@ function GroundGrid() {
 }
 
 function GroundRing() {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const meshRef = useRef<InstancedMesh>(null);
+  const dummy = useMemo(() => new Object3D(), []);
   const colors = useMemo(
-    () => Array.from({ length: 48 }, () => new THREE.Color("#223349")),
+    () => Array.from({ length: 48 }, () => new Color("#223349")),
     [],
   );
 
@@ -158,7 +170,7 @@ function RocketPlume({
   lite: boolean;
   offset?: number;
 }) {
-  const pointsRef = useRef<THREE.Points>(null);
+  const pointsRef = useRef<Points>(null);
   const count = lite ? 110 : 260;
   const velocities = useMemo(() => {
     const random = createRandom(0x726f636b + count);
@@ -187,7 +199,7 @@ function RocketPlume({
     }
 
     const time = state.clock.elapsedTime;
-    const attribute = points.geometry.getAttribute("position") as THREE.BufferAttribute;
+    const attribute = points.geometry.getAttribute("position") as BufferAttribute;
 
     for (let index = 0; index < count; index += 1) {
       const velocity = velocities[index];
@@ -215,7 +227,7 @@ function RocketPlume({
         transparent
         opacity={lite ? 0.7 : 0.95}
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={AdditiveBlending}
         sizeAttenuation
       />
     </points>
@@ -294,19 +306,19 @@ export function Spaceport({
   const router = useRouter();
   const launchLift = useRef(0);
   const hovered = useRef<"beginner" | "advanced" | null>(null);
-  const rocketA = useRef<THREE.Group>(null);
-  const rocketB = useRef<THREE.Group>(null);
-  const armA = useRef<THREE.Group>(null);
-  const armB = useRef<THREE.Group>(null);
-  const lightA = useRef<THREE.MeshBasicMaterial>(null);
-  const lightB = useRef<THREE.MeshBasicMaterial>(null);
-  const screenA = useMemo(() => new THREE.Vector3(), []);
-  const screenB = useMemo(() => new THREE.Vector3(), []);
+  const rocketA = useRef<Group>(null);
+  const rocketB = useRef<Group>(null);
+  const armA = useRef<Group>(null);
+  const armB = useRef<Group>(null);
+  const lightA = useRef<MeshBasicMaterial>(null);
+  const lightB = useRef<MeshBasicMaterial>(null);
+  const screenA = useMemo(() => new Vector3(), []);
+  const screenB = useMemo(() => new Vector3(), []);
 
   useFrame((state, delta) => {
     const scroll = getScrollState();
     const progress = scroll.progress;
-    const lift = THREE.MathUtils.clamp((progress - 0.05) / 0.5, 0, 1);
+    const lift = MathUtils.clamp((progress - 0.05) / 0.5, 0, 1);
     const ease = 1 - Math.pow(1 - lift, 3);
     launchLift.current += (ease - launchLift.current) * Math.min(1, delta * 5);
     const rocket = launchLift.current;
@@ -383,8 +395,8 @@ export function Spaceport({
         setPadHover({
           id: hit,
           pad: hit === "beginner" ? "PAD 01 / BEGINNER" : "PAD 02 / ADVANCED",
-          x: THREE.MathUtils.clamp(hitX, 96, Math.max(96, width - 96)),
-          y: THREE.MathUtils.clamp(hitY, 72, Math.max(72, height - 72)),
+          x: MathUtils.clamp(hitX, 96, Math.max(96, width - 96)),
+          y: MathUtils.clamp(hitY, 72, Math.max(72, height - 72)),
         });
       } else if (hovered.current) {
         clearPadHover(hovered.current);

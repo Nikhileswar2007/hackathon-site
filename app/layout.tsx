@@ -1,12 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Orbitron, Oxanium } from "next/font/google";
 import "./globals.css";
-import { OrbiterCursor } from "@/app/components/effects/OrbiterCursor";
-import { CursorTrail } from "@/app/components/effects/CursorTrail";
 import { EffectsProvider } from "@/app/components/effects/effects-provider";
 import { CommandPaletteProvider } from "@/app/components/effects/CommandPaletteProvider";
 import { ToastProvider } from "@/app/components/effects/ToastProvider";
-import { Intro } from "@/app/components/effects/Intro";
 import { SmoothScroll } from "@/app/components/effects/SmoothScroll";
 import { Footer } from "@/app/components/layout/Footer";
 import { Navbar } from "@/app/components/layout/Navbar";
@@ -14,7 +11,7 @@ import { ScrollHUD } from "@/app/components/layout/ScrollHUD";
 import { BackToTop } from "@/app/components/layout/BackToTop";
 import { MobileActionBar } from "@/app/components/layout/MobileActionBar";
 import { RouteAnnouncer } from "@/app/components/layout/RouteAnnouncer";
-import { PerfPanelLoader } from "@/app/components/effects/PerfPanelLoader";
+import { ClientChrome } from "@/app/components/effects/ClientChrome";
 import { SpaceCanvas } from "@/app/components/space/SpaceCanvas";
 import { siteConfig } from "@/app/content/site-config";
 
@@ -36,6 +33,7 @@ const bodyFont = Inter({
   variable: "--font-inter-src",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   fallback: ["system-ui", "sans-serif"],
 });
 
@@ -43,6 +41,7 @@ const hudFont = JetBrains_Mono({
   variable: "--font-jetbrains-mono-src",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
   fallback: ["SFMono-Regular", "Menlo", "monospace"],
 });
 
@@ -91,12 +90,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <SmoothScroll />
               <div className="space-backdrop" aria-hidden="true" />
               <SpaceCanvas />
-              <Intro />
               <a href="#main-content" className="skip-link">
                 Skip to content
               </a>
               <RouteAnnouncer />
-              <PerfPanelLoader />
+              <ClientChrome />
               <Navbar />
               <ScrollHUD />
               <main
@@ -109,8 +107,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <Footer />
               <BackToTop />
               <MobileActionBar />
-              <OrbiterCursor />
-              <CursorTrail />
             </CommandPaletteProvider>
           </EffectsProvider>
         </ToastProvider>
