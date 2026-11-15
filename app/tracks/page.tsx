@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "Tracks",
   description:
     "Compare the Beginner and Advanced tracks at Kakshya 2026: eligibility, problem style, evaluation, submission pack, finalists and themes.",
+  alternates: {
+    canonical: "/tracks",
+  },
 };
 
 const pageContainer =

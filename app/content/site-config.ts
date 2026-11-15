@@ -20,6 +20,10 @@ export const siteConfig = {
   description:
     "Kakshya 2026: 48 Hours to Orbit is the IIST National Space Hackathon — a 48-hour, national-level, online event with Beginner and Advanced tracks.",
 
+  siteUrl:
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+    "http://localhost:3000",
+
   eventStartISO: null as string | null,
   registrationOpen: false,
 

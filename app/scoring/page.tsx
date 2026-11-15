@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   title: "Scoring",
   description:
     "Kakshya 2026 scoring: Beginner, Advanced and Finals criteria, bands, benchmark formula, judging process, penalties and tie-breakers.",
+  alternates: {
+    canonical: "/scoring",
+  },
 };
 
 const pageContainer =

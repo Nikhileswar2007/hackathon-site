@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "About Kakshya 2026, the IIST National Space Hackathon: a 48-hour national-level online event with Beginner and Advanced tracks.",
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 const pageContainer =

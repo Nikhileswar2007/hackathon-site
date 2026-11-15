@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   title: "Prizes",
   description:
     "Kakshya 2026 prizes: Beginner and Advanced track awards, participation, merit and achievement certificates, prize conditions and payment rules.",
+  alternates: {
+    canonical: "/prizes",
+  },
 };
 
 const pageContainer =

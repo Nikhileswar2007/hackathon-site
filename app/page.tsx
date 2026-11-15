@@ -38,10 +38,35 @@ import { siteConfig, TBA } from "@/app/content/site-config";
 export const metadata: Metadata = {
   title: { absolute: `${siteConfig.name} — ${siteConfig.tagline}` },
   description: siteConfig.description,
+  alternates: {
+    canonical: "/",
+  },
 };
 
 const pageContainer =
   "mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8";
+
+const eventJsonLd = siteConfig.eventStartISO
+  ? {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      name: siteConfig.name,
+      description: siteConfig.description,
+      startDate: siteConfig.eventStartISO,
+      eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+      eventStatus: "https://schema.org/EventScheduled",
+      location: {
+        "@type": "VirtualLocation",
+        url: siteConfig.siteUrl,
+      },
+      organizer: {
+        "@type": "Organization",
+        name: "Indian Institute of Space Science and Technology",
+        url: siteConfig.siteUrl,
+      },
+      url: siteConfig.siteUrl,
+    }
+  : null;
 
 const faqById = new Map(
   faqGroups.flatMap((group) =>
@@ -387,6 +412,12 @@ export default function HomePage() {
           </Reveal>
         </div>
       </section>
+      {eventJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+        />
+      ) : null}
     </>
   );
 }
